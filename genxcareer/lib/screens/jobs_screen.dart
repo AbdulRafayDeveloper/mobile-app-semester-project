@@ -291,7 +291,9 @@ class _JobsScreenState extends State<JobsScreen> {
                           ],
                         ),
                       ),
+                     
                     ],
+                    
                   ),
                 ),
                 ],
@@ -301,10 +303,42 @@ class _JobsScreenState extends State<JobsScreen> {
                 toolbarHeight: 100,  // Set the height of the AppBar
 
               ),
+              
             ),
+            Positioned(
+            top: 100,  // Adjusted to place after the AppBar
+            left: 0,
+            right: 0,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      print('Remote Only filter pressed');
+                    },
+                    child: Text('Remote Only'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      print('Salary Range filter pressed');
+                    },
+                    child: Text('Salary Range'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      print('Date Posted filter pressed');
+                    },
+                    child: Text('Date Posted'),
+                  ),
+                ],
+              ),
+            ),
+          ),
             // Main content inside Column
             Positioned(
-              top: 100,  // Adjusted to accommodate the increased AppBar height
+              top: 150,  // Adjusted to accommodate the increased AppBar height
               left: 0,
               right: 0,
               bottom: 0,
