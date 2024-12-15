@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'GenX Career',
       home: Scaffold(
-        body: SafeArea(child: SignInScreen()),
+        body: SafeArea(child: SplashScreen()),
       ),
     );
   }

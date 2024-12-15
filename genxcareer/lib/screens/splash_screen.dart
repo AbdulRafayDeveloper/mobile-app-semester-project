@@ -73,20 +73,13 @@ class _SplashScreenState extends State<SplashScreen>
                   opacity: _fadeAnimation,
                   child: const Image(
                     image: AssetImage('assets/logo.png'),
-                    width: 200,
-                    height: 200,
+                    width: 300,
+                    height: 300,
                   ),
                 ),
               ),
               const SizedBox(height: 10),
-              const Text(
-                "Welcome to GenX Career",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF9866C7),
-                ),
-              ),
+              
             ],
           ),
         ),
