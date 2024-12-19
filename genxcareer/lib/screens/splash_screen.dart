@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // Required for SystemChrome
 import 'package:genxcareer/screens/jobs_screen.dart';
-import 'package:genxcareer/screens/sign_in_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -18,6 +18,14 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
+
+    // Set the navigation bar and status bar color
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Color(0xFF40189D), // Status bar color
+      statusBarIconBrightness: Brightness.light, // Status bar icon color
+      systemNavigationBarColor: Color(0xFF40189D), // Navigation bar color
+      systemNavigationBarIconBrightness: Brightness.light, // Nav bar icon color
+    ));
 
     // Initialize the animation controller
     _controller = AnimationController(
@@ -42,10 +50,10 @@ class _SplashScreenState extends State<SplashScreen>
     // Start the animation
     _controller.forward();
 
-    // Navigate to the SignInScreen after 3 seconds
+    // Navigate to the JobsScreen after 3 seconds
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => JobsScreen()));
+          context, MaterialPageRoute(builder: (context) => const JobsScreen()));
     });
   }
 
@@ -60,8 +68,8 @@ class _SplashScreenState extends State<SplashScreen>
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-            // color: Color(0xFFECECEC),
-            ),
+          color: Color(0xFF40189D), // Background color
+        ),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -72,14 +80,13 @@ class _SplashScreenState extends State<SplashScreen>
                 child: FadeTransition(
                   opacity: _fadeAnimation,
                   child: const Image(
-                    image: AssetImage('assets/logo.png'),
+                    image: AssetImage('assets/NX.png'),
                     width: 300,
                     height: 300,
                   ),
                 ),
               ),
               const SizedBox(height: 10),
-              
             ],
           ),
         ),

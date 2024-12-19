@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:genxcareer/screens/jobs_screen.dart';
-import 'package:genxcareer/screens/sign_in_screen.dart';
-import 'package:genxcareer/screens/splash_screen.dart';
+import 'screens/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,7 +10,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'GenX Career',
       home: Scaffold(

@@ -1,164 +1,197 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:genxcareer/screens/Admin/dashboard.dart';
 import 'package:genxcareer/screens/Admin/jobs.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:genxcareer/screens/forget_password.dart';
+import 'package:genxcareer/screens/jobs_screen.dart';
+import 'package:genxcareer/screens/sign_up_screen.dart';
 
 class JobDetailPage extends StatelessWidget {
-  final JobCard job;
+  final Map<String, String> job;
 
-  // Constructor to receive the job object
-  JobDetailPage({required this.job});
+  const JobDetailPage({Key? key, required this.job}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // Get screen width for responsive text sizing
+    double screenWidth = MediaQuery.of(context).size.width;
+    double fontSizeTitle = screenWidth * 0.06; // 6% of screen width
+    double fontSizeSubtitle = screenWidth * 0.045; // 4.5% of screen width
+    double fontSizeBody = screenWidth * 0.04; // 4% of screen width
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          job.jobTitle,
-          style: TextStyle(color: Colors.white), // Set the title color to white
-        ),
-         // Make AppBar transparent
-        elevation: 0, // Remove the shadow under the AppBar
-        iconTheme: IconThemeData(color: Colors.white), // Set the back button color to white
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/HD-wallpaper-back-to-it-background-purple-solid-thumbnail.jpg'),
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
+        title: Text(job['title']!),
+        
       ),
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          // Background Image for the entire screen
-          Image.asset(
-            'assets/HD-wallpaper-back-to-it-background-purple-solid-thumbnail.jpg',
-            fit: BoxFit.cover,
-          ),
-          // Overlay for better contrast
-          Container(
-            color: Colors.black.withOpacity(0.5),
-          ),
-          // Content body with a scrollable ListView
-          SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(26.0),
+          child: SingleChildScrollView(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Job Details Section
-                Container(
-                  margin: const EdgeInsets.only(bottom: 20),
-                  padding: const EdgeInsets.all(12.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: Colors.white.withOpacity(0.1), // Slight opacity for background
-                    border: Border.all(
-                      color: Colors.white,
-                      width: 1.0,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.white.withOpacity(0.2),
-                        blurRadius: 8,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${job.jobTitle}',
-                        style: const TextStyle(
-                          fontSize: 24,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween, // Distributes items across the row
+                // Job details header
+                Row(
+                  children: [
+                    const SizedBox(width: 10),
+                    // Left side: Company name and job title
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Job Title and Company Name with Avatar
-                          Row(
-                            children: [
-                              // Avatar
-                              CircleAvatar(
-                                radius: 30, // Adjust the radius as needed
-                                backgroundImage: NetworkImage(job.imageUrl), // Use NetworkImage to load the image
-                              ),
-                              const SizedBox(width: 12), // Space between the Avatar and Company Name
-                              Text(
-                                job.companyName, // Display the company name
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
+                          Text(
+                            job['company']!,
+                            style: TextStyle(
+                              fontSize: fontSizeSubtitle,
+                              fontWeight: FontWeight.normal,
+                            ),
                           ),
-                          // Apply Button on the other end
-                          ElevatedButton(
-                            onPressed: () async {
-                              final url = job.applyLink.trim(); // Remove any leading/trailing spaces
-                              print('Job Apply Link: $url'); // Debug: Print the apply link
-
-                              // Check if the URL starts with 'http://' or 'https://'
-                              if (url.startsWith('http://') || url.startsWith('https://')) {
-                                try {
-                                  final uri = Uri.parse(url); // Convert the string URL to Uri
-                                  print('Parsed URL: $uri'); // Debug: Print the parsed URL
-
-                                  if (await canLaunchUrl(uri)) { // Check if the URL can be launched
-                                    await launchUrl(uri); // Launch the URL
-                                  } else {
-                                    throw 'Could not launch $uri'; // Error if URL can't be opened
-                                  }
-                                } catch (e) {
-                                  print('Error: $e'); // Catch and print any parsing errors
-                                }
-                              } else {
-                                print('Invalid URL format: $url'); // If URL is missing 'http://' or 'https://'
-                              }
-                            },
-                            child: Text('Apply'),
+                          const SizedBox(height: 5),
+                          Text(
+                            job['title']!,
+                            style: TextStyle(
+                              fontSize: fontSizeTitle,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Salary: ${job.salaryRange}',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
+                    ),
+                    // Right side: Logo as CircleAvatar
+                    CircleAvatar(
+                      backgroundImage: NetworkImage(job['logo']!),
+                      radius: 30,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                
+                // Job type button
+                Padding(
+                  padding: EdgeInsets.only(left: 8),
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    child: Text('${job['jobType']!}'),
+                    style: ElevatedButton.styleFrom(
+                      side: BorderSide(color: Colors.grey, width: 1), // Blue outline
+                      padding: EdgeInsets.symmetric(horizontal: 28, vertical: 10), // Adjust padding if needed
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                // Add a fine grey line after the job type
+                Divider(color: Colors.grey.shade300, thickness: 1),
+                const SizedBox(height: 20),
+                // Salary and Location
+               Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Salary Row with icon and text side by side
+                Padding(
+                  padding: EdgeInsets.only(left: 30),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8), // Padding for outer circle
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(196, 121, 66, 248), // Light purple outer circle
+                          shape: BoxShape.circle, // Circular shape
+                           // Purple border
+                        ),
+                        child: CircleAvatar(
+                          backgroundColor: Color.fromARGB(142, 147, 104, 248), // Same as outer circle color
+                          radius: 20, // Size of the inner circle (location icon)
+                          child: FaIcon(
+                          FontAwesomeIcons.coins,
+                          size: 20, // Size of the icon
+                          color: Colors.white, // Icon color
+                        ),
                         ),
                       ),
-                      const SizedBox(height: 12),
-                      const SizedBox(height: 20),
-                      Text(
-                        "Description",
-                        style: const TextStyle(
-                          fontSize: 24,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
+                      const SizedBox(width: 10), 
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Salary"),
+                          Text(
+                            "${job['salary']!}",
+                            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      )
+                      
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                // Location Row with icon and text side by side
+                Padding(
+                  padding: EdgeInsets.only(left: 30),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8), // Padding for outer circle
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(196, 121, 66, 248), // Light purple outer circle
+                          shape: BoxShape.circle, // Circular shape
+                          
+                        ),
+                        child: CircleAvatar(
+                          backgroundColor: Color.fromARGB(142, 147, 104, 248), // Same as outer circle color
+                          radius: 20, // Size of the inner circle (location icon)
+                          child: Icon(
+                            Icons.work_outline,
+                            size: 20, // Size of the icon
+                            color: Colors.white, // Icon color
+                          ),
                         ),
                       ),
-                      const SizedBox(height: 20),
-                      Text(
-                        job.description,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
-                        ),
-                      ),
+                      const SizedBox(width: 10), // Space between icon and text
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("location"),
+                          Text(
+                            "${job['location']!}",
+                            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      )
                     ],
                   ),
                 ),
               ],
             ),
+                const SizedBox(height: 20),
+                // Add a fine grey line after the location
+                Divider(color: Colors.grey.shade300, thickness: 1),
+                const SizedBox(height: 20),
+
+                // Job Description
+                Text(
+                  "Job Description",
+                  style: TextStyle(
+                    fontSize: fontSizeSubtitle,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  job['description'] ?? "No description available.",
+                  style: TextStyle(fontSize: fontSizeBody),
+                ),
+              ],
+            ),
           ),
-        ],
+        ),
       ),
     );
   }
 }
+
+ 
+
+

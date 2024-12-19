@@ -1,300 +1,414 @@
 import 'package:flutter/material.dart';
 import 'package:genxcareer/screens/Admin/admin_update.dart';
+import 'package:genxcareer/screens/Admin/change_passord.dart';
 import 'package:genxcareer/screens/Admin/jobs.dart';
+import 'package:genxcareer/screens/Admin/users.dart';
 import 'package:genxcareer/screens/jobs_screen.dart';
 import 'package:genxcareer/screens/sign_in_screen.dart';
+import 'package:genxcareer/screens/users_details.dart';
+import 'package:intl/intl.dart'; // For formatting the selected date
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 
 class Users extends StatefulWidget {
   const Users({super.key});
 
   @override
-  State<Users> createState() => _UsersState();
+  _UsersState createState() => _UsersState();
 }
 
 class _UsersState extends State<Users> {
-  List<UserCard> filteredUsers = userCards;
-  TextEditingController _searchController = TextEditingController();
-  bool isSearching = false;
+  bool isSearchFocused = false; // To track if the search bar is focused
+  double minSalary = 30000; // Minimum salary default value
+  double maxSalary = 100000; // Maximum salary default value
+  DateTime? selectedDate; // Store the selected date
+  List<Map<String, String>> Users = []; // This will hold the Users displayed
+  bool isLoadingMore = false; // To manage the loading state
 
-  // GlobalKey for controlling the Scaffold
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+// Placeholder for user data
+final List<Map<String, String>> user = [
+  {
+    'name': 'John Doe',
+    'email': 'john.doe@example.com',
+    'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRe3oPvKsA05otgZYGFZmxk5WHLYTFKWOFaNA&s',
+  },
+  {
+    'name': 'Jane Smith',
+    'email': 'jane.smith@example.com',
+    'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRe3oPvKsA05otgZYGFZmxk5WHLYTFKWOFaNA&s',
+  },
+  {
+    'name': 'Alice Johnson',
+    'email': 'alice.johnson@example.com',
+    'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRe3oPvKsA05otgZYGFZmxk5WHLYTFKWOFaNA&s',
+  },
+  {
+    'name': 'Bob Brown',
+    'email': 'bob.brown@example.com',
+    'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRe3oPvKsA05otgZYGFZmxk5WHLYTFKWOFaNA&s',
+  },
+  {
+    'name': 'Emily Davis',
+    'email': 'emily.davis@example.com',
+    'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRe3oPvKsA05otgZYGFZmxk5WHLYTFKWOFaNA&s',
+  },
+  {
+    'name': 'Chris Evans',
+    'email': 'chris.evans@example.com',
+    'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRe3oPvKsA05otgZYGFZmxk5WHLYTFKWOFaNA&s',
+  },
+  {
+    'name': 'Sophia Martinez',
+    'email': 'sophia.martinez@example.com',
+    'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRe3oPvKsA05otgZYGFZmxk5WHLYTFKWOFaNA&s',
+  },
+];
+
 
   @override
+  void initState() {
+  super.initState();
+  // Initially load first 5 Users
+  Users.addAll(user.take(5));
+}
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size; // Get screen size
     return Scaffold(
-      key: _scaffoldKey, // Assign the GlobalKey to Scaffold
+      backgroundColor: Colors.grey[100], // Light background color
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-           const DrawerHeader(
+            const DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.white,
-                image: DecorationImage(image: AssetImage('assets/logo.png'))
+                
               ),
-              child: const Text(
-                'Menu',
-                style: TextStyle(color: Colors.white, fontSize: 24),
+              child: Center( // Centers the image in the DrawerHeader
+                child: SizedBox(
+                  width: 500, // Adjust as needed
+                  height: 500, // Adjust as needed
+                  child: Image(
+                    image: AssetImage('assets/new_logo2.png'),
+                    fit: BoxFit.contain, // Ensures the image scales proportionally
+                  ),
+                ),
               ),
+            ),
+
+            ListTile(
+              leading: const Icon(Icons.dashboard),
+              title: const Text('Dashboard'),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => UserDetailPage()));
+              },
+            ),
+
+            ListTile(
+              leading: const Icon(Icons.edit),
+              title: const Text('Edit Details'),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AdminDetailPage()));
+              },
             ),
             ListTile(
               leading: const Icon(Icons.join_full),
               title: const Text('Jobs'),
               onTap: () {
-                Navigator.pop(context); // Close the drawer
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Jobs()),
-                );
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Jobs()));
+              },
+            ),
+            
+             ListTile(
+              leading: const Icon(Icons.password),
+              title: const Text('Change Password'),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AdminPasswordPage()));
               },
             ),
             ListTile(
-              leading: const Icon(Icons.person),
-              title: const Text('Customers'),
+              leading: const Icon(Icons.logout),
+              title: const Text('Logout'),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Users()));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('Update Admin'),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => AdminDetailPage()));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.exit_to_app, color: Colors.purple),
-              title: const Text(
-                'Log Out',
-                style: TextStyle(color: Colors.purple),
-              ),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => JobsScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> JobsScreen()));
               },
             ),
           ],
         ),
       ),
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          Image.asset(
-            'assets/HD-wallpaper-back-to-it-background-purple-solid-thumbnail.jpg',
-            fit: BoxFit.cover,
-          ),
-          Container(
-            color: Colors.black.withOpacity(0.4),
-          ),
-          Column(
-            children: [
-              AppBar(
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                automaticallyImplyLeading: false, // Disable default drawer icon
-                flexibleSpace: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 38),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // Drawer icon
-                        IconButton(
-                          icon: const Icon(Icons.menu, color: Colors.white, size: 28),
-                          onPressed: () {
-                            _scaffoldKey.currentState?.openDrawer(); // Open the drawer
-                          },
-                        ),
-                        // Title or search field
-                        isSearching
-                            ? Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                                  child: TextField(
-                                    controller: _searchController,
-                                    autofocus: true,
-                                    style: const TextStyle(color: Colors.white),
-                                    decoration: InputDecoration(
-                                      hintText: 'Search by name...',
-                                      hintStyle:
-                                          TextStyle(color: Colors.white.withOpacity(0.6)),
-                                      suffixIcon: IconButton(
-                                        icon: const Icon(Icons.clear, color: Colors.white),
-                                        onPressed: () {
-                                          _searchController.clear();
-                                          setState(() {
-                                            filteredUsers = userCards;
-                                          });
-                                        },
-                                      ),
-                                      enabledBorder: const UnderlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.white),
-                                      ),
-                                      focusedBorder: const UnderlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.white),
-                                      ),
-                                    ),
-                                    onChanged: (query) {
-                                      setState(() {
-                                        filteredUsers = userCards
-                                            .where((user) => user.name
-                                                .toLowerCase()
-                                                .contains(query.toLowerCase()))
-                                            .toList();
-                                      });
-                                    },
-                                  ),
-                                ),
-                              )
-                            : const Expanded(
-                                child: Align(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    'Your Customers',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                    textAlign: TextAlign.start,
-                                  ),
-                                ),
+      body: SafeArea(
+        
+        child: GestureDetector(
+          onTap: () {
+            if (isSearchFocused) {
+              setState(() {
+                isSearchFocused = false; // Reset when tapping outside
+              });
+            }
+          },
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Purple Area (Header)
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  width: double.infinity,
+                  height: isSearchFocused ? 0 : size.height * 0.19, // Height reduces to 0 when search is focused
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Color(0xFF40189D), Color.fromARGB(255, 111, 57, 238)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(60), // Increased roundness
+                      bottomRight: Radius.circular(60),
+                    ),
+                  ),
+                  child: Stack(
+                    children: [
+                      // Centered Text
+                      Positioned(
+                        top: size.height * 0.05, // Adjust this value to center the text vertically
+                        left: 30,
+                       // right: 20,
+                       
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Text(
+                              "GenX Career",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 35,
+                                fontWeight: FontWeight.bold,
                               ),
-                        // Search icon
-                        IconButton(
-                          icon: const Icon(
-                            Icons.search,
-                            color: Colors.white,
-                            size: 28,
+                            ),
+                            Text(
+                              "Users Details",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ],
+                        ),
+
+                      ),
+                      // Top-right icon (Popup Menu)
+                      Positioned(
+                          top: 10,
+                          right: 10,
+                          child: Builder(
+                            builder: (context) => IconButton(
+                              icon: const Icon(Icons.menu, color: Colors.white),
+                              onPressed: () {
+                                Scaffold.of(context).openDrawer();
+                              },
+                            ),
                           ),
-                          onPressed: () {
-                            setState(() {
-                              isSearching = !isSearching;
-                            });
-                            if (!isSearching) {
-                              _searchController.clear();
-                              setState(() {
-                                filteredUsers = userCards;
-                              });
-                            }
-                          },
+                        ),
+
+                    ],
+                  ),
+                ),
+
+                // Search Bar (moves up on focus)
+               Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 50),
+                  child: Transform.translate(
+                    offset: isSearchFocused ? const Offset(0, 50) : const Offset(0, -30), // Move search bar up when focused
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(30),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3), // Light grey shadow
+                            spreadRadius: 1, // How far the shadow spreads
+                            blurRadius: 10, // Smoothness of the shadow
+                            offset: const Offset(0, 5), // Position the shadow below
+                          ),
+                        ],
+                      ),
+                      child: TextField(
+                        autofocus: false,
+                        onTap: () {
+                          setState(() {
+                            isSearchFocused = true;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          hintText: 'Search user here...',
+                          fillColor: Colors.transparent, // Transparent because the background is set in the Container
+                          filled: true,
+                          prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                          suffixIcon: isSearchFocused
+                              ? IconButton(
+                                  icon: const Icon(Icons.close),
+                                  onPressed: () {
+                                    setState(() {
+                                      isSearchFocused = false; // Reset when cross is pressed
+                                    });
+                                  },
+                                )
+                              : null,
+                          contentPadding: const EdgeInsets.all(10),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                            borderSide: BorderSide.none, // Remove border since Container handles it
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: isSearchFocused ? 70 : 2), 
+                // Filter Buttons (appear when search bar is focused)
+                if (isSearchFocused) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            
+                           
+                          ],
                         ),
                       ],
                     ),
                   ),
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                  padding: const EdgeInsets.all(12.0),
-                  child: ListView.builder(
-                    itemCount: filteredUsers.length,
-                    itemBuilder: (context, index) {
-                      return _buildUserCard(filteredUsers[index]);
-                    },
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
+                ],
 
-  Widget _buildUserCard(UserCard user) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-      padding: const EdgeInsets.all(12.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: const Color.fromARGB(60, 255, 255, 255),
-        border: Border.all(
-          color: Colors.white,
-          width: 1.0,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.white.withOpacity(0.2),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 40,
-            backgroundImage: NetworkImage(user.avatar),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  user.name,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 18,
-                    color: Colors.white,
+                // user Cards
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: Users.map((user) => buildUserCard(user, context)).toList(),
                   ),
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  user.email,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
+        if (!isLoadingMore)
+          Center(
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white, // This will set the button's background color
+              ),
+              onPressed: loadMoreUsers,
+              child: const Text(
+                "Load More",
+                style: TextStyle(color: Color(0xFF40189D)),
+              ),
+            ),
+          ),
+        if (isLoadingMore)
+          const Center(
+            child: CircularProgressIndicator(),
+          ),
               ],
             ),
           ),
-          IconButton(
-            icon: const Icon(Icons.delete, color: Colors.white),
-            onPressed: () {
-              // Handle delete functionality here
-            },
-          ),
-        ],
+        ),
       ),
     );
   }
+
+Widget buildUserCard(Map<String, String> user, BuildContext context) {
+  return GestureDetector(
+    child: Container(
+      margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 15),
+      color: Colors.grey[100],
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Image with proper fit and constraints
+            Container(
+              width: 50, // Set a fixed width for the image
+              height: 50, // Set a fixed height for the image
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8), // Optional: for rounded corners
+                image: DecorationImage(
+                  image: NetworkImage(user['image']!),
+                  fit: BoxFit.cover, // Adjust the image to fit the container without distortion
+                ),
+              ),
+            ),
+            const SizedBox(width: 15), // Add some space between image and text
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Name text
+                  Text(
+                    user['name']!,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                    overflow: TextOverflow.ellipsis, // Adds ellipsis if text is too long
+                    maxLines: 1, // Limits to a single line
+                  ),
+                  const SizedBox(height: 5),
+                  // Email with responsive layout
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Icon(Icons.email_outlined, color: Color(0xFF40189D)),
+                      const SizedBox(width: 5),
+                      Expanded(
+                        child: Text(
+                          user['email']!,
+                          style: const TextStyle(fontSize: 16),
+                          overflow: TextOverflow.ellipsis, // Adds ellipsis if email is too long
+                          maxLines: 1,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.delete  , color: Colors.red),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }
 
-class UserCard {
-  final String name;
-  final String email;
-  final String avatar;
 
-  UserCard({
-    required this.name,
-    required this.email,
-    required this.avatar,
+
+int currentPage = 1; // Keeps track of the current page of Users
+
+void loadMoreUsers() async {
+  setState(() {
+    isLoadingMore = true;
+  });
+
+  // Simulate network call delay
+  await Future.delayed(const Duration(seconds: 2));
+
+  setState(() {
+    // Load the next 5 Users based on the current page
+    final nextUsers = user.skip(currentPage * 5).take(5).toList();
+    Users.addAll(nextUsers);
+    currentPage++; // Move to the next page
+    isLoadingMore = false;
   });
 }
+}
 
-final List<UserCard> userCards = [
-  UserCard(
-    name: 'Maria Green',
-    email: 'maria@gmail.com',
-    avatar:
-        "https://plus.unsplash.com/premium_photo-1678197937465-bdbc4ed95815?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cGVyc29ufGVufDB8fDB8fHww",
-  ),
-  UserCard(
-    name: 'John Smith',
-    email: 'john@gmail.com',
-    avatar:
-        'https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?cs=srgb&dl=pexels-creationhill-1681010.jpg&fm=jpg',
-  ),
-  UserCard(
-    name: 'Eva Robinson',
-    email: 'eva@gmail.com',
-    avatar:
-        'https://plus.unsplash.com/premium_photo-1678197937465-bdbc4ed95815?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cGVyc29ufGVufDB8fDB8fHww',
-  ),
-];
+ 

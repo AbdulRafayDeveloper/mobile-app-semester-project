@@ -1,449 +1,481 @@
 import 'package:flutter/material.dart';
-import 'package:genxcareer/screens/Admin/admin_update.dart';
-import 'package:genxcareer/screens/Admin/users.dart';
 import 'package:genxcareer/screens/sign_in_screen.dart';
 import 'package:genxcareer/screens/users_details.dart';
+import 'package:intl/intl.dart'; // For formatting the selected date
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 
 class JobsScreen extends StatefulWidget {
+  const JobsScreen({super.key});
+
   @override
   _JobsScreenState createState() => _JobsScreenState();
 }
 
 class _JobsScreenState extends State<JobsScreen> {
-  final List<Map<String, String>> jobs = [
-    {
-      'company': 'DevsRank',
-      'title': 'MERN Developer',
-      'location': 'Faisalabad',
-      'salary': 'PKR50K - PKR100K',
-      'type': 'Full-time',
-      'posted': '20d',
-      'details': 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC...'
-    },
-     {
-      'company': 'DevsRank',
-      'title': 'MERN Developer',
-      'location': 'Faisalabad',
-      'salary': 'PKR50K - PKR100K',
-      'type': 'Full-time',
-      'posted': '20d',
-      'details': 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC...'
-    },
-     {
-      'company': 'DevsRank',
-      'title': 'MERN Developer',
-      'location': 'Faisalabad',
-      'salary': 'PKR50K - PKR100K',
-      'type': 'Full-time',
-      'posted': '20d',
-      'details': 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC...'
-    },
-     {
-      'company': 'DevsRank',
-      'title': 'MERN Developer',
-      'location': 'Faisalabad',
-      'salary': 'PKR50K - PKR100K',
-      'type': 'Full-time',
-      'posted': '20d',
-      'details': 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC...'
-    },
-     {
-      'company': 'DevsRank',
-      'title': 'MERN Developer',
-      'location': 'Faisalabad',
-      'salary': 'PKR50K - PKR100K',
-      'type': 'Full-time',
-      'posted': '20d',
-      'details': 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC...'
-    },
+  bool isSearchFocused = false; // To track if the search bar is focused
+  double minSalary = 30000; // Minimum salary default value
+  double maxSalary = 100000; // Maximum salary default value
+  DateTime? selectedDate; // Store the selected date
+  List<Map<String, String>> jobs = []; // This will hold the jobs displayed
+bool isLoadingMore = false; // To manage the loading state
 
-     {
-      'company': 'DevsRank',
-      'title': 'MERN Developer',
-      'location': 'Faisalabad',
-      'salary': 'PKR50K - PKR100K',
-      'type': 'Full-time',
-      'posted': '20d',
-      'details': 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC...'
-    },
-     {
-      'company': 'DevsRank',
-      'title': 'MERN Developer',
-      'location': 'Faisalabad',
-      'salary': 'PKR50K - PKR100K',
-      'type': 'Full-time',
-      'posted': '20d',
-      'details': 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC...'
-    },
-     {
-      'company': 'DevsRank',
-      'title': 'MERN Developer',
-      'location': 'Faisalabad',
-      'salary': 'PKR50K - PKR100K',
-      'type': 'Full-time',
-      'posted': '20d',
-      'details': 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC...'
-    },
-     {
-      'company': 'DevsRank',
-      'title': 'MERN Developer',
-      'location': 'Faisalabad',
-      'salary': 'PKR50K - PKR100K',
-      'type': 'Full-time',
-      'posted': '20d',
-      'details': 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC...'
-    },
-     {
-      'company': 'DevsRank',
-      'title': 'MERN Developer',
-      'location': 'Faisalabad',
-      'salary': 'PKR50K - PKR100K',
-      'type': 'Full-time',
-      'posted': '20d',
-      'details': 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC...'
-    },
-    // Add more job data...
-  ];
-
-  bool isSearching = false;
-  TextEditingController _searchController = TextEditingController();
-  List<Map<String, String>> filteredJobs = [];
+// Placeholder for job data
+final List<Map<String, String>> job = [
+  {
+    'company': 'Darkseer Studios',
+    'title': 'Senior Software Engineer',
+    'salary': '\$500 - \$1,000',
+    'location': 'Medan, Indonesia',
+    'logo': 'https://res.cloudinary.com/vistaprint/images/c_scale,w_448,h_448,dpr_2/f_auto,q_auto/v1705580343/ideas-and-advice-prod/en-us/adidas/adidas.png?_i=AA',
+    'description': 'WLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+    'jobType': 'Full-time'
+  },
+  {
+    'company': 'Nextgen Corp',
+    'title': 'Backend Developer',
+    'salary': '\$800 - \$1,200',
+    'location': 'Jakarta, Indonesia',
+    'logo': 'https://marketplace.canva.com/EAF7Nm6GMzo/1/0/1600w/canva-black-white-modern-concept-football-club-logo-3-nFuSBwgIA.jpg',
+    'description': 'Join our team to develop scalable backend solutions for our growing platform.',
+    'jobType': 'Part-time'
+  },
+  {
+    'company': 'Futura Labs',
+    'title': 'Frontend Developer',
+    'salary': '\$600 - \$900',
+    'location': 'Bali, Indonesia',
+    'logo': 'https://www.logolounge.com/wp-content/uploads/2023/12/21954_438371-300x300.jpg',
+    'description': 'We are looking for a creative Frontend Developer to design user-friendly websites.',
+    'jobType': 'Full-time'
+  },
+  {
+    'company': 'Darkseer Studios',
+    'title': 'Senior Software Engineer',
+    'salary': '\$500 - \$1,000',
+    'location': 'Medan, Indonesia',
+    'logo': 'https://res.cloudinary.com/vistaprint/images/c_scale,w_448,h_448,dpr_2/f_auto,q_auto/v1705580343/ideas-and-advice-prod/en-us/adidas/adidas.png?_i=AA',
+    'description': 'Lead the development of cutting-edge software solutions in a fast-paced environment.',
+    'jobType': 'Contract'
+  },
+  {
+    'company': 'Nextgen Corp',
+    'title': 'Backend Developer',
+    'salary': '\$800 - \$1,200',
+    'location': 'Jakarta, Indonesia',
+    'logo': 'https://marketplace.canva.com/EAF7Nm6GMzo/1/0/1600w/canva-black-white-modern-concept-football-club-logo-3-nFuSBwgIA.jpg',
+    'description': 'Backend development and API integrations for high-traffic platforms.',
+    'jobType': 'Full-time'
+  },
+  {
+    'company': 'Futura Labs',
+    'title': 'Frontend Developer',
+    'salary': '\$600 - \$900',
+    'location': 'Bali, Indonesia',
+    'logo': 'https://www.logolounge.com/wp-content/uploads/2023/12/21954_438371-300x300.jpg',
+    'description': 'Work closely with designers and other developers to create intuitive UI/UX experiences.',
+    'jobType': 'Freelance'
+  },
+  {
+    'company': 'Darkseer Studios',
+    'title': 'Senior Software Engineer',
+    'salary': '\$500 - \$1,000',
+    'location': 'Medan, Indonesia',
+    'logo': 'https://res.cloudinary.com/vistaprint/images/c_scale,w_448,h_448,dpr_2/f_auto,q_auto/v1705580343/ideas-and-advice-prod/en-us/adidas/adidas.png?_i=AA',
+    'description': 'Help shape the future of the company by managing and guiding the tech team.',
+    'jobType': 'Full-time'
+  },
+  {
+    'company': 'Nextgen Corp',
+    'title': 'Backend Developer',
+    'salary': '\$800 - \$1,200',
+    'location': 'Jakarta, Indonesia',
+    'logo': 'https://marketplace.canva.com/EAF7Nm6GMzo/1/0/1600w/canva-black-white-modern-concept-football-club-logo-3-nFuSBwgIA.jpg',
+    'description': 'Join us as we build scalable backend systems for our high-demand applications.',
+    'jobType': 'Contract'
+  },
+  {
+    'company': 'Futura Labs',
+    'title': 'Frontend Developer',
+    'salary': '\$600 - \$900',
+    'location': 'Bali, Indonesia',
+    'logo': 'https://www.logolounge.com/wp-content/uploads/2023/12/21954_438371-300x300.jpg',
+    'description': 'Innovative Frontend Developer wanted to bring designs to life with modern JavaScript frameworks.',
+    'jobType': 'Part-time'
+  },
+  {
+    'company': 'Darkseer Studios',
+    'title': 'Senior Software Engineer',
+    'salary': '\$500 - \$1,000',
+    'location': 'Medan, Indonesia',
+    'logo': 'https://res.cloudinary.com/vistaprint/images/c_scale,w_448,h_448,dpr_2/f_auto,q_auto/v1705580343/ideas-and-advice-prod/en-us/adidas/adidas.png?_i=AA',
+    'description': 'Take ownership of the software architecture and lead a diverse engineering team.',
+    'jobType': 'Full-time'
+  },
+  {
+    'company': 'Nextgen Corp',
+    'title': 'Backend Developer',
+    'salary': '\$800 - \$1,200',
+    'location': 'Jakarta, Indonesia',
+    'logo': 'https://marketplace.canva.com/EAF7Nm6GMzo/1/0/1600w/canva-black-white-modern-concept-football-club-logo-3-nFuSBwgIA.jpg',
+    'description': 'Develop backend services and APIs with a focus on performance and scalability.',
+    'jobType': 'Freelance'
+  },
+  {
+    'company': 'Futura Labs',
+    'title': 'Frontend Developer',
+    'salary': '\$600 - \$900',
+    'location': 'Bali, Indonesia',
+    'logo': 'https://www.logolounge.com/wp-content/uploads/2023/12/21954_438371-300x300.jpg',
+    'description': 'Collaborate with the design team to create pixel-perfect, responsive web pages.',
+    'jobType': 'Part-time'
+  },
+];
 
   @override
   void initState() {
-    super.initState();
-    filteredJobs = jobs;  // Initially show all jobs
-  }
-
-  @override
+  super.initState();
+  // Initially load first 5 jobs
+  jobs.addAll(job.take(5));
+}
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Stack(
-          children: [
-            // Background image
-            Positioned.fill(
-              child: Image.asset(
-                'assets/HD-wallpaper-back-to-it-background-purple-solid-thumbnail.jpg',
-                fit: BoxFit.cover,
-              ),
-            ),
-            // AppBar inside the Stack
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: AppBar(
-                iconTheme: IconThemeData(color: Colors.white),
-                leading: Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: IconButton(
-                    icon: Icon(Icons.arrow_back, color: Colors.white),
-                    onPressed: () {
-                      Navigator.pop(context); // Go back to the previous screen
-                    },
+    final size = MediaQuery.of(context).size; // Get screen size
+    return Scaffold(
+      backgroundColor: Colors.grey[100], // Light background color
+      body: SafeArea(
+        child: GestureDetector(
+          onTap: () {
+            if (isSearchFocused) {
+              setState(() {
+                isSearchFocused = false; // Reset when tapping outside
+              });
+            }
+          },
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Purple Area (Header)
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  width: double.infinity,
+                  height: isSearchFocused ? 0 : size.height * 0.19, // Height reduces to 0 when search is focused
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Color(0xFF40189D), Color.fromARGB(255, 111, 57, 238)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(60), // Increased roundness
+                      bottomRight: Radius.circular(60),
+                    ),
                   ),
-                ),
-                title: isSearching
-                    ? Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: TextField(
-                            controller: _searchController,
-                            autofocus: true,
-                            style: TextStyle(color: Colors.white),
-                            decoration: InputDecoration(
-                              hintText: 'Search by title...',
-                              hintStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
-                              suffixIcon: IconButton(
-                                icon: Icon(Icons.clear, color: Colors.white),
-                                onPressed: () {
-                                  _searchController.clear();
-                                  setState(() {
-                                    filteredJobs = jobs;
-                                  });
-                                },
-                              ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
+                  child: Stack(
+                    children: [
+                      // Centered Text
+                      Positioned(
+                        top: size.height * 0.05, // Adjust this value to center the text vertically
+                        left: 30,
+                       // right: 20,
+                       
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Text(
+                              "GenX Career",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 35,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            onChanged: (query) {
-                              setState(() {
-                                filteredJobs = jobs
-                                    .where((job) =>
-                                        job['title']!.toLowerCase().contains(query.toLowerCase()))
-                                    .toList();
-                              });
-                            },
+                            Text(
+                              "Your Job search partner",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ],
+                        ),
+
+                      ),
+                      // Top-right icon (Popup Menu)
+                      Positioned(
+                        top: 10,
+                        right: 10,
+                        child: PopupMenuButton<String>(
+                          icon: Container(
+                          padding: const EdgeInsets.all(8.0),  // Padding around the icon
+                          decoration: BoxDecoration(
+                            color: Colors.white,  // White background for the icon
+                            shape: BoxShape.circle,  // Circular background
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),  // Optional shadow for the circle
+                                spreadRadius: 1,
+                                blurRadius: 4,
+                                offset: Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: const Icon(
+                            Icons.person,
+                            color: Color(0xFF40189D),  // Blue color for the icon
+                            size: 20,  // Adjust size as needed
                           ),
                         ),
-                      )
-                    : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children:[ 
-                        const Text(
-                          'GenX Career',
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.normal, fontSize: 26),
-                        ),
-                           Row(
-                              children: [
-                                
-                                   Text(
-                                    "Jobs Based on your Search",
-                                    style: TextStyle(
-                                        fontSize: 16, fontWeight: FontWeight.normal, color: Colors.white),
-                                  ),
-                                
-                              ],
+                          onSelected: (String value) {
+                            // Handle selection here
+                            if (value == 'Edit Details') {
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=> UserDetailPage()));
+                            } else if (value == 'Login') {
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=> SignInScreen()));
+                            } else if (value == 'Logout') {
+                              //Navigator.push(context, MaterialPageRoute(builder: (context)=> ));
+                            }
+                          },
+                          itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                            const PopupMenuItem<String>(
+                              value: 'Edit Details',
+                              child: Row(
+                                children: [
+                                  Icon(Icons.edit, color: Colors.green),
+                                  SizedBox(width: 6),
+                                  Text("Edit Details")
+                                ],
+                              ),
                             ),
-                            
-                          
-                        ]
-                    ),
-                actions: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 16.0),
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.search,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          isSearching = !isSearching;
-                        });
-                        if (!isSearching) {
-                          _searchController.clear();
-                          setState(() {
-                            filteredJobs = jobs;
-                          });
-                        }
-                      },
-                    ),
-                  ),
-                  Padding(
-                  padding: const EdgeInsets.only(right: 16.0),
-                  child: PopupMenuButton<String>(
-                    offset: Offset(0, 50), // Adjust position of the dropdown
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    color: Colors.white,
-                    icon: CircleAvatar(
-                      backgroundColor: Colors.transparent,
-                      child: Icon(Icons.person, color: Colors.white),
-                    ),
-                    onSelected: (value) {
-                      if (value == 'Login') {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => SignInScreen()),
-                        );
-                      } else if (value == 'Edit Details') {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => UserDetailPage()),
-                        );
-                      }
-                    },
-                    itemBuilder: (BuildContext context) => [
-                      PopupMenuItem(
-                        value: 'Login',
-                        child: Row(
-                          children: [
-                            Icon(Icons.login, color: Colors.black),
-                            SizedBox(width: 10),
-                            Text(
-                              'Login',
-                              style: TextStyle(fontWeight: FontWeight.w500),
+                            const PopupMenuItem<String>(
+                              value: 'Login',
+                              child: Row(
+                                children: [
+                                  Icon(Icons.login, color: Colors.black),
+                                  SizedBox(width: 6),
+                                  Text("Login")
+                                ],
+                              ),
+                            ),
+                            const PopupMenuItem<String>(
+                              value: 'Logout',
+                              child: Row(
+                                children: [
+                                  Icon(Icons.logout, color: Colors.red),
+                                  SizedBox(width: 6),
+                                  Text("Logout")
+                                ],
+                              ),
                             ),
                           ],
                         ),
                       ),
-                      PopupMenuItem(
-                        value: 'Edit Details',
-                        child: Row(
-                          children: [
-                            Icon(Icons.edit, color: Colors.black),
-                            SizedBox(width: 10),
-                            Text(
-                              'Edit Details',
-                              style: TextStyle(fontWeight: FontWeight.w500),
-                            ),
-                          ],
-                        ),
-                      ),
-                      PopupMenuDivider(),
-                      PopupMenuItem(
-                        value: 'Logout',
-                        child: Row(
-                          children: [
-                            Icon(Icons.logout, color: Colors.red),
-                            SizedBox(width: 10),
-                            Text(
-                              'Logout',
-                              style: TextStyle(fontWeight: FontWeight.w500),
-                            ),
-                          ],
-                        ),
-                      ),
-                     
                     ],
-                    
                   ),
                 ),
-                ],
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                // Increase the height of the AppBar
-                toolbarHeight: 100,  // Set the height of the AppBar
 
-              ),
-              
-            ),
-            Positioned(
-            top: 100,  // Adjusted to place after the AppBar
-            left: 0,
-            right: 0,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      print('Remote Only filter pressed');
-                    },
-                    child: Text('Remote Only'),
+                // Search Bar (moves up on focus)
+               Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 50),
+                  child: Transform.translate(
+                    offset: isSearchFocused ? const Offset(0, 50) : const Offset(0, -30), // Move search bar up when focused
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(30),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3), // Light grey shadow
+                            spreadRadius: 1, // How far the shadow spreads
+                            blurRadius: 10, // Smoothness of the shadow
+                            offset: const Offset(0, 5), // Position the shadow below
+                          ),
+                        ],
+                      ),
+                      child: TextField(
+                        autofocus: false,
+                        onTap: () {
+                          setState(() {
+                            isSearchFocused = true;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          hintText: 'Search job here...',
+                          fillColor: Colors.transparent, // Transparent because the background is set in the Container
+                          filled: true,
+                          prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                          suffixIcon: isSearchFocused
+                              ? IconButton(
+                                  icon: const Icon(Icons.close),
+                                  onPressed: () {
+                                    setState(() {
+                                      isSearchFocused = false; // Reset when cross is pressed
+                                    });
+                                  },
+                                )
+                              : null,
+                          contentPadding: const EdgeInsets.all(10),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                            borderSide: BorderSide.none, // Remove border since Container handles it
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      print('Salary Range filter pressed');
-                    },
-                    child: Text('Salary Range'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      print('Date Posted filter pressed');
-                    },
-                    child: Text('Date Posted'),
+                ),
+
+                SizedBox(height: isSearchFocused ? 70 : 2), 
+                // Filter Buttons (appear when search bar is focused)
+                if (isSearchFocused) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                // Show Salary Range Slider on press
+                                setState(() {
+                                  // You can add more functionality to show the range here if needed
+                                });
+                              },
+                              child: const Text('Remote', style: TextStyle(color: Colors.black)),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                // Show Salary Range Slider
+                                showSalaryRangeDialog(context);
+                              },
+                              child: const Text('Salary Range', style: TextStyle(color: Colors.black)),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                // Show Date Picker
+                                _selectDate(context);
+                              },
+                              child: const Text('Date Posted', style: TextStyle(color: Colors.black)),
+                            ),
+                            const Icon(Icons.tune, color: Colors.black),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
+
+                // Job Cards
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: jobs.map((job) => buildJobCard(job, context)).toList(),
+                  ),
+                ),
+        if (!isLoadingMore)
+          Center(
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white, // This will set the button's background color
+              ),
+              onPressed: loadMoreJobs,
+              child: const Text(
+                "Load More",
+                style: TextStyle(color: Color(0xFF40189D)),
               ),
             ),
           ),
-            // Main content inside Column
-            Positioned(
-              top: 150,  // Adjusted to accommodate the increased AppBar height
-              left: 0,
-              right: 0,
-              bottom: 0,
+        if (isLoadingMore)
+          const Center(
+            child: CircularProgressIndicator(),
+          ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+Widget buildJobCard(Map<String, String> job, BuildContext context) {
+  return GestureDetector(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => JobDetailsPage(job: job),
+        ),
+      );
+    },
+    child: Container(
+      margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 15),
+      color: Colors.grey[100],
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Row(
+          children: [
+            // Image with proper fit and constraints
+            Container(
+              width: 50, // Set a fixed width for the image
+              height: 50, // Set a fixed height for the image
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8), // Optional: for rounded corners
+                image: DecorationImage(
+                  image: NetworkImage(job['logo']!),
+                  fit: BoxFit.cover, // Adjust the image to fit the container without distortion
+                ),
+              ),
+            ),
+            const SizedBox(width: 15), // Add some space between image and text
+            Expanded(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  
-                  // Job Cards
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(133, 199, 168, 238),
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(30),
-                          topRight: Radius.circular(30),
-                        ),
-                      ),
-                      
-                      margin: const EdgeInsets.all(12),
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: filteredJobs.length,
-                        itemBuilder: (context, index) {
-                          final job = filteredJobs[index];
-                          return Card(
-                            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                            shape: RoundedRectangleBorder(
-                              // White border for the card
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                            child: InkWell(
-                              onTap: () {
-                                Future.delayed(const Duration(milliseconds: 200), () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          JobDetailsScreen(job: job),
-                                    ),
-                                  );
-                                });
-                              },
-                              borderRadius: BorderRadius.circular(8),
-                              highlightColor: Colors.grey[500],
-                              splashColor: Colors.grey[300],
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 10),
-                                child: ListTile(
-                                  
-                                  title: Text(
-                                    job['company']!,
-                                    style: TextStyle(fontSize: 11),
-                                  ),
-                                  subtitle: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        job['title']!,
-                                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                                      ),
-                                      Text(job['location']!),
-                                      if (job.containsKey('salary')) Text(job['salary']!),
-                                      Text(job['type']!),
-                                    ],
-                                  ),
-                                  trailing: SizedBox(
-                                    width: 77,
-                                    child: Center(
-                                      child: Stack(
-                                        children: [
-                                          
-                                          Positioned(
-                                            bottom: 0,
-                                            left: 0,
-                                            right: 0,
-                                            child: SizedBox(
-                                              height: 30,
-                                              child: ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                  backgroundColor: Color.fromARGB(255, 67, 1, 129),
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(20),
-                                                  ),
-                                                ),
-                                                onPressed: () {
-                                                  print("1");
-                                                },
-                                                child: Text(
-                                                  "Apply",
-                                                  style: TextStyle(color: Colors.white, fontSize: 11),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
+                  // Company Title
+                  Text(
+                    job['company']!,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black54,
                     ),
+                    overflow: TextOverflow.ellipsis, // Adds ellipsis if text is too long
+                    maxLines: 1, // Limits to a single line
+                  ),
+                  const SizedBox(height: 5),
+                  // Job Title
+                  Text(
+                    job['title']!,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                    overflow: TextOverflow.ellipsis, // Adds ellipsis if text is too long
+                    maxLines: 1, // Limits to a single line
+                  ),
+                  const SizedBox(height: 15),
+                  Row(
+                    children: [
+                      const Icon(Icons.currency_exchange, color: Color(0xFF40189D)),
+                      const SizedBox(width: 5),
+                      Text(
+                        job['salary']!,
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 2),
+                  Row(
+                    children: [
+                      const Icon(Icons.work_outline, color: Color(0xFF40189D)),
+                      const SizedBox(width: 5),
+                      Text(
+                        job['location']!,
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -451,178 +483,313 @@ class _JobsScreenState extends State<JobsScreen> {
           ],
         ),
       ),
+    ),
+  );
+}
+
+
+int currentPage = 1; // Keeps track of the current page of jobs
+
+void loadMoreJobs() async {
+  setState(() {
+    isLoadingMore = true;
+  });
+
+  // Simulate network call delay
+  await Future.delayed(const Duration(seconds: 2));
+
+  setState(() {
+    // Load the next 5 jobs based on the current page
+    final nextJobs = job.skip(currentPage * 5).take(5).toList();
+    jobs.addAll(nextJobs);
+    currentPage++; // Move to the next page
+    isLoadingMore = false;
+  });
+}
+
+
+  // Function to show Salary Range dialog with sliders
+  void showSalaryRangeDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Select Salary Range'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Minimum Salary Slider
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Min Salary'),
+                  Text("\\${minSalary.toInt()}"),
+                ],
+              ),
+              Slider(
+                value: minSalary,
+                min: 10000,
+                max: 100000,
+                divisions: 10,
+                label: minSalary.toString(),
+                onChanged: (double value) {
+                  setState(() {
+                    minSalary = value;
+                  });
+                },
+              ),
+              // Maximum Salary Slider
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Max Salary'),
+                  Text("\\${maxSalary.toInt()}"),
+                ],
+              ),
+              Slider(
+                value: maxSalary,
+                min: 20000,
+                max: 200000,
+                divisions: 10,
+                label: maxSalary.toString(),
+                onChanged: (double value) {
+                  setState(() {
+                    maxSalary = value;
+                  });
+                },
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text('Close'),
+            ),
+          ],
+        );
+      },
     );
+  }
+
+  // Function to show date picker
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(), // Current date as default
+      firstDate: DateTime(2000), // Earliest date
+      lastDate: DateTime(2100), // Latest date
+    );
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked; // Update the selected date
+      });
+    }
   }
 }
 
 
 
-class JobDetailsScreen extends StatelessWidget {
+class JobDetailsPage extends StatelessWidget {
   final Map<String, String> job;
 
-  const JobDetailsScreen({required this.job});
+  const JobDetailsPage({Key? key, required this.job}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Stack(
-          children: [
-            // Background image
-            Positioned.fill(
-              child: Image.asset(
-                'assets/HD-wallpaper-back-to-it-background-purple-solid-thumbnail.jpg',
-                fit: BoxFit.cover,
-              ),
-            ),
-            // AppBar on top with transparent background and increased height
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: AppBar(
-                toolbarHeight: 120, // Increased AppBar height
-                backgroundColor: Colors.transparent, // Make app bar transparent
-                elevation: 0, // Remove shadow
-                leading: IconButton(
-                  icon: Icon(Icons.arrow_back, color: Colors.white), // Back button in white
-                  onPressed: () {
-                    Navigator.pop(context); // Go back to the previous screen
-                  },
-                ),
-                title: Text(
-                  'Job Details',
-                  style: TextStyle(
-                    color: Colors.white, // Title color in white
-                    fontSize: 26, // Increased font size for the title
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-              ),
-            ),
-            // Container with light purple top rounded background, now placed behind the content
-            Positioned(
-              top: 120, // Start after AppBar
-              left: 16, // Added left padding
-              right: 16, // Added right padding
-              bottom: 0, // Stretch to the bottom
-              child: Container(
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(133, 199, 168, 238), // Light purple background color
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
-                ),
-                child: SizedBox.expand(),
-              ),
-            ),
-            // Main content inside Positioned widget
-            Positioned(
-              top: 120, // Start the content after the AppBar
-              left: 0,
-              right: 0,
-              bottom: 0, // Make sure it stretches to the bottom
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Container(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
+    // Get screen width for responsive text sizing
+    double screenWidth = MediaQuery.of(context).size.width;
+    double fontSizeTitle = screenWidth * 0.06; // 6% of screen width
+    double fontSizeSubtitle = screenWidth * 0.045; // 4.5% of screen width
+    double fontSizeBody = screenWidth * 0.04; // 4% of screen width
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(job['title']!),
+        
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(26.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Job details header
+                Row(
+                  children: [
+                    const SizedBox(width: 10),
+                    // Left side: Company name and job title
+                    Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Job title and company details
                           Text(
                             job['company']!,
                             style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              letterSpacing: 1.2, // Add letter spacing
+                              fontSize: fontSizeSubtitle,
+                              fontWeight: FontWeight.normal,
                             ),
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 5),
                           Text(
                             job['title']!,
                             style: TextStyle(
-                              fontSize: 24,
+                              fontSize: fontSizeTitle,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              letterSpacing: 1.2, // Add letter spacing
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            job['location']!,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                              letterSpacing: 1.0, // Add letter spacing
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            job['salary']!,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                              letterSpacing: 1.0, // Add letter spacing
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            job['type']!,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                              letterSpacing: 1.0, // Add letter spacing
-                            ),
-                          ),
-                          SizedBox(height: 16),
-                          // Job details text
-                          Text(
-                            job['details']!,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                              height: 1.6, // Adjust line height for better readability
-                            ),
-                          ),
-                          SizedBox(height: 32),
-                          // Apply button
-                          Center(
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12), // Adjust padding for button
-                                backgroundColor: const Color.fromARGB(255, 75, 2, 138), // Change button color
-                              ),
-                              onPressed: () {
-                                print("Applied");
-                              },
-                              child: Text(
-                                "Apply Now",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold, // Add font weight for emphasis
-                                ),
-                              ),
                             ),
                           ),
                         ],
                       ),
                     ),
+                    // Right side: Logo as CircleAvatar
+                    CircleAvatar(
+                      backgroundImage: NetworkImage(job['logo']!),
+                      radius: 30,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                
+                // Job type button
+                Padding(
+                  padding: EdgeInsets.only(left: 8),
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    child: Text('${job['jobType']!}'),
+                    style: ElevatedButton.styleFrom(
+                      side: BorderSide(color: Colors.grey, width: 1), // Blue outline
+                      padding: EdgeInsets.symmetric(horizontal: 28, vertical: 10), // Adjust padding if needed
+                    ),
                   ),
                 ),
-              ),
+                const SizedBox(height: 10),
+                // Add a fine grey line after the job type
+                Divider(color: Colors.grey.shade300, thickness: 1),
+                const SizedBox(height: 20),
+                // Salary and Location
+               Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Salary Row with icon and text side by side
+                Padding(
+                  padding: EdgeInsets.only(left: 30),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8), // Padding for outer circle
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(196, 121, 66, 248), // Light purple outer circle
+                          shape: BoxShape.circle, // Circular shape
+                           // Purple border
+                        ),
+                        child: CircleAvatar(
+                          backgroundColor: Color.fromARGB(142, 147, 104, 248), // Same as outer circle color
+                          radius: 20, // Size of the inner circle (location icon)
+                          child: FaIcon(
+                          FontAwesomeIcons.coins,
+                          size: 20, // Size of the icon
+                          color: Colors.white, // Icon color
+                        ),
+                        ),
+                      ),
+                      const SizedBox(width: 10), 
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Salary"),
+                          Text(
+                            "${job['salary']!}",
+                            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      )
+                      
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                // Location Row with icon and text side by side
+                Padding(
+                  padding: EdgeInsets.only(left: 30),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8), // Padding for outer circle
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(196, 121, 66, 248), // Light purple outer circle
+                          shape: BoxShape.circle, // Circular shape
+                          
+                        ),
+                        child: CircleAvatar(
+                          backgroundColor: Color.fromARGB(142, 147, 104, 248), // Same as outer circle color
+                          radius: 20, // Size of the inner circle (location icon)
+                          child: Icon(
+                            Icons.work_outline,
+                            size: 20, // Size of the icon
+                            color: Colors.white, // Icon color
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10), // Space between icon and text
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("location"),
+                          Text(
+                            "${job['location']!}",
+                            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
+                const SizedBox(height: 20),
+                // Add a fine grey line after the location
+                Divider(color: Colors.grey.shade300, thickness: 1),
+                const SizedBox(height: 20),
+
+                // Job Description
+                Text(
+                  "Job Description",
+                  style: TextStyle(
+                    fontSize: fontSizeSubtitle,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  job['description'] ?? "No description available.",
+                  style: TextStyle(fontSize: fontSizeBody),
+                ),
+                const SizedBox(height: 20),
+
+                Center(
+                  child: ElevatedButton(
+                      onPressed: () {},
+                      child: Text('Apply', style: TextStyle(color: Colors.white),),
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.symmetric(horizontal: 28, vertical: 10), 
+                        backgroundColor:Color(0xFF40189D), // Adjust padding if needed
+                      ),
+                    ),
+                ),
+              ],
+
+            ),
+          ),
         ),
       ),
     );
   }
 }
+
+ 
+
+

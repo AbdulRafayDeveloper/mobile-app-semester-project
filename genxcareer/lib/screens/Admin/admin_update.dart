@@ -13,10 +13,9 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool _isPasswordVisible = false;
 
   // List to hold the account details (Name, Email, Password)
-  List<String> accountDetails = ['John Doe', 'johndoe@example.com', 'password123'];
+  List<String> accountDetails = ['John Doe', 'johndoe@example.com'];
 
   // Variable to store the selected image
   XFile? _selectedImage;
@@ -29,7 +28,6 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
     // Initialize the controllers with the current values from the list
     _nameController.text = accountDetails[0];
     _emailController.text = accountDetails[1];
-    _passwordController.text = accountDetails[2];
   }
 
   // Function to pick an image from the gallery
@@ -49,9 +47,8 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
         children: [
           // Background Image (outside area)
           Positioned.fill(
-            child: Image.asset(
-              'assets/HD-wallpaper-back-to-it-background-purple-solid-thumbnail.jpg', // Replace with your image path
-              fit: BoxFit.cover,
+            child: Container(
+              color: Color(0xFF40189D), // Use any color you prefer
             ),
           ),
           // White Container with Rounded Top
@@ -109,31 +106,7 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
                                 },
                               ),
                               const SizedBox(height: 16),
-                              TextField(
-                                controller: _passwordController,
-                                obscureText: !_isPasswordVisible,
-                                decoration: InputDecoration(
-                                  labelText: 'Password',
-                                  border: const OutlineInputBorder(),
-                                  suffixIcon: IconButton(
-                                    icon: Icon(
-                                      _isPasswordVisible
-                                          ? Icons.visibility
-                                          : Icons.visibility_off,
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        _isPasswordVisible = !_isPasswordVisible;
-                                      });
-                                    },
-                                  ),
-                                ),
-                                onChanged: (value) {
-                                  setState(() {
-                                    accountDetails[2] = value; // Update password in the list
-                                  });
-                                },
-                              ),
+                              
                             ],
                           ),
                         ),
@@ -147,7 +120,7 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
                               final name = _nameController.text;
                               final email = _emailController.text;
                               final password = _passwordController.text;
-                              print("Name: $name, Email: $email, Password: $password");
+                              print("Name: $name, Email: $email");
                               // Perform save action (like updating the database)
                             },
                             style: ElevatedButton.styleFrom(
@@ -176,7 +149,7 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
                   CircleAvatar(
                     radius: 60,
                     backgroundImage: _selectedImage == null
-                        ? NetworkImage(
+                        ? const NetworkImage(
                             'https://plus.unsplash.com/premium_photo-1678197937465-bdbc4ed95815?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cGVyc29ufGVufDB8fDB8fHww')
                         : FileImage(File(_selectedImage!.path)), // Show selected image if available
                   ),
@@ -187,14 +160,14 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
                     child: GestureDetector(
                       onTap: _pickImage, // Pick image on pencil icon tap
                       child: Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
+                        padding: const EdgeInsets.all(5),
+                        decoration: const BoxDecoration(
                           color: Colors.white,
                           shape: BoxShape.circle,
                         ),
-                        child: Icon(
+                        child: const Icon(
                           Icons.edit,
-                          color: const Color.fromARGB(255, 80, 2, 139),
+                          color: Color.fromARGB(255, 80, 2, 139),
                           size: 24,
                         ),
                       ),
@@ -212,7 +185,7 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
             child: Row(
               children: [
                 IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.arrow_back,
                     color: Colors.white,
                     size: 34, // Adjust size of the arrow
@@ -221,8 +194,8 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
                     Navigator.pop(context); // This will navigate back to the previous screen
                   },
                 ),
-                SizedBox(width: 20), // Add spacing between the icon and the text
-                Text(
+                const SizedBox(width: 20), // Add spacing between the icon and the text
+                const Text(
                   'Admin Settings', // Adjust text as needed
                   style: TextStyle(
                     fontSize: 26,
