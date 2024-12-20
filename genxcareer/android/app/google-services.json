@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "360584986024",
+    "project_id": "genx-career",
+    "storage_bucket": "genx-career.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:360584986024:android:4619c4eede3a49c850719d",
+        "android_client_info": {
+          "package_name": "com.example.genxcareer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNaVrAD_XzcuIO6IhaRc9_fi9-N9Fsl8U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
