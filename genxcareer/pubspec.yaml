@@ -60,6 +60,12 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/android_logo.png"
+  adaptive_icon_foreground: "assets/android_logo.png"
+  adaptive_icon_background: "#40189d"
 
 flutter:
 
