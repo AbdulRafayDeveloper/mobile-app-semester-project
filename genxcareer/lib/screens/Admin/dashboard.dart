@@ -135,7 +135,7 @@ class _DashboardState extends State<Dashboard> {
                             ),
                           ),
                           Text(
-                            "Jobs Details",
+                            "Dashboard",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: width * 0.05, // Responsive font size

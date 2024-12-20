@@ -463,6 +463,11 @@ Widget buildJobCard(Map<String, String> job, BuildContext context) {
                         job['location']!,
                         style: const TextStyle(fontSize: 16),
                       ),
+                      Spacer(),
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.delete  , color: Colors.red),
+                      ),
                     ],
                   ),
                 ],

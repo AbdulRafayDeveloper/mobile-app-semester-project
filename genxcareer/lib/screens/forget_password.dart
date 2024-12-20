@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:genxcareer/screens/jobs_screen.dart';
 import 'package:genxcareer/screens/sign_in_screen.dart';
 
 class ForgetPasswordPage extends StatelessWidget {
@@ -57,7 +58,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     IconButton(
                       icon: const Icon(Icons.arrow_back, color: Colors.black),
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> SignInScreen()));
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => const JobsScreen()));
                       },
                     ),
                     const Text(
@@ -79,6 +81,20 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                   style: TextStyle(fontSize: 14, color: Colors.grey),
                 ),
                 const SizedBox(height: 30),
+
+                // Current Password
+                _buildPasswordField(
+                  controller: _currentPasswordController,
+                  label: 'Current Password',
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Current Password cannot be empty';
+                    }
+                    return null; // Add additional validation if needed
+                  },
+                ),
+                const SizedBox(height: 20),
+
                 // New Password
                 _buildPasswordField(
                   controller: _newPasswordController,

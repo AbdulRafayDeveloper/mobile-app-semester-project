@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:genxcareer/screens/Admin/admin_update.dart';
 import 'package:genxcareer/screens/Admin/change_passord.dart';
+import 'package:genxcareer/screens/Admin/dashboard.dart';
 import 'package:genxcareer/screens/Admin/jobs.dart';
 import 'package:genxcareer/screens/Admin/users.dart';
 import 'package:genxcareer/screens/jobs_screen.dart';
@@ -100,7 +101,7 @@ final List<Map<String, String>> user = [
               title: const Text('Dashboard'),
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => UserDetailPage()));
+                    MaterialPageRoute(builder: (context) => Dashboard()));
               },
             ),
 

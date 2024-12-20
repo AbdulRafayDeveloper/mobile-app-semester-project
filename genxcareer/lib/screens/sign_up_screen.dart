@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:genxcareer/screens/jobs_screen.dart';
 import 'package:genxcareer/screens/sign_in_screen.dart';
-
+import 'package:flutter/gestures.dart';
 class RegisterPage extends StatelessWidget {
   const RegisterPage({Key? key}) : super(key: key);
 
@@ -38,6 +39,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           content: Text('Registration Successful!'),
         ),
       );
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> JobsScreen()));
     }
   }
 
@@ -207,22 +209,35 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ),
 
+                  const SizedBox(height: 30),
                   // Already have an account? Sign In
                   Align(
                     alignment: Alignment.center,
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const SignInScreen()),
-                        );
-                      },
-                      child: const Text(
-                        "Already have an account? Sign In",
-                        style: TextStyle(fontSize: 14, color: Color(0xFF40189D)),
+                    child: RichText(
+                      text: TextSpan(
+                        text: "Already have an account? ",
+                        style: const TextStyle(fontSize: 14, color: Colors.black),
+                        children: [
+                          TextSpan(
+                            text: 'Sign in',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFF40189D),
+                              fontWeight: FontWeight.bold,
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => SignInScreen()),
+                                );
+                              },
+                          ),
+                        ],
                       ),
                     ),
                   ),
+
                   const SizedBox(height: 5),
                 ],
               ),

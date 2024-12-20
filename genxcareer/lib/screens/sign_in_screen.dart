@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:genxcareer/screens/Admin/dashboard.dart';
 import 'package:genxcareer/screens/Admin/jobs.dart';
 import 'package:genxcareer/screens/forget_password.dart';
-import 'package:genxcareer/screens/jobs_screen.dart';
 import 'package:genxcareer/screens/sign_up_screen.dart';
-
+import 'package:genxcareer/screens/jobs_screen.dart';
+import 'package:flutter/gestures.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -27,29 +26,21 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   bool _showPassword = false;
 
-  void _login() {
-    final email = _emailController.text.trim();
-    final password = _passwordController.text.trim();
-
-    if (email.isEmpty || password.isEmpty) {
+  void login() {
+    if (_formKey.currentState?.validate() ?? false) {
+      // Valid inputs
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Email and password cannot be empty'),
+          content: Text('Login Successful!'),
         ),
       );
-    } else {
-      // Process login logic
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Login successful!'),
-        ),
-      );
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> Jobs()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> Dashboard()));
     }
   }
 
@@ -61,200 +52,233 @@ class _SignInScreenState extends State<SignInScreen> {
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Back Button and Title
-                Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back, color: Colors.black),
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>JobsScreen()));
-                      },
-                    ),
-                    const Text(
-                      'Go Back to Jobs',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 40),
-
-                // Sign In Title
-                const Text(
-                  'Sign In',
-                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 10),
-                const Text(
-                  'Please sign in to your registered account',
-                  style: TextStyle(fontSize: 14, color: Colors.grey),
-                ),
-                const SizedBox(height: 30),
-
-                // Email TextField
-                TextField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-
-                // Password TextField
-                TextField(
-                  controller: _passwordController,
-                  obscureText: !_showPassword,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _showPassword ? Icons.visibility : Icons.visibility_off,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Back Button and Title
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.arrow_back, color: Colors.black),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => JobsScreen()),
+                          );
+                        },
                       ),
-                      onPressed: () {
-                        setState(() {
-                          _showPassword = !_showPassword;
-                        });
-                      },
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-
-                // Forgot Password
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=> ForgetPasswordPage()));
-                    },
-                    child: const Text(
-                      'Forgot your password?',
-                      style: TextStyle(fontSize: 14, color: Color(0xFF40189D)),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 5),
-
-                // Login Button
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF40189D),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                      const Text(
+                        'Go Back to Jobs',
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
                       ),
-                    ),
-                    onPressed: _login,
-                    child: const Text(
-                      'SIGN IN',
-                      style: TextStyle(fontSize: 16, color: Colors.white),
-                    ),
+                    ],
                   ),
-                ),
+                  const SizedBox(height: 40),
 
-                 Align(
-                  alignment: Alignment.center,
-                  child: TextButton(
-                    onPressed: () {
-                      setState(() {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> SignUpScreen()));
-                      });
-                    },
-                    child: const Text(
-                      "Don't have a account ? Sign up",
-                      style: TextStyle(fontSize: 14, color: Color(0xFF40189D)),
-                    ),
+                  // Sign In Title
+                  const Text(
+                    'Sign In',
+                    style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
                   ),
-                ),
-                const SizedBox(height: 5),
-
-                // Or Sign In With
-                const Center(
-                  child: Text(
-                    'Or sign in with',
+                  const SizedBox(height: 10),
+                  const Text(
+                    'Please sign in to your registered account',
                     style: TextStyle(fontSize: 14, color: Colors.grey),
                   ),
-                ),
-                const SizedBox(height: 20),
+                  const SizedBox(height: 30),
 
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                    
-                      shape: RoundedRectangleBorder(
+                  // Email TextField
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      labelText: 'Email',
+                      border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      side: BorderSide(
-                        color: Color(0xFF40189D), // Border color
-                        width: 0.5, // Border width
-                      ),
                     ),
-                    onPressed: _login,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Add an image or an icon
-                        Image.asset('assets/google-removebg-preview.png'),
-                        const SizedBox(width: 20), // Spacing between icon and text
-                        const Text(
-                          'Sign In with Google',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                      ],
-                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Email cannot be empty';
+                      }
+                      if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                        return 'Enter a valid email';
+                      }
+                      return null;
+                    },
                   ),
-                ),
-                SizedBox(height: 10,),
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                    
-                      shape: RoundedRectangleBorder(
+                  const SizedBox(height: 20),
+
+                  // Password TextField
+                  TextFormField(
+                    controller: _passwordController,
+                    obscureText: !_showPassword,
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      side: BorderSide(
-                        color: Color(0xFF40189D), // Border color
-                        width: 0.5, // Border width
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _showPassword ? Icons.visibility : Icons.visibility_off,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _showPassword = !_showPassword;
+                          });
+                        },
                       ),
                     ),
-                    onPressed: _login,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Add an image or an icon
-                        Image.asset('assets/facebook-removebg-preview.png'),
-                        const SizedBox(width: 0), // Spacing between icon and text
-                        const Text(
-                          'Sign In with Facebook',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                      ],
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Password cannot be empty';
+                      }
+                      if (value.length < 6) {
+                        return 'Password must be at least 6 characters';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 10),
+
+                  // Forgot Password
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ForgetPasswordPage()),
+                        );
+                      },
+                      child: const Text(
+                        'Forgot your password?',
+                        style: TextStyle(fontSize: 14, color: Color(0xFF40189D)),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 5),
+
+                  // Login Button
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF40189D),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      onPressed: login,
+                      child: const Text(
+                        'SIGN IN',
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  Align(
+                    alignment: Alignment.center,
+                    child: RichText(
+                      text: TextSpan(
+                        text: "Don't have an account? ",
+                        style: const TextStyle(fontSize: 14, color: Colors.black),
+                        children: [
+                          TextSpan(
+                            text: 'Sign up',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFF40189D),
+                              fontWeight: FontWeight.bold,
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => SignUpScreen()),
+                                );
+                              },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Or Sign In With
+                  const Center(
+                    child: Text(
+                      'Or sign in with',
+                      style: TextStyle(fontSize: 14, color: Colors.grey),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Google Sign-In Button
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        side: const BorderSide(
+                          color: Color(0xFF40189D),
+                          width: 0.5,
+                        ),
+                      ),
+                      onPressed: login,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset('assets/google-removebg-preview.png', height: 24),
+                          const SizedBox(width: 20),
+                          const Text(
+                            'Sign In with Google',
+                            style: TextStyle(fontSize: 16, color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+
+                  // Facebook Sign-In Button
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        side: const BorderSide(
+                          color: Color(0xFF40189D),
+                          width: 0.5,
+                        ),
+                      ),
+                      onPressed: login,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset('assets/facebook-removebg-preview.png', height: 24),
+                          const SizedBox(width: 10),
+                          const Text(
+                            'Sign In with Facebook',
+                            style: TextStyle(fontSize: 16, color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

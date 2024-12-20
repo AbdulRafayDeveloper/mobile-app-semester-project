@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:genxcareer/screens/forget_password.dart';
 import 'package:genxcareer/screens/sign_in_screen.dart';
 import 'package:genxcareer/screens/users_details.dart';
 import 'package:intl/intl.dart'; // For formatting the selected date
@@ -229,22 +230,35 @@ final List<Map<String, String>> job = [
                         ),
                           onSelected: (String value) {
                             // Handle selection here
-                            if (value == 'Edit Details') {
+                            if (value == 'Edit Profile') {
                               Navigator.push(context, MaterialPageRoute(builder: (context)=> UserDetailPage()));
                             } else if (value == 'Login') {
                               Navigator.push(context, MaterialPageRoute(builder: (context)=> SignInScreen()));
                             } else if (value == 'Logout') {
                               //Navigator.push(context, MaterialPageRoute(builder: (context)=> ));
                             }
+                            else if (value == 'Change Password') {
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=> ForgetPasswordPage()));
+                            }
                           },
                           itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
                             const PopupMenuItem<String>(
-                              value: 'Edit Details',
+                              value: 'Edit Profile',
                               child: Row(
                                 children: [
                                   Icon(Icons.edit, color: Colors.green),
                                   SizedBox(width: 6),
-                                  Text("Edit Details")
+                                  Text("Edit Profile")
+                                ],
+                              ),
+                            ),
+                            const PopupMenuItem<String>(
+                              value: 'Change Password',
+                              child: Row(
+                                children: [
+                                  Icon(Icons.password, color: Color.fromARGB(255, 21, 53, 79)),
+                                  SizedBox(width: 6),
+                                  Text("Change Password")
                                 ],
                               ),
                             ),
@@ -343,6 +357,14 @@ final List<Map<String, String>> job = [
                                   // You can add more functionality to show the range here if needed
                                 });
                               },
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5), // Adjust padding for size
+                                minimumSize: const Size(60, 30), // Set minimum size for the button
+                                backgroundColor: Colors.white, // Optional: Button background color
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8), // Optional: Rounded corners
+                                ),
+                              ),
                               child: const Text('Remote', style: TextStyle(color: Colors.black)),
                             ),
                             ElevatedButton(
@@ -350,6 +372,14 @@ final List<Map<String, String>> job = [
                                 // Show Salary Range Slider
                                 showSalaryRangeDialog(context);
                               },
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5), // Adjust padding for size
+                                minimumSize: const Size(60, 30), // Set minimum size for the button
+                                backgroundColor: Colors.white, // Optional: Button background color
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8), // Optional: Rounded corners
+                                ),
+                              ),
                               child: const Text('Salary Range', style: TextStyle(color: Colors.black)),
                             ),
                             ElevatedButton(
@@ -357,6 +387,14 @@ final List<Map<String, String>> job = [
                                 // Show Date Picker
                                 _selectDate(context);
                               },
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5), // Adjust padding for size
+                                minimumSize: const Size(60, 30), // Set minimum size for the button
+                                backgroundColor: Colors.white, // Optional: Button background color
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8), // Optional: Rounded corners
+                                ),
+                              ),
                               child: const Text('Date Posted', style: TextStyle(color: Colors.black)),
                             ),
                             const Icon(Icons.tune, color: Colors.black),
