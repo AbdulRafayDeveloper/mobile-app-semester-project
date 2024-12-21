@@ -65,7 +65,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       },
                     ),
                     const Text(
-                      'Go Back to Login',
+                      'Go Back',
                       style: TextStyle(
                           fontSize: 20, fontWeight: FontWeight.normal),
                     ),

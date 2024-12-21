@@ -1,9 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Required for SystemChrome
+import 'package:flutter/services.dart';
 import 'package:genxcareer/controller/user_controller.dart';
 import 'package:genxcareer/routes/app_routes.dart';
-import 'package:genxcareer/screens/Admin/dashboard.dart';
-import 'package:genxcareer/screens/jobs_screen.dart';
 import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -54,6 +54,66 @@ class _SplashScreenState extends State<SplashScreen>
 
     // Start the animation
     _controller.forward();
+    _checkUserAuthentication();
+  }
+
+  // Separate async method to handle user authentication
+  Future<void> _checkUserAuthentication() async {
+    // Get the user from FirebaseAuth
+
+    User? checkUser = await FirebaseAuth.instance.currentUser;
+
+    print("SPlash Screen checkUser: $checkUser");
+
+    // Check if the user is authenticated
+    if (checkUser != null) {
+      if (!checkUser.emailVerified) {
+        return;
+      }
+
+      final doc = await FirebaseFirestore.instance
+          .collection('users')
+          .where('email', isEqualTo: checkUser.email)
+          .get();
+
+      if (doc.docs.isNotEmpty) {
+        final userDoc = doc.docs.first;
+        String? role = userDoc.data()['role'];
+        String? name = userDoc.data()['name'];
+        String? idToken = await checkUser.getIdToken();
+        final decodedToken = await checkUser.getIdTokenResult();
+        final expDate = DateTime.fromMillisecondsSinceEpoch(
+            decodedToken.expirationTime!.millisecondsSinceEpoch);
+        final bool isTokenExpired = DateTime.now().isAfter(expDate);
+
+        // Store the user data using GetX
+        userController.setUserData(
+            idToken ?? '', checkUser.email ?? '', role ?? '', isTokenExpired);
+
+        print("Token Expiry Date: $expDate");
+        print("Is Token Expired? $isTokenExpired");
+        print("Check User: $checkUser");
+        print("idToken: $idToken");
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content:
+                Text("Please Login to apply for Jobs or as an administrator"),
+            duration: const Duration(seconds: 3),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content:
+              Text("Please Login to apply for Jobs or as an administrator"),
+          duration: const Duration(seconds: 3),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
 
     // Delay for 3 seconds before checking the user role and navigating
     Future.delayed(const Duration(seconds: 3), () {

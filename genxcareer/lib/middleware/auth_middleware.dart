@@ -12,25 +12,45 @@ class AuthMiddleware extends GetMiddleware {
     print("User isAuthenticated: ${userController.isAuthenticated.value}");
     print("User role: ${userController.role.value}");
     print("User token: ${userController.token.value}");
+    print("User tokenExpired: ${userController.tokenExpired.value}");
 
     if (route == '/signIn' && !userController.isAuthenticated.value) {
       print("User is already on the signIn page.");
+      userController.clearUserData();
       return null;
     }
 
     if (route == '/signUp' && !userController.isAuthenticated.value) {
       print("User is already on the signUp page.");
+      userController.clearUserData();
       return null;
     }
 
+    // if (route == '/userChangePassword' &&
+    //     !userController.isAuthenticated.value) {
+    //   print("User is not logged in so move to signIn page.");
+    //   userController.clearUserData();
+    //   return const RouteSettings(name: '/signIn');
+    // }
+
+    // if (route == '/userProfileDetails' &&
+    //     !userController.isAuthenticated.value) {
+    //   print("User is not logged in so move to signIn page.");
+    //   userController.clearUserData();
+    //   return const RouteSettings(name: '/signIn');
+    // }
+
     // Default redirection to the sign-in page for unauthenticated users
     if (!userController.isAuthenticated.value ||
-        userController.token.value.isEmpty) {
+        userController.token.value.isEmpty ||
+        userController.tokenExpired.value == true) {
       if (route != 'signUp' &&
           route != 'signIn' &&
           route != 'userJobs' &&
           route != 'userJobDetailsPage') {
         print("Redirecting to signIn due to unauthenticated user");
+        // empty the value of isAuthenticated and token
+        userController.clearUserData();
         return const RouteSettings(name: '/signIn');
       }
       return null;
@@ -38,7 +58,9 @@ class AuthMiddleware extends GetMiddleware {
 
     // Handle admin-specific logic
 
-    if (userController.role.value == 'admin') {
+    if (userController.isAuthenticated.value &&
+        userController.role.value == 'admin' &&
+        userController.tokenExpired.value == false) {
       if (route == '/signIn' || route == '/signUp') {
         print("Admin already logged in, redirecting to adminDashboard.");
         return const RouteSettings(name: '/adminDashboard');
@@ -56,9 +78,11 @@ class AuthMiddleware extends GetMiddleware {
       return null; // Allow navigation to admin routes
     }
 
-    if (userController.role.value == 'user') {
+    if (userController.isAuthenticated.value &&
+        userController.role.value == 'user' &&
+        userController.tokenExpired.value == false) {
       if (route == '/signIn' || route == '/signUp') {
-        print("Admin already logged in, redirecting to adminDashboard.");
+        print("User already logged in, redirecting to user jobs.");
         return const RouteSettings(name: '/userJobs');
       }
 

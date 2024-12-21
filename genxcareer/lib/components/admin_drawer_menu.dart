@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:genxcareer/controller/user_controller.dart';
 import 'package:get/get.dart';
@@ -62,7 +63,8 @@ class AdminDrawerMenu extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.logout),
           title: const Text('Logout'),
-          onTap: () {
+          onTap: () async {
+            await FirebaseAuth.instance.signOut();
             Get.find<UserController>().clearUserData();
             Get.offAllNamed(AppRoutes.signIn);
           },

@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:genxcareer/controller/user_controller.dart';
 import 'package:genxcareer/routes/app_routes.dart';
 import 'package:get/get.dart';
 
@@ -259,15 +261,18 @@ class _JobsScreenState extends State<JobsScreen> {
                               size: 20, // Adjust size as needed
                             ),
                           ),
-                          onSelected: (String value) {
+                          onSelected: (String value) async {
                             // Handle selection here
                             if (value == 'Edit Profile') {
                               Get.offAllNamed(AppRoutes.userProfileDetails);
                             } else if (value == 'Sign In/Sign Up') {
                               Get.offAllNamed(AppRoutes.signIn);
                             } else if (value == 'Logout') {
+                              await FirebaseAuth.instance.signOut();
+                              Get.find<UserController>().clearUserData();
+                              Get.offAllNamed(AppRoutes.signIn);
                             } else if (value == 'Change Password') {
-                              Get.offAllNamed(AppRoutes.userForgetPassword);
+                              Get.offAllNamed(AppRoutes.userChangePassword);
                             }
                           },
                           itemBuilder: (BuildContext context) =>

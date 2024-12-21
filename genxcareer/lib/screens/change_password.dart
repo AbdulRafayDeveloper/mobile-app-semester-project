@@ -64,7 +64,7 @@ class _AdminPasswordScreenState extends State<AdminPasswordScreen> {
                       },
                     ),
                     const Text(
-                      'Go Back to Jobs',
+                      'Go Back',
                       style: TextStyle(
                           fontSize: 20, fontWeight: FontWeight.normal),
                     ),

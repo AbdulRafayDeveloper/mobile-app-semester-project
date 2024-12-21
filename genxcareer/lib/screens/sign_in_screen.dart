@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:genxcareer/controller/user_controller.dart';
 import 'package:genxcareer/routes/app_routes.dart';
-import 'package:genxcareer/screens/Admin/dashboard.dart';
-import 'package:genxcareer/screens/forget_password.dart';
-import 'package:genxcareer/screens/sign_up_screen.dart';
-import 'package:genxcareer/screens/jobs_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:genxcareer/services/firebase_auth.dart';
 import 'package:get/get.dart';

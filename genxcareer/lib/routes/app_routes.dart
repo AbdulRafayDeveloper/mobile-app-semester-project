@@ -67,14 +67,22 @@ class AppRoutes {
         middlewares: [AuthMiddleware()]),
 
     // users
-    GetPage(name: userChangePassword, page: () => UserPasswordPage()),
-    GetPage(name: userForgetPassword, page: () => ForgetPasswordPage()),
+    GetPage(
+        name: userChangePassword,
+        page: () => UserPasswordPage(),
+        middlewares: [AuthMiddleware()]),
+    GetPage(
+        name: userForgetPassword,
+        page: () => ForgetPasswordPage(),
+        middlewares: [AuthMiddleware()]),
     GetPage(name: userJobs, page: () => JobsScreen()),
     GetPage(
-      name: AppRoutes.userJobDetailsPage,
-      page: () => JobDetailsPage(job: Get.arguments['job']),
-    ),
+        name: AppRoutes.userJobDetailsPage,
+        page: () => JobDetailsPage(job: Get.arguments['job'])),
 
-    GetPage(name: userProfileDetails, page: () => UserDetailPage()),
+    GetPage(
+        name: userProfileDetails,
+        page: () => UserDetailPage(),
+        middlewares: [AuthMiddleware()]),
   ];
 }
