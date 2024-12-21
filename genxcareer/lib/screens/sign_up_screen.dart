@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:genxcareer/screens/jobs_screen.dart';
+import 'package:genxcareer/models/user_model.dart';
+import 'package:genxcareer/routes/app_routes.dart';
 import 'package:genxcareer/screens/sign_in_screen.dart';
 import 'package:flutter/gestures.dart';
+import 'package:genxcareer/services/firebase_auth.dart';
+import 'package:genxcareer/services/user_service.dart';
+import 'package:get/get.dart';
+
 class RegisterPage extends StatelessWidget {
   const RegisterPage({Key? key}) : super(key: key);
 
@@ -22,24 +27,105 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  final userController = UserApis();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   bool _showPassword = false;
 
-  void _register() {
+  void _register() async {
     if (_formKey.currentState?.validate() ?? false) {
-      // All fields are valid
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Registration Successful!'),
-        ),
-      );
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> JobsScreen()));
+      try {
+        final result = await firebaseSignUp(
+            _emailController.text, _passwordController.text);
+
+        if (result['status'] == false) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(result['message']),
+              duration: const Duration(seconds: 3),
+              backgroundColor: Colors.red,
+            ),
+          );
+          return;
+        }
+
+        if (result['status'] == true) {
+          try {
+            await result['email'].sendEmailVerification();
+          } catch (e) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content:
+                    Text("Failed to send verification email: ${e.toString()}"),
+                duration: const Duration(seconds: 3),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+
+          // print("email 2: ${result['email'].email}");
+          // print("uid: ${result['uid']}");
+
+          try {
+            // create User Model Object
+            UserModel user = UserModel(
+              uid: result['uid'],
+              name: _nameController.text,
+              email: result['email'].email,
+              role: "user",
+              profileUrl: "",
+              createdAt: DateTime.now(),
+            );
+
+            final savedUser = await userController.addUser(user);
+
+            if (savedUser['status'] == false) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(savedUser['message']),
+                  duration: const Duration(seconds: 3),
+                  backgroundColor: Colors.red,
+                ),
+              );
+              return;
+            }
+          } catch (e) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text("Failed to add user: ${e.toString()}"),
+                duration: const Duration(seconds: 3),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+
+          // Navigate to Sign in Screen after creating an account
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                  "Sign-up successful! Please check your email to verify your account."),
+              duration: const Duration(seconds: 4),
+              backgroundColor: Colors.green,
+            ),
+          );
+          Get.offAllNamed(AppRoutes.signIn);
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.toString()),
+            duration: const Duration(seconds: 3),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
     }
   }
 
@@ -50,7 +136,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
             child: Form(
               key: _formKey, // Form key for validation
               child: Column(
@@ -62,12 +149,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       IconButton(
                         icon: const Icon(Icons.arrow_back, color: Colors.black),
                         onPressed: () {
-                          Navigator.pop(context);
+                          Get.offAllNamed(AppRoutes.signIn);
                         },
                       ),
                       const Text(
-                        'Go Back to Login',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
+                        'Go Back to Sign In',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.normal),
                       ),
                     ],
                   ),
@@ -137,7 +225,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _showPassword ? Icons.visibility : Icons.visibility_off,
+                          _showPassword
+                              ? Icons.visibility
+                              : Icons.visibility_off,
                         ),
                         onPressed: () {
                           setState(() {
@@ -169,7 +259,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _showPassword ? Icons.visibility : Icons.visibility_off,
+                          _showPassword
+                              ? Icons.visibility
+                              : Icons.visibility_off,
                         ),
                         onPressed: () {
                           setState(() {
@@ -216,7 +308,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     child: RichText(
                       text: TextSpan(
                         text: "Already have an account? ",
-                        style: const TextStyle(fontSize: 14, color: Colors.black),
+                        style:
+                            const TextStyle(fontSize: 14, color: Colors.black),
                         children: [
                           TextSpan(
                             text: 'Sign in',
@@ -227,10 +320,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => SignInScreen()),
-                                );
+                                Get.offAllNamed(AppRoutes.signIn);
                               },
                           ),
                         ],

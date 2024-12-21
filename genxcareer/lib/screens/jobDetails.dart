@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:genxcareer/routes/app_routes.dart';
+import 'package:get/get.dart';
 
-class JobDetailPage extends StatelessWidget {
+class JobDetailsPage extends StatelessWidget {
   final Map<String, String> job;
 
-  const JobDetailPage({Key? key, required this.job}) : super(key: key);
+  const JobDetailsPage({Key? key, required this.job}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,22 @@ class JobDetailPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(job['title']!),
+        title: Row(
+          children: [
+            GestureDetector(
+              onTap: () {
+                Get.offAllNamed(AppRoutes.userJobs);
+              },
+              child: Icon(
+                Icons.arrow_back,
+                color: Colors.black, // Set color to suit your design
+                size: 24, // Adjust the size as per your requirement
+              ),
+            ),
+            const SizedBox(width: 10),
+            Text(job['title']!),
+          ],
+        ),
       ),
       body: SafeArea(
         child: Padding(
@@ -188,6 +205,23 @@ class JobDetailPage extends StatelessWidget {
                 Text(
                   job['description'] ?? "No description available.",
                   style: TextStyle(fontSize: fontSizeBody),
+                ),
+                const SizedBox(height: 20),
+
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    child: Text(
+                      'Apply',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 28, vertical: 10),
+                      backgroundColor:
+                          Color(0xFF40189D), // Adjust padding if needed
+                    ),
+                  ),
                 ),
               ],
             ),

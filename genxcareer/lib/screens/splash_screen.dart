@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Required for SystemChrome
+import 'package:genxcareer/controller/user_controller.dart';
+import 'package:genxcareer/routes/app_routes.dart';
+import 'package:genxcareer/screens/Admin/dashboard.dart';
 import 'package:genxcareer/screens/jobs_screen.dart';
+import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -11,6 +15,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
+  final userController = Get.find<UserController>();
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
@@ -50,10 +55,13 @@ class _SplashScreenState extends State<SplashScreen>
     // Start the animation
     _controller.forward();
 
-    // Navigate to the JobsScreen after 3 seconds
+    // Delay for 3 seconds before checking the user role and navigating
     Future.delayed(const Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const JobsScreen()));
+      if (userController.role.value == "admin") {
+        Get.offAllNamed(AppRoutes.adminDashboard);
+      } else {
+        Get.offAllNamed(AppRoutes.userJobs);
+      }
     });
   }
 

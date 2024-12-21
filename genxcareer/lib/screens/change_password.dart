@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:genxcareer/routes/app_routes.dart';
-import 'package:genxcareer/screens/jobs_screen.dart';
 import 'package:get/get.dart';
 
-class ForgetPasswordPage extends StatelessWidget {
-  const ForgetPasswordPage({Key? key}) : super(key: key);
+class UserPasswordPage extends StatelessWidget {
+  const UserPasswordPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: ForgetPasswordScreen(),
+      home: AdminPasswordScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
-class ForgetPasswordScreen extends StatefulWidget {
-  const ForgetPasswordScreen({Key? key}) : super(key: key);
+class AdminPasswordScreen extends StatefulWidget {
+  const AdminPasswordScreen({Key? key}) : super(key: key);
 
   @override
-  State<ForgetPasswordScreen> createState() => _ForgetPasswordScreenState();
+  State<AdminPasswordScreen> createState() => _AdminPasswordScreenState();
 }
 
-class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
+class _AdminPasswordScreenState extends State<AdminPasswordScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final TextEditingController _currentPasswordController =
@@ -65,7 +64,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       },
                     ),
                     const Text(
-                      'Go Back to Login',
+                      'Go Back to Jobs',
                       style: TextStyle(
                           fontSize: 20, fontWeight: FontWeight.normal),
                     ),

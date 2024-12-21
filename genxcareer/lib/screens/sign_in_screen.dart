@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:genxcareer/controller/user_controller.dart';
+import 'package:genxcareer/routes/app_routes.dart';
 import 'package:genxcareer/screens/Admin/dashboard.dart';
-import 'package:genxcareer/screens/Admin/jobs.dart';
 import 'package:genxcareer/screens/forget_password.dart';
 import 'package:genxcareer/screens/sign_up_screen.dart';
 import 'package:genxcareer/screens/jobs_screen.dart';
 import 'package:flutter/gestures.dart';
+import 'package:genxcareer/services/firebase_auth.dart';
+import 'package:get/get.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -26,21 +29,69 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  final userController = Get.find<UserController>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   bool _showPassword = false;
 
-  void login() {
+  void login() async {
     if (_formKey.currentState?.validate() ?? false) {
-      // Valid inputs
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Login Successful!'),
-        ),
-      );
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> Dashboard()));
+      try {
+        final result = await firebaseSignIn(
+            _emailController.text, _passwordController.text);
+
+        if (result['status'] == false) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(result['message']),
+              duration: const Duration(seconds: 3),
+              backgroundColor: Colors.red,
+            ),
+          );
+          return;
+        }
+
+        if (result['status'] == true) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Login successful! Welcome, ${result['name']}"),
+              duration: const Duration(seconds: 4),
+              backgroundColor: Colors.green,
+            ),
+          );
+
+          if (userController.tokenExpired.value) {
+            print("tokenExpired: ${userController.tokenExpired.value}");
+            print("Token: ${userController.token.value}");
+            print("email: ${userController.email.value}");
+            print("role: ${userController.role.value}");
+          } else {
+            print("tokenExpired: ${userController.tokenExpired.value}");
+            print("Token: ${userController.token.value}");
+            print("email: ${userController.email.value}");
+            print("role: ${userController.role.value}");
+          }
+
+          if (result['role'] == 'admin') {
+            print("Admin Account");
+            Get.offAllNamed(AppRoutes.adminDashboard);
+          } else {
+            print("User Account");
+            Get.offAllNamed(AppRoutes.userJobs);
+          }
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.toString()),
+            duration: const Duration(seconds: 3),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
     }
   }
 
@@ -51,7 +102,8 @@ class _SignInScreenState extends State<SignInScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
             child: Form(
               key: _formKey,
               child: Column(
@@ -63,15 +115,13 @@ class _SignInScreenState extends State<SignInScreen> {
                       IconButton(
                         icon: const Icon(Icons.arrow_back, color: Colors.black),
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => JobsScreen()),
-                          );
+                          Get.offAllNamed(AppRoutes.userJobs);
                         },
                       ),
                       const Text(
                         'Go Back to Jobs',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.normal),
                       ),
                     ],
                   ),
@@ -121,7 +171,9 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _showPassword ? Icons.visibility : Icons.visibility_off,
+                          _showPassword
+                              ? Icons.visibility
+                              : Icons.visibility_off,
                         ),
                         onPressed: () {
                           setState(() {
@@ -147,14 +199,12 @@ class _SignInScreenState extends State<SignInScreen> {
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => ForgetPasswordPage()),
-                        );
+                        Get.offAllNamed(AppRoutes.forgetPassword);
                       },
                       child: const Text(
                         'Forgot your password?',
-                        style: TextStyle(fontSize: 14, color: Color(0xFF40189D)),
+                        style:
+                            TextStyle(fontSize: 14, color: Color(0xFF40189D)),
                       ),
                     ),
                   ),
@@ -186,7 +236,8 @@ class _SignInScreenState extends State<SignInScreen> {
                     child: RichText(
                       text: TextSpan(
                         text: "Don't have an account? ",
-                        style: const TextStyle(fontSize: 14, color: Colors.black),
+                        style:
+                            const TextStyle(fontSize: 14, color: Colors.black),
                         children: [
                           TextSpan(
                             text: 'Sign up',
@@ -197,10 +248,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => SignUpScreen()),
-                                );
+                                Get.offAllNamed(AppRoutes.signUp);
                               },
                           ),
                         ],
@@ -237,7 +285,8 @@ class _SignInScreenState extends State<SignInScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset('assets/google-removebg-preview.png', height: 24),
+                          Image.asset('assets/google-removebg-preview.png',
+                              height: 24),
                           const SizedBox(width: 20),
                           const Text(
                             'Sign In with Google',
@@ -267,7 +316,8 @@ class _SignInScreenState extends State<SignInScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset('assets/facebook-removebg-preview.png', height: 24),
+                          Image.asset('assets/facebook-removebg-preview.png',
+                              height: 24),
                           const SizedBox(width: 10),
                           const Text(
                             'Sign In with Facebook',

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:genxcareer/routes/app_routes.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io'; // Import to use File
 
@@ -32,7 +34,8 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
 
   // Function to pick an image from the gallery
   Future<void> _pickImage() async {
-    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    final XFile? pickedFile =
+        await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
         _selectedImage = pickedFile; // Update the selected image
@@ -59,14 +62,18 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
             bottom: 0,
             child: ClipRRect(
               borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(30), // Adjust the top-left corner radius
-                topRight: Radius.circular(30), // Adjust the top-right corner radius
+                topLeft:
+                    Radius.circular(30), // Adjust the top-left corner radius
+                topRight:
+                    Radius.circular(30), // Adjust the top-right corner radius
               ),
               child: Container(
                 color: Colors.white,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 100), // Adjust to make room for avatar
-                  child: SingleChildScrollView( // Make the content scrollable
+                  padding: const EdgeInsets.only(
+                      top: 100), // Adjust to make room for avatar
+                  child: SingleChildScrollView(
+                    // Make the content scrollable
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -82,13 +89,13 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
                               TextField(
                                 controller: _nameController,
                                 decoration: const InputDecoration(
-                                  labelText: 'Name',
-                                  border: OutlineInputBorder(),
-                                  focusColor: Colors.purple
-                                ),
+                                    labelText: 'Name',
+                                    border: OutlineInputBorder(),
+                                    focusColor: Colors.purple),
                                 onChanged: (value) {
                                   setState(() {
-                                    accountDetails[0] = value; // Update name in the list
+                                    accountDetails[0] =
+                                        value; // Update name in the list
                                   });
                                 },
                               ),
@@ -101,12 +108,12 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
                                 ),
                                 onChanged: (value) {
                                   setState(() {
-                                    accountDetails[1] = value; // Update email in the list
+                                    accountDetails[1] =
+                                        value; // Update email in the list
                                   });
                                 },
                               ),
                               const SizedBox(height: 16),
-                              
                             ],
                           ),
                         ),
@@ -124,9 +131,13 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
                               // Perform save action (like updating the database)
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color.fromARGB(255, 66, 2, 122), // Set the background color to purple
+                              backgroundColor: const Color.fromARGB(255, 66, 2,
+                                  122), // Set the background color to purple
                             ),
-                            child: const Text('Save Changes', style: TextStyle(color: Colors.white),),
+                            child: const Text(
+                              'Save Changes',
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                         ),
                       ],
@@ -139,7 +150,8 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
           // Circular Avatar breaking outside the white area
           Positioned(
             top: 160, // Move the avatar down to be half inside and half outside
-            left: MediaQuery.of(context).size.width / 2 - 60, // Center horizontally
+            left: MediaQuery.of(context).size.width / 2 -
+                60, // Center horizontally
             child: GestureDetector(
               onTap: _pickImage, // Pick image on avatar tap
               child: Stack(
@@ -151,12 +163,14 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
                     backgroundImage: _selectedImage == null
                         ? const NetworkImage(
                             'https://plus.unsplash.com/premium_photo-1678197937465-bdbc4ed95815?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cGVyc29ufGVufDB8fDB8fHww')
-                        : FileImage(File(_selectedImage!.path)), // Show selected image if available
+                        : FileImage(File(_selectedImage!
+                            .path)), // Show selected image if available
                   ),
                   // Edit Pencil Icon
                   Positioned(
-                    bottom: -10, // Position the pencil slightly outside the avatar
-                    right: 2,  // Position it on the right side
+                    bottom:
+                        -10, // Position the pencil slightly outside the avatar
+                    right: 2, // Position it on the right side
                     child: GestureDetector(
                       onTap: _pickImage, // Pick image on pencil icon tap
                       child: Container(
@@ -191,10 +205,11 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
                     size: 34, // Adjust size of the arrow
                   ),
                   onPressed: () {
-                    Navigator.pop(context); // This will navigate back to the previous screen
+                    Get.offAllNamed(AppRoutes.adminDashboard);
                   },
                 ),
-                const SizedBox(width: 20), // Add spacing between the icon and the text
+                const SizedBox(
+                    width: 20), // Add spacing between the icon and the text
                 const Text(
                   'Admin Settings', // Adjust text as needed
                   style: TextStyle(

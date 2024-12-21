@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:genxcareer/screens/Admin/admin_update.dart';
-import 'package:genxcareer/screens/Admin/change_passord.dart';
-import 'package:genxcareer/screens/Admin/jobs.dart';
-import 'package:genxcareer/screens/Admin/users.dart';
-import 'package:genxcareer/screens/jobs_screen.dart';
+import 'package:genxcareer/components/admin_drawer_menu.dart';
 import 'package:pie_chart/pie_chart.dart'; // Import pie_chart package
 
 class Dashboard extends StatefulWidget {
@@ -30,73 +26,15 @@ class _DashboardState extends State<Dashboard> {
     // Color configuration for the pie chart
     List<Color> colorList = [
       Color(0xFF40189D), // Purple for Remote
-      Colors.green,      // Green for Onsite
-      Colors.blue,       // Blue for Hybrid
+      Colors.green, // Green for Onsite
+      Colors.blue, // Blue for Hybrid
     ];
 
     return Scaffold(
       backgroundColor: Colors.grey[100], // Light background color
       drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(),
-              child: Center(
-                child: SizedBox(
-                  width: 150, // Adjust for proper scaling
-                  height: 150,
-                  child: Image(
-                    image: AssetImage('assets/new_logo2.png'),
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
-            ),
-            // ListTiles for navigation
-            ListTile(
-              leading: const Icon(Icons.join_full),
-              title: const Text('Jobs'),
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Jobs()));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.edit),
-              title: const Text('Edit Details'),
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AdminDetailPage()));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.people),
-              title: const Text('Customers'),
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Users()));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.password),
-              title: const Text('Change Password'),
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AdminPasswordPage()));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text('Logout'),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => JobsScreen()));
-              },
-            ),
-          ],
-        ),
+        child: const AdminDrawerMenu(), // Use the reusable drawer menu
       ),
-
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -109,7 +47,10 @@ class _DashboardState extends State<Dashboard> {
                 height: 150,
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Color(0xFF40189D), Color.fromARGB(255, 111, 57, 238)],
+                    colors: [
+                      Color(0xFF40189D),
+                      Color.fromARGB(255, 111, 57, 238)
+                    ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -177,10 +118,12 @@ class _DashboardState extends State<Dashboard> {
                           ),
                           child: Container(
                             width: width * 0.4, // Responsive width
-                            padding: EdgeInsets.all(width * 0.05), // Dynamic padding
+                            padding:
+                                EdgeInsets.all(width * 0.05), // Dynamic padding
                             child: const Column(
                               children: [
-                                Icon(Icons.work, size: 50, color: Color(0xFF40189D)),
+                                Icon(Icons.work,
+                                    size: 50, color: Color(0xFF40189D)),
                                 SizedBox(height: 10),
                                 Text(
                                   "Total Jobs",
@@ -210,10 +153,12 @@ class _DashboardState extends State<Dashboard> {
                           ),
                           child: Container(
                             width: width * 0.4, // Responsive width
-                            padding: EdgeInsets.all(width * 0.05), // Dynamic padding
+                            padding:
+                                EdgeInsets.all(width * 0.05), // Dynamic padding
                             child: Column(
                               children: const [
-                                Icon(Icons.people, size: 50, color: Colors.green),
+                                Icon(Icons.people,
+                                    size: 50, color: Colors.green),
                                 SizedBox(height: 10),
                                 Text(
                                   "Total Clients",
@@ -243,7 +188,8 @@ class _DashboardState extends State<Dashboard> {
                       dataMap: dataMap,
                       chartType: ChartType.ring,
                       colorList: colorList,
-                      chartRadius: width / 2.5, // Adjust size based on screen width
+                      chartRadius:
+                          width / 2.5, // Adjust size based on screen width
                       centerText: "Job Types",
                       legendOptions: const LegendOptions(
                         showLegends: true,

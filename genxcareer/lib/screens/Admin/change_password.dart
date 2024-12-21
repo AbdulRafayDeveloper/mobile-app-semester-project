@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:genxcareer/routes/app_routes.dart';
 import 'package:genxcareer/screens/Admin/dashboard.dart';
-import 'package:genxcareer/screens/sign_in_screen.dart';
+import 'package:get/get.dart';
 
 class AdminPasswordPage extends StatelessWidget {
   const AdminPasswordPage({Key? key}) : super(key: key);
@@ -24,9 +25,11 @@ class AdminPasswordScreen extends StatefulWidget {
 class _AdminPasswordScreenState extends State<AdminPasswordScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _currentPasswordController = TextEditingController();
+  final TextEditingController _currentPasswordController =
+      TextEditingController();
   final TextEditingController _newPasswordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   bool _showPassword = false;
 
@@ -58,13 +61,13 @@ class _AdminPasswordScreenState extends State<AdminPasswordScreen> {
                     IconButton(
                       icon: const Icon(Icons.arrow_back, color: Colors.black),
                       onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => const Dashboard()));
+                        Get.offAllNamed(AppRoutes.adminDashboard);
                       },
                     ),
                     const Text(
                       'Go Back to Login',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
+                      style: TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.normal),
                     ),
                   ],
                 ),
