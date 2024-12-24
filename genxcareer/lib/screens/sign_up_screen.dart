@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:genxcareer/models/user_model.dart';
 import 'package:genxcareer/routes/app_routes.dart';
-import 'package:genxcareer/screens/sign_in_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:genxcareer/services/firebase_auth.dart';
 import 'package:genxcareer/services/user_service.dart';
@@ -68,9 +67,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
             );
           }
-
-          // print("email 2: ${result['email'].email}");
-          // print("uid: ${result['uid']}");
 
           try {
             // create User Model Object

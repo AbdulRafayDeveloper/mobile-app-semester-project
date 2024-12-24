@@ -12,7 +12,20 @@
           "package_name": "com.example.genxcareer"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "360584986024-r7r9v7nqs7h6t70itcbq82g3snnljce0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.genxcareer",
+            "certificate_hash": "905b107b1137e3b797cde38fcf107b3f8c4b960d"
+          }
+        },
+        {
+          "client_id": "360584986024-strih01u4m7p5ktaoek5n3kmo8tin2ju.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDNaVrAD_XzcuIO6IhaRc9_fi9-N9Fsl8U"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "360584986024-strih01u4m7p5ktaoek5n3kmo8tin2ju.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "360584986024-pm16fnsg2r6o1plvdon7fjur88l94ria.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.genxcareer"
+              }
+            }
+          ]
         }
       }
     }

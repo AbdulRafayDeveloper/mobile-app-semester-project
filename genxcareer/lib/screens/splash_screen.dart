@@ -95,24 +95,10 @@ class _SplashScreenState extends State<SplashScreen>
         print("Check User: $checkUser");
         print("idToken: $idToken");
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content:
-                Text("Please Login to apply for Jobs or as an administrator"),
-            duration: const Duration(seconds: 3),
-            backgroundColor: Colors.red,
-          ),
-        );
+        print("Please Login to apply for Jobs or as an administrator");
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content:
-              Text("Please Login to apply for Jobs or as an administrator"),
-          duration: const Duration(seconds: 3),
-          backgroundColor: Colors.red,
-        ),
-      );
+      print("Please Login to apply for Jobs or as an administrator");
     }
 
     // Delay for 3 seconds before checking the user role and navigating

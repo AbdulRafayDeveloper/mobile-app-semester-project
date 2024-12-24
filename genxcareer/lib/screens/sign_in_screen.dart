@@ -1,9 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:genxcareer/controller/user_controller.dart';
 import 'package:genxcareer/routes/app_routes.dart';
 import 'package:flutter/gestures.dart';
 import 'package:genxcareer/services/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -277,7 +279,64 @@ class _SignInScreenState extends State<SignInScreen> {
                           width: 0.5,
                         ),
                       ),
-                      onPressed: login,
+                      onPressed: () async {
+                        try {
+                          final result = await signInWithGoogle();
+
+                          if (result?['status'] == false) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(result?['message']),
+                                duration: const Duration(seconds: 3),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                            return;
+                          }
+
+                          if (result?['status'] == true) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                    "Login successful! Welcome, ${result?['name']}"),
+                                duration: const Duration(seconds: 4),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+
+                            if (userController.tokenExpired.value) {
+                              print(
+                                  "tokenExpired: ${userController.tokenExpired.value}");
+                              print("Token: ${userController.token.value}");
+                              print("email: ${userController.email.value}");
+                              print("role: ${userController.role.value}");
+                            } else {
+                              print(
+                                  "tokenExpired: ${userController.tokenExpired.value}");
+                              print("Token: ${userController.token.value}");
+                              print("email: ${userController.email.value}");
+                              print("role: ${userController.role.value}");
+                            }
+
+                            if (result?['role'] == 'admin') {
+                              print("Admin Account");
+                              Get.offAllNamed(AppRoutes.adminDashboard);
+                            } else {
+                              print("User Account");
+                              Get.offAllNamed(AppRoutes.userJobs);
+                            }
+                          }
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(e.toString()),
+                              duration: const Duration(seconds: 3),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                          return;
+                        }
+                      },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -308,7 +367,9 @@ class _SignInScreenState extends State<SignInScreen> {
                           width: 0.5,
                         ),
                       ),
-                      onPressed: login,
+                      onPressed: () {
+                        print("Current This option is not valid");
+                      },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

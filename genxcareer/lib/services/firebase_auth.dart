@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:genxcareer/models/user_model.dart';
+import 'package:genxcareer/services/user_service.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:genxcareer/controller/user_controller.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 Future<Map<String, dynamic>> firebaseSignUp(
     String email, String password) async {
@@ -156,6 +159,148 @@ Future<Map<String, dynamic>> firebaseSignIn(
     return {
       "status": false,
       "message": errorMessage,
+      "email": null,
+      "uid": null,
+    };
+  }
+}
+
+Future<Map<String, dynamic>?> signInWithGoogle() async {
+  print("Enter into sign in with Google");
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final userController = Get.find<UserController>();
+  final userApis = UserApis();
+
+  try {
+    // Google Sign-In
+    final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+    if (googleUser == null) return null; // User cancelled sign-in
+
+    print("googleUser: $googleUser");
+    print("googleUser Display Name: ${googleUser.displayName}");
+    print("googleUser Email: ${googleUser.email}");
+
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+
+    // Create a credential
+    final AuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    // Sign in with Firebase
+    final UserCredential userCredential =
+        await _auth.signInWithCredential(credential);
+    final User? user = userCredential.user;
+
+    if (user == null) {
+      return {
+        "status": false,
+        "message": "Sign-in failed, no user found.",
+        "email": null,
+        "uid": null,
+      };
+    }
+
+    if (!user.emailVerified) {
+      return {
+        "status": false,
+        "message": "Please verify your email before logging in.",
+        "email": user.email,
+        "uid": user.uid,
+      };
+    }
+
+    // Fetch user data from Firestore
+    final doc = await _firestore.collection('users').doc(user.uid).get();
+    if (!doc.exists) {
+      try {
+        // create User Model Object
+        UserModel userModel = UserModel(
+          uid: user.uid,
+          name: googleUser.displayName ??
+              "Anonymous", // Add a default name if null
+          email: googleUser.email,
+          role: "user",
+          profileUrl:
+              googleUser.photoUrl ?? "", // Handle null case for profile URL
+          createdAt: DateTime.now(),
+        );
+
+        final savedUser = await userApis.addUser(userModel);
+
+        if (savedUser['status'] == false) {
+          // Handle failure to save user, maybe show an error message
+          return {
+            "status": false,
+            "message": "Failed to create user in the database.",
+            "email": user.email,
+            "uid": user.uid,
+          };
+        }
+      } catch (e) {
+        print("Error creating user: $e");
+        return {
+          "status": false,
+          "message": "An error occurred while creating user.",
+          "email": user.email,
+          "uid": user.uid,
+        };
+      }
+    }
+
+    // Extract user data
+    final userDoc = doc.data()!;
+    String? role = userDoc['role'];
+    String? name = userDoc['name'];
+
+    // Optionally retrieve the ID token and check its expiry
+    String? idToken = await user.getIdToken();
+    final decodedToken = await user.getIdTokenResult();
+    final expDate = DateTime.fromMillisecondsSinceEpoch(
+        decodedToken.expirationTime!.millisecondsSinceEpoch);
+    final bool isTokenExpired = DateTime.now().isAfter(expDate);
+
+    // Store user data using GetX (replace with your controller logic)
+    userController.setUserData(
+        idToken ?? '', user.email ?? '', role ?? '', isTokenExpired);
+
+    return {
+      "status": true,
+      "message": "Login successful.",
+      "email": user.email,
+      "uid": user.uid,
+      "token": idToken ?? '',
+      "isTokenExpired": isTokenExpired,
+      "tokenExpDate": expDate,
+      "role": role ?? '',
+      "name": name ?? '',
+    };
+  } on FirebaseAuthException catch (e) {
+    String errorMessage;
+    if (e.code == "user-not-found") {
+      errorMessage = "No user found for that email.";
+    } else if (e.code == "wrong-password") {
+      errorMessage = "Incorrect password.";
+    } else {
+      errorMessage = "Error: ${e.message}";
+    }
+
+    return {
+      "status": false,
+      "message": errorMessage,
+      "email": null,
+      "uid": null,
+    };
+  } catch (e) {
+    print("Google Sign-In Error: $e");
+    return {
+      "status": false,
+      "message": "An unexpected error occurred.",
       "email": null,
       "uid": null,
     };
