@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class JobDetailPage extends StatelessWidget {
-  final Map<String, String> job;
+class AdminJobDetailPage extends StatelessWidget {
+  final Map<String, String> jobId;
 
-  const JobDetailPage({Key? key, required this.job}) : super(key: key);
+  const AdminJobDetailPage({Key? key, required this.jobId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class JobDetailPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(job['title']!),
+        title: Text(jobId['title']!),
       ),
       body: SafeArea(
         child: Padding(
@@ -35,7 +35,7 @@ class JobDetailPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            job['company']!,
+                            jobId['company']!,
                             style: TextStyle(
                               fontSize: fontSizeSubtitle,
                               fontWeight: FontWeight.normal,
@@ -43,7 +43,7 @@ class JobDetailPage extends StatelessWidget {
                           ),
                           const SizedBox(height: 5),
                           Text(
-                            job['title']!,
+                            jobId['title']!,
                             style: TextStyle(
                               fontSize: fontSizeTitle,
                               fontWeight: FontWeight.bold,
@@ -54,7 +54,7 @@ class JobDetailPage extends StatelessWidget {
                     ),
                     // Right side: Logo as CircleAvatar
                     CircleAvatar(
-                      backgroundImage: NetworkImage(job['logo']!),
+                      backgroundImage: NetworkImage(jobId['logo']!),
                       radius: 30,
                     ),
                   ],
@@ -66,7 +66,7 @@ class JobDetailPage extends StatelessWidget {
                   padding: EdgeInsets.only(left: 8),
                   child: ElevatedButton(
                     onPressed: () {},
-                    child: Text('${job['jobType']!}'),
+                    child: Text('${jobId['jobType']!}'),
                     style: ElevatedButton.styleFrom(
                       side: BorderSide(
                           color: Colors.grey, width: 1), // Blue outline
@@ -117,7 +117,7 @@ class JobDetailPage extends StatelessWidget {
                             children: [
                               Text("Salary"),
                               Text(
-                                "${job['salary']!}",
+                                "${jobId['salary']!}",
                                 style: TextStyle(
                                     fontSize: 24, fontWeight: FontWeight.bold),
                               ),
@@ -160,7 +160,7 @@ class JobDetailPage extends StatelessWidget {
                             children: [
                               Text("location"),
                               Text(
-                                "${job['location']!}",
+                                "${jobId['location']!}",
                                 style: TextStyle(
                                     fontSize: 24, fontWeight: FontWeight.bold),
                               ),
@@ -186,7 +186,7 @@ class JobDetailPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  job['description'] ?? "No description available.",
+                  jobId['description'] ?? "No description available.",
                   style: TextStyle(fontSize: fontSizeBody),
                 ),
               ],

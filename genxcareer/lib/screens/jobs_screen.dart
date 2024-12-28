@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:genxcareer/controller/user_controller.dart';
 import 'package:genxcareer/routes/app_routes.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class JobsScreen extends StatefulWidget {
   const JobsScreen({super.key});
@@ -12,6 +13,8 @@ class JobsScreen extends StatefulWidget {
 }
 
 class _JobsScreenState extends State<JobsScreen> {
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final userStates = Get.find<UserController>();
   bool isSearchFocused = false; // To track if the search bar is focused
   double minSalary = 30000; // Minimum salary default value
   double maxSalary = 100000; // Maximum salary default value
@@ -160,6 +163,14 @@ class _JobsScreenState extends State<JobsScreen> {
     super.initState();
     // Initially load first 5 jobs
     jobs.addAll(job.take(5));
+    _checkUserAuthentication();
+  }
+
+  Future<void> _checkUserAuthentication() async {
+    print("User isAuthenticated: ${userStates.isAuthenticated.value}");
+    print("User role: ${userStates.role.value}");
+    print("User token: ${userStates.token.value}");
+    print("User tokenExpired: ${userStates.tokenExpired.value}");
   }
 
   Widget build(BuildContext context) {
@@ -265,10 +276,15 @@ class _JobsScreenState extends State<JobsScreen> {
                             // Handle selection here
                             if (value == 'Edit Profile') {
                               Get.offAllNamed(AppRoutes.userProfileDetails);
-                            } else if (value == 'Sign In/Sign Up') {
+                            } else if (value == 'Sign In') {
                               Get.offAllNamed(AppRoutes.signIn);
+                            } else if (value == 'Sign Up') {
+                              Get.offAllNamed(AppRoutes.signUp);
                             } else if (value == 'Logout') {
                               await FirebaseAuth.instance.signOut();
+                              if (userStates.provider.value == 'google') {
+                                await _googleSignIn.signOut();
+                              }
                               Get.find<UserController>().clearUserData();
                               Get.offAllNamed(AppRoutes.signIn);
                             } else if (value == 'Change Password') {
@@ -277,47 +293,85 @@ class _JobsScreenState extends State<JobsScreen> {
                           },
                           itemBuilder: (BuildContext context) =>
                               <PopupMenuEntry<String>>[
-                            const PopupMenuItem<String>(
-                              value: 'Edit Profile',
-                              child: Row(
-                                children: [
-                                  Icon(Icons.edit, color: Colors.green),
-                                  SizedBox(width: 6),
-                                  Text("Edit Profile")
-                                ],
+                            if (userStates.role.value == "user" &&
+                                userStates.isAuthenticated.value &&
+                                userStates.provider.value == "email") ...[
+                              const PopupMenuItem<String>(
+                                value: 'Edit Profile',
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.edit, color: Colors.green),
+                                    SizedBox(width: 6),
+                                    Text("Edit Profile")
+                                  ],
+                                ),
                               ),
-                            ),
-                            const PopupMenuItem<String>(
-                              value: 'Change Password',
-                              child: Row(
-                                children: [
-                                  Icon(Icons.password,
-                                      color: Color.fromARGB(255, 21, 53, 79)),
-                                  SizedBox(width: 6),
-                                  Text("Change Password")
-                                ],
+                              const PopupMenuItem<String>(
+                                value: 'Change Password',
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.password,
+                                        color: Color.fromARGB(255, 21, 53, 79)),
+                                    SizedBox(width: 6),
+                                    Text("Change Password")
+                                  ],
+                                ),
                               ),
-                            ),
-                            const PopupMenuItem<String>(
-                              value: 'Sign In/Sign Up',
-                              child: Row(
-                                children: [
-                                  Icon(Icons.login, color: Colors.black),
-                                  SizedBox(width: 6),
-                                  Text("Sign In/Sign Up")
-                                ],
+                              const PopupMenuItem<String>(
+                                value: 'Logout',
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.logout, color: Colors.red),
+                                    SizedBox(width: 6),
+                                    Text("Logout")
+                                  ],
+                                ),
                               ),
-                            ),
-                            const PopupMenuItem<String>(
-                              value: 'Logout',
-                              child: Row(
-                                children: [
-                                  Icon(Icons.logout, color: Colors.red),
-                                  SizedBox(width: 6),
-                                  Text("Logout")
-                                ],
+                            ] else if (userStates.role.value == "user" &&
+                                userStates.isAuthenticated.value &&
+                                userStates.provider.value == "google") ...[
+                              const PopupMenuItem<String>(
+                                value: 'Edit Profile',
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.edit, color: Colors.green),
+                                    SizedBox(width: 6),
+                                    Text("Edit Profile")
+                                  ],
+                                ),
                               ),
-                            ),
+                              const PopupMenuItem<String>(
+                                value: 'Logout',
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.logout, color: Colors.red),
+                                    SizedBox(width: 6),
+                                    Text("Logout")
+                                  ],
+                                ),
+                              ),
+                            ] else ...[
+                              const PopupMenuItem<String>(
+                                value: 'Sign In',
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.login, color: Colors.green),
+                                    SizedBox(width: 6),
+                                    Text("Sign In")
+                                  ],
+                                ),
+                              ),
+                              const PopupMenuItem<String>(
+                                value: 'Sign Up',
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.login, color: Colors.orange),
+                                    SizedBox(width: 6),
+                                    Text("Sign Up")
+                                  ],
+                                ),
+                              ),
+                            ]
                           ],
                         ),
                       ),

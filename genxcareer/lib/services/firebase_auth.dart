@@ -19,9 +19,6 @@ Future<Map<String, dynamic>> firebaseSignUp(
 
     final User? checkUser = userCredential.user;
 
-    // print("Email: ${checkUser?.email}");
-    // print("uid: ${checkUser?.uid}");
-
     if (checkUser != null) {
       return {
         "status": true,
@@ -101,14 +98,16 @@ Future<Map<String, dynamic>> firebaseSignIn(
             decodedToken.expirationTime!.millisecondsSinceEpoch);
         final bool isTokenExpired = DateTime.now().isAfter(expDate);
 
-        // Store the user data using GetX
-        userController.setUserData(
-            idToken ?? '', checkUser.email ?? '', role ?? '', isTokenExpired);
+        userController.setUserData(idToken ?? '', checkUser.email ?? '',
+            role ?? '', "email", isTokenExpired);
 
-        // print("Token Expiry Date: $expDate");
-        // print("Is Token Expired? $isTokenExpired");
-        // print("Check User: $checkUser");
-        // print("idToken: $idToken");
+        // Update the provider to "email"
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(checkUser.uid)
+            .update({
+          'provider': 'email',
+        });
 
         return {
           "status": true,
@@ -175,7 +174,6 @@ Future<Map<String, dynamic>?> signInWithGoogle() async {
   final userApis = UserApis();
 
   try {
-    // Google Sign-In
     final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
     if (googleUser == null) return null; // User cancelled sign-in
 
@@ -226,8 +224,8 @@ Future<Map<String, dynamic>?> signInWithGoogle() async {
               "Anonymous", // Add a default name if null
           email: googleUser.email,
           role: "user",
-          profileUrl:
-              googleUser.photoUrl ?? "", // Handle null case for profile URL
+          provider: "google",
+          profileUrl: "", // Handle null case for profile URL
           createdAt: DateTime.now(),
         );
 
@@ -251,23 +249,29 @@ Future<Map<String, dynamic>?> signInWithGoogle() async {
           "uid": user.uid,
         };
       }
+    } else {
+      try {
+        // User exists, update the provider field to "google"
+        await _firestore.collection('users').doc(user.uid).update({
+          'provider': 'google', // Update provider to google
+        });
+      } catch (e) {
+        print("Error updating user provider: $e");
+      }
     }
 
     // Extract user data
     final userDoc = doc.data()!;
     String? role = userDoc['role'];
     String? name = userDoc['name'];
-
-    // Optionally retrieve the ID token and check its expiry
     String? idToken = await user.getIdToken();
     final decodedToken = await user.getIdTokenResult();
     final expDate = DateTime.fromMillisecondsSinceEpoch(
         decodedToken.expirationTime!.millisecondsSinceEpoch);
     final bool isTokenExpired = DateTime.now().isAfter(expDate);
 
-    // Store user data using GetX (replace with your controller logic)
-    userController.setUserData(
-        idToken ?? '', user.email ?? '', role ?? '', isTokenExpired);
+    userController.setUserData(idToken ?? '', user.email ?? '', role ?? 'user',
+        "google", isTokenExpired);
 
     return {
       "status": true,
@@ -277,7 +281,7 @@ Future<Map<String, dynamic>?> signInWithGoogle() async {
       "token": idToken ?? '',
       "isTokenExpired": isTokenExpired,
       "tokenExpDate": expDate,
-      "role": role ?? '',
+      "role": role ?? 'user',
       "name": name ?? '',
     };
   } on FirebaseAuthException catch (e) {

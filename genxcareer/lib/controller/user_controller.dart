@@ -5,16 +5,18 @@ class UserController extends GetxController {
   var token = ''.obs;
   var email = ''.obs;
   var role = ''.obs;
+  var provider = ''.obs;
   var isAuthenticated = false.obs;
-  var tokenExpired = false.obs; // New variable to track token expiration
+  var tokenExpired = false.obs;
 
   // Method to set user data
   void setUserData(String userToken, String userEmail, String userRole,
-      bool isTokenExpired) {
+      String userProvider, bool isTokenExpired) {
     token.value = userToken;
     email.value = userEmail;
     role.value = userRole;
-    tokenExpired.value = isTokenExpired; // Set the token expiration status
+    provider.value = userProvider;
+    tokenExpired.value = isTokenExpired;
     isAuthenticated.value = true;
   }
 
@@ -23,7 +25,8 @@ class UserController extends GetxController {
     token.value = '';
     email.value = '';
     role.value = '';
-    tokenExpired.value = false; // Reset token expiration flag
+    provider.value = '';
+    tokenExpired.value = false;
     isAuthenticated.value = false;
   }
 }

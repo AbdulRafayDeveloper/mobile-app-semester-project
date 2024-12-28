@@ -63,7 +63,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     User? checkUser = await FirebaseAuth.instance.currentUser;
 
-    print("SPlash Screen checkUser: $checkUser");
+    print("Splash Screen checkUser: $checkUser");
 
     // Check if the user is authenticated
     if (checkUser != null) {
@@ -79,7 +79,7 @@ class _SplashScreenState extends State<SplashScreen>
       if (doc.docs.isNotEmpty) {
         final userDoc = doc.docs.first;
         String? role = userDoc.data()['role'];
-        String? name = userDoc.data()['name'];
+        String? provider = userDoc.data()['provider'];
         String? idToken = await checkUser.getIdToken();
         final decodedToken = await checkUser.getIdTokenResult();
         final expDate = DateTime.fromMillisecondsSinceEpoch(
@@ -87,13 +87,14 @@ class _SplashScreenState extends State<SplashScreen>
         final bool isTokenExpired = DateTime.now().isAfter(expDate);
 
         // Store the user data using GetX
-        userController.setUserData(
-            idToken ?? '', checkUser.email ?? '', role ?? '', isTokenExpired);
+        userController.setUserData(idToken ?? '', checkUser.email ?? '',
+            role ?? '', provider ?? "email", isTokenExpired);
 
         print("Token Expiry Date: $expDate");
         print("Is Token Expired? $isTokenExpired");
         print("Check User: $checkUser");
         print("idToken: $idToken");
+        print("provider: $provider");
       } else {
         print("Please Login to apply for Jobs or as an administrator");
       }
@@ -102,7 +103,7 @@ class _SplashScreenState extends State<SplashScreen>
     }
 
     // Delay for 3 seconds before checking the user role and navigating
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 1), () {
       if (userController.role.value == "admin") {
         Get.offAllNamed(AppRoutes.adminDashboard);
       } else {

@@ -3,7 +3,8 @@ class UserModel {
   final String name;
   final String email;
   final String role; // Either 'user' or 'admin'
-  final String? profileUrl; // Nullable, will be updated later
+  final String provider;
+  final String? profileUrl;
   final DateTime createdAt;
 
   UserModel({
@@ -11,7 +12,8 @@ class UserModel {
     required this.name,
     required this.email,
     required this.role,
-    this.profileUrl, // Nullable field
+    required this.provider,
+    this.profileUrl,
     required this.createdAt,
   });
 
@@ -22,7 +24,8 @@ class UserModel {
       'name': name,
       'email': email,
       'role': role,
-      'profileUrl': profileUrl ?? '', // Empty string if not provided
+      'provider': provider,
+      'profileUrl': profileUrl ?? '',
       'createdAt': createdAt.toIso8601String(),
     };
   }
@@ -33,7 +36,8 @@ class UserModel {
       uid: map['uid'] ?? '',
       name: map['name'] ?? '',
       email: map['email'] ?? '',
-      role: map['role'] ?? 'user', // Default role is 'user'
+      role: map['role'] ?? 'user',
+      provider: map['provider'] ?? 'email',
       profileUrl: map['profileUrl'],
       createdAt: DateTime.parse(map['createdAt']),
     );

@@ -33,7 +33,7 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
       backgroundColor: Colors.grey[100], // Light background color
       drawer: Drawer(
-        child: const AdminDrawerMenu(), // Use the reusable drawer menu
+        child: AdminDrawerMenu(), // Use the reusable drawer menu
       ),
       body: SafeArea(
         child: SingleChildScrollView(

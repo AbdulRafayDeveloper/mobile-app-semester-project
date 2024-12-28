@@ -1,30 +1,16 @@
-import 'package:flutter/foundation.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:genxcareer/controller/user_controller.dart';
 import 'package:genxcareer/routes/app_routes.dart';
-import 'package:genxcareer/screens/jobs_screen.dart';
-import 'package:genxcareer/screens/sign_up_screen.dart';
+import 'package:genxcareer/services/jobs_service.dart';
 import 'package:get/get.dart';
-import 'screens/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   try {
-    if (kIsWeb) {
-      await Firebase.initializeApp(
-          options: const FirebaseOptions(
-              apiKey: "AIzaSyDZV8hMrLXJQ0FPinbWWHBFnJaairX8Y2E",
-              authDomain: "genx-career.firebaseapp.com",
-              projectId: "genx-career",
-              storageBucket: "genx-career.firebasestorage.app",
-              messagingSenderId: "360584986024",
-              appId: "1:360584986024:web:8b008565bde705b150719d"));
-    } else {
-      await Firebase.initializeApp();
-    }
-
+    await Firebase.initializeApp();
     debugPrint("🔥 Firebase successfully initialized!");
   } catch (e) {
     debugPrint("❌ Firebase initialization failed: $e");
@@ -32,6 +18,7 @@ void main() async {
 
   Get.put(UserController());
   runApp(const MyApp());
+  startJobFetchingTask();
 }
 
 class MyApp extends StatelessWidget {
@@ -39,14 +26,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return const MaterialApp(
-    //   debugShowCheckedModeBanner: false,
-    //   title: 'GenX Career',
-    //   home: Scaffold(
-    //     // body: SafeArea(child: SplashScreen()),
-    //     body: SafeArea(child: JobsScreen()),
-    //   ),
-    // );
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'GenX Career',
@@ -54,4 +33,23 @@ class MyApp extends StatelessWidget {
       getPages: AppRoutes.pages,
     );
   }
+}
+
+void startJobFetchingTask() {
+  const duration = Duration(minutes: 60);
+  // const duration = Duration(seconds: 10);
+  Timer.periodic(duration, (Timer timer) async {
+    print("🔄 Timer triggered: Starting the job fetching task...");
+
+    try {
+      print("⏳ Fetching jobs from the API...");
+      await JobsApis().fetchAndSaveJobs();
+      print("✅ Timer: Jobs fetched and saved successfully.");
+    } catch (e) {
+      print("❌ Error during job fetching: $e");
+    }
+
+    print(
+        "🔁 Timer execution cycle completed. Waiting for the next interval...");
+  });
 }

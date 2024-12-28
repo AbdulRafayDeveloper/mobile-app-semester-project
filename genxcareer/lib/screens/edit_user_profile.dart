@@ -1,45 +1,121 @@
 import 'package:flutter/material.dart';
+import 'package:genxcareer/controller/user_controller.dart';
 import 'package:genxcareer/routes/app_routes.dart';
+import 'package:genxcareer/services/user_service.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io'; // Import to use File
+import 'dart:io';
 
-class AdminDetailPage extends StatefulWidget {
-  const AdminDetailPage({super.key});
+class UserDetailPage extends StatefulWidget {
+  const UserDetailPage({super.key});
 
   @override
-  _AdminDetailPageState createState() => _AdminDetailPageState();
+  _UserDetailPageState createState() => _UserDetailPageState();
 }
 
-class _AdminDetailPageState extends State<AdminDetailPage> {
+class _UserDetailPageState extends State<UserDetailPage> {
+  final userStates = Get.find<UserController>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  String? _profileUrl;
 
-  // List to hold the account details (Name, Email, Password)
-  List<String> accountDetails = ['John Doe', 'johndoe@example.com'];
-
-  // Variable to store the selected image
   XFile? _selectedImage;
-
   final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
     super.initState();
-    // Initialize the controllers with the current values from the list
-    _nameController.text = accountDetails[0];
-    _emailController.text = accountDetails[1];
+    _fetchUserData();
   }
 
-  // Function to pick an image from the gallery
+  Future<void> _fetchUserData() async {
+    try {
+      final result = await UserApis().getOneUser(userStates.email.value);
+      if (result['status'] == 'success') {
+        final data = result['data'];
+        setState(() {
+          _nameController.text = data['name'];
+          _emailController.text = data['email'];
+          _profileUrl = data['profileUrl'];
+        });
+      } else {
+        Get.snackbar(
+          'Error',
+          result['message'],
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
+    } catch (e) {
+      Get.snackbar('Error', e.toString(), snackPosition: SnackPosition.BOTTOM);
+    }
+  }
+
   Future<void> _pickImage() async {
-    final XFile? pickedFile =
-        await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        _selectedImage = pickedFile; // Update the selected image
-      });
+    try {
+      final XFile? pickedFile =
+          await _picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        // Validate the file type
+        final String fileExtension =
+            pickedFile.path.split('.').last.toLowerCase();
+        const List<String> allowedExtensions = ['jpg', 'jpeg', 'png'];
+
+        if (allowedExtensions.contains(fileExtension)) {
+          setState(() {
+            _selectedImage = pickedFile;
+          });
+        } else {
+          // Show error if file type is not allowed
+          Get.snackbar(
+            'Invalid File',
+            'Please select a valid image file (JPG, JPEG, or PNG).',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+          );
+        }
+      }
+    } catch (e) {
+      // Handle errors during image selection
+      Get.snackbar(
+        'Error',
+        'An unexpected error occurred while selecting an image.',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
+  Future<void> updateProfile(String imagePath) async {
+    try {
+      final String finalImagePath =
+          imagePath.isNotEmpty ? imagePath : _profileUrl ?? '';
+
+      final result = await UserApis().updateUserByEmail(
+        userStates.email.value,
+        finalImagePath,
+        _nameController.text,
+      );
+
+      if (result['status'] == 'success') {
+        setState(() {
+          _profileUrl = finalImagePath;
+        });
+        Get.snackbar(
+          'Success',
+          result['message'],
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      } else {
+        Get.snackbar(
+          'Error',
+          result['message'],
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
+    } catch (e) {
+      Get.snackbar('Error', e.toString(), snackPosition: SnackPosition.BOTTOM);
     }
   }
 
@@ -92,12 +168,6 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
                                     labelText: 'Name',
                                     border: OutlineInputBorder(),
                                     focusColor: Colors.purple),
-                                onChanged: (value) {
-                                  setState(() {
-                                    accountDetails[0] =
-                                        value; // Update name in the list
-                                  });
-                                },
                               ),
                               const SizedBox(height: 16),
                               TextField(
@@ -106,12 +176,7 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
                                   labelText: 'Email',
                                   border: OutlineInputBorder(),
                                 ),
-                                onChanged: (value) {
-                                  setState(() {
-                                    accountDetails[1] =
-                                        value; // Update email in the list
-                                  });
-                                },
+                                enabled: false,
                               ),
                               const SizedBox(height: 16),
                             ],
@@ -123,12 +188,7 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
                           padding: const EdgeInsets.symmetric(horizontal: 32.0),
                           child: ElevatedButton(
                             onPressed: () {
-                              // Save changes action here
-                              final name = _nameController.text;
-                              final email = _emailController.text;
-                              final password = _passwordController.text;
-                              print("Name: $name, Email: $email");
-                              // Perform save action (like updating the database)
+                              updateProfile(_selectedImage?.path ?? '');
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color.fromARGB(255, 66, 2,
@@ -160,12 +220,15 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
                   // Circular Avatar
                   CircleAvatar(
                     radius: 60,
-                    backgroundImage: _selectedImage == null
-                        ? const NetworkImage(
-                            'https://plus.unsplash.com/premium_photo-1678197937465-bdbc4ed95815?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cGVyc29ufGVufDB8fDB8fHww')
-                        : FileImage(File(_selectedImage!
-                            .path)), // Show selected image if available
+                    backgroundImage: _selectedImage != null
+                        ? FileImage(File(_selectedImage!.path))
+                        : (_profileUrl != null &&
+                                _profileUrl!.startsWith('/data'))
+                            ? FileImage(File(_profileUrl!))
+                            : const AssetImage('assets/default_avatar.png')
+                                as ImageProvider,
                   ),
+
                   // Edit Pencil Icon
                   Positioned(
                     bottom:
@@ -205,13 +268,13 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
                     size: 34, // Adjust size of the arrow
                   ),
                   onPressed: () {
-                    Get.offAllNamed(AppRoutes.adminDashboard);
+                    Get.offAllNamed(AppRoutes.userJobs);
                   },
                 ),
                 const SizedBox(
                     width: 20), // Add spacing between the icon and the text
                 const Text(
-                  'Admin Settings', // Adjust text as needed
+                  'Edit User Profile',
                   style: TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.normal,

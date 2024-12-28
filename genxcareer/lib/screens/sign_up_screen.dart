@@ -75,6 +75,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               name: _nameController.text,
               email: result['email'].email,
               role: "user",
+              provider: "email",
               profileUrl: "",
               createdAt: DateTime.now(),
             );

@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:genxcareer/controller/user_controller.dart';
 import 'package:get/get.dart';
 import 'package:genxcareer/routes/app_routes.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AdminDrawerMenu extends StatelessWidget {
-  const AdminDrawerMenu({Key? key}) : super(key: key);
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final userStates = Get.find<UserController>();
+  AdminDrawerMenu({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +68,9 @@ class AdminDrawerMenu extends StatelessWidget {
           title: const Text('Logout'),
           onTap: () async {
             await FirebaseAuth.instance.signOut();
+            if (userStates.provider.value == 'google') {
+              await _googleSignIn.signOut();
+            }
             Get.find<UserController>().clearUserData();
             Get.offAllNamed(AppRoutes.signIn);
           },

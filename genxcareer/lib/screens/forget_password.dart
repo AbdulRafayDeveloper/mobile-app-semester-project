@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:genxcareer/routes/app_routes.dart';
-import 'package:genxcareer/screens/jobs_screen.dart';
 import 'package:get/get.dart';
 
 class ForgetPasswordPage extends StatelessWidget {

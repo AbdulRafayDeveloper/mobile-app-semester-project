@@ -26,20 +26,6 @@ class AuthMiddleware extends GetMiddleware {
       return null;
     }
 
-    // if (route == '/userChangePassword' &&
-    //     !userController.isAuthenticated.value) {
-    //   print("User is not logged in so move to signIn page.");
-    //   userController.clearUserData();
-    //   return const RouteSettings(name: '/signIn');
-    // }
-
-    // if (route == '/userProfileDetails' &&
-    //     !userController.isAuthenticated.value) {
-    //   print("User is not logged in so move to signIn page.");
-    //   userController.clearUserData();
-    //   return const RouteSettings(name: '/signIn');
-    // }
-
     // Default redirection to the sign-in page for unauthenticated users
     if (!userController.isAuthenticated.value ||
         userController.token.value.isEmpty ||
@@ -56,6 +42,26 @@ class AuthMiddleware extends GetMiddleware {
       return null;
     }
 
+    if (userController.isAuthenticated.value &&
+        userController.role.value == 'user' &&
+        userController.tokenExpired.value == false &&
+        userController.provider.value == 'google') {
+      if (route == '/userChangePassword') {
+        print("User login with google so redirecting to user jobs.");
+        return const RouteSettings(name: '/userJobs');
+      }
+    }
+
+    if (userController.isAuthenticated.value &&
+        userController.role.value == 'admin' &&
+        userController.tokenExpired.value == false &&
+        userController.provider.value == 'google') {
+      if (route == '/adminChangePassword') {
+        print("Admin login with google so redirecting to admin dashboard.");
+        return const RouteSettings(name: '/adminDashboard');
+      }
+    }
+
     // Handle admin-specific logic
 
     if (userController.isAuthenticated.value &&
@@ -68,6 +74,7 @@ class AuthMiddleware extends GetMiddleware {
       if (![
         '/adminDashboard',
         '/adminJobs',
+        '/adminJobsDetail',
         '/adminEditDetails',
         '/adminCustomersList',
         '/adminChangePassword'
