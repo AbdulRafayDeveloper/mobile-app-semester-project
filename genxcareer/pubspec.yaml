@@ -46,6 +46,7 @@ dependencies:
   image_picker: ^1.1.2
   http: ^1.2.2
   workmanager: ^0.5.2
+  url_launcher: ^6.3.1
 
 
 dev_dependencies:
@@ -58,7 +59,6 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
-  url_launcher: ^6.0.10
   flutter_launcher_icons: ^0.14.2
   pie_chart: ^5.0.0
 

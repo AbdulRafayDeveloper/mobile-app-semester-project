@@ -84,7 +84,7 @@ class AppRoutes {
     GetPage(name: userJobs, page: () => JobsScreen()),
     GetPage(
         name: AppRoutes.userJobDetailsPage,
-        page: () => JobDetailsPage(job: Get.arguments['job'])),
+        page: () => JobDetailsPage(jobId: Get.arguments['jobId'])),
 
     GetPage(
         name: userProfileDetails,
