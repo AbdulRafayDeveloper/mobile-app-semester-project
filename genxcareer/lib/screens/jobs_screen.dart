@@ -163,14 +163,6 @@ class _JobsScreenState extends State<JobsScreen> {
     super.initState();
     // Initially load first 5 jobs
     jobs.addAll(job.take(5));
-    _checkUserAuthentication();
-  }
-
-  Future<void> _checkUserAuthentication() async {
-    print("User isAuthenticated: ${userStates.isAuthenticated.value}");
-    print("User role: ${userStates.role.value}");
-    print("User token: ${userStates.token.value}");
-    print("User tokenExpired: ${userStates.tokenExpired.value}");
   }
 
   Widget build(BuildContext context) {
@@ -276,6 +268,8 @@ class _JobsScreenState extends State<JobsScreen> {
                             // Handle selection here
                             if (value == 'Edit Profile') {
                               Get.offAllNamed(AppRoutes.userProfileDetails);
+                            } else if (value == 'Change Password') {
+                              Get.offAllNamed(AppRoutes.userChangePassword);
                             } else if (value == 'Sign In') {
                               Get.offAllNamed(AppRoutes.signIn);
                             } else if (value == 'Sign Up') {

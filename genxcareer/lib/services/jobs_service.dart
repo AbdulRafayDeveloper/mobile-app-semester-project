@@ -59,10 +59,8 @@ class JobsApis {
     }
   }
 
-  // Method to get one job by id
   Future<Map<String, dynamic>> getOneJob(String jobId) async {
     try {
-      // Validate jobId before attempting to fetch data
       if (jobId.isEmpty) {
         return {
           'status': 'error',
@@ -76,15 +74,18 @@ class JobsApis {
       if (!jobDoc.exists) {
         return {
           'status': 'error',
-          'message': 'job not found in Firestore.',
+          'message': 'Job not found in Firestore.',
           'data': null,
         };
       }
 
+      // Convert DocumentSnapshot to Map<String, dynamic>
+      final jobData = jobDoc.data() as Map<String, dynamic>;
+
       return {
         'status': 'success',
         'message': 'Job Record fetched successfully.',
-        'data': jobDoc
+        'data': jobData,
       };
     } catch (e) {
       return {

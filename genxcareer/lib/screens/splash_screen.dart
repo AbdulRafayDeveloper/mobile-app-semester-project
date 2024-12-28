@@ -60,7 +60,6 @@ class _SplashScreenState extends State<SplashScreen>
   // Separate async method to handle user authentication
   Future<void> _checkUserAuthentication() async {
     // Get the user from FirebaseAuth
-
     User? checkUser = await FirebaseAuth.instance.currentUser;
 
     print("Splash Screen checkUser: $checkUser");
