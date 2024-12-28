@@ -29,8 +29,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'GenX Career',
-      // initialRoute: AppRoutes.splashScreen,
-      initialRoute: AppRoutes.userJobs,
+      initialRoute: AppRoutes.splashScreen,
       getPages: AppRoutes.pages,
     );
   }

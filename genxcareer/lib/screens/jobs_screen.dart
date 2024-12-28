@@ -146,7 +146,7 @@ class _JobsState extends State<JobsScreen> {
                     children: [
                       // Centered Text
                       Positioned(
-                        top: size.height * 0.05,
+                        top: size.height * 0.04,
                         left: 30,
                         child: const Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

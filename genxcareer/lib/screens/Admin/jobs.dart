@@ -209,7 +209,7 @@ class _JobsState extends State<Jobs> {
                     children: [
                       // Centered Text
                       Positioned(
-                        top: size.height * 0.05,
+                        top: size.height * 0.04,
                         left: 30,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

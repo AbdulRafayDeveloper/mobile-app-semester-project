@@ -37,7 +37,13 @@ class _DashboardState extends State<Dashboard> {
             future: dashboardStats,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
+                return const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Center(child: CircularProgressIndicator()),
+                  ],
+                );
               }
 
               if (snapshot.hasError) {

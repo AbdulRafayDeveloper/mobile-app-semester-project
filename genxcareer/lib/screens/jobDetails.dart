@@ -134,7 +134,6 @@ class _AdminJobDetailPageState extends State<JobDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Get screen width for responsive text sizing
     double screenWidth = MediaQuery.of(context).size.width;
     double fontSizeTitle = screenWidth * 0.05; // 6% of screen width
     double fontSizeSubtitle = screenWidth * 0.035; // 4.5% of screen width

@@ -114,7 +114,7 @@ class _UsersState extends State<Users> {
                         child: Stack(
                           children: [
                             Positioned(
-                              top: size.height * 0.05,
+                              top: size.height * 0.04,
                               left: 30,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
