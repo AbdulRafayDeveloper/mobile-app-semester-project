@@ -13,8 +13,7 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
   final userController = Get.find<UserController>();
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
@@ -52,9 +51,18 @@ class _SplashScreenState extends State<SplashScreen>
       ),
     );
 
+    // Add status listener to trigger authentication check after animation completes
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        // Delay the navigation for a few seconds to allow the logo to be visible
+        Future.delayed(const Duration(seconds: 1), () {
+          _checkUserAuthentication();
+        });
+      }
+    });
+
     // Start the animation
     _controller.forward();
-    _checkUserAuthentication();
   }
 
   // Separate async method to handle user authentication

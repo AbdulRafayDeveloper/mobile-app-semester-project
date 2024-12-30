@@ -84,19 +84,34 @@ class _UsersState extends State<Users> {
             if (isSearchFocused) {
               setState(() {
                 isSearchFocused = false;
+                FocusScope.of(context).unfocus();
               });
             }
           },
           child: isInitialLoading
-              ? const Center(child: CircularProgressIndicator())
+              ? const Center(child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: const [
+                        SizedBox(height:80),
+                        CircularProgressIndicator(),
+                        SizedBox(height: 20),
+                        Text(
+                          "Loading data...",
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+                        ),
+                      ],
+                    ),)
               : SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
+                      Container(
                         width: double.infinity,
-                        height: isSearchFocused ? 0 : size.height * 0.19,
+                        height: isSearchFocused
+                      ? 0
+                      : size.height *
+                          0.16,
                         decoration: const BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
@@ -155,11 +170,8 @@ class _UsersState extends State<Users> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 50),
-                        child: Transform.translate(
-                          offset: isSearchFocused
-                              ? const Offset(0, 50)
-                              : const Offset(0, -30),
+                        padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                        
                           child: Container(
                             decoration: BoxDecoration(
                               color: Colors.white,
@@ -196,6 +208,7 @@ class _UsersState extends State<Users> {
                                             isSearchFocused = false;
                                             searchController.clear();
                                             onSearch('');
+                                            FocusScope.of(context).unfocus();
                                           });
                                         },
                                       )
@@ -208,9 +221,9 @@ class _UsersState extends State<Users> {
                               ),
                             ),
                           ),
-                        ),
+                      
                       ),
-                      SizedBox(height: isSearchFocused ? 70 : 2),
+                      SizedBox(height:10 ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         child: SizedBox(

@@ -110,9 +110,11 @@ class _JobsState extends State<JobsScreen> {
       body: SafeArea(
         child: GestureDetector(
           onTap: () {
+            
             if (isSearchFocused) {
               setState(() {
                 isSearchFocused = false; // Reset when tapping outside
+                FocusScope.of(context).unfocus();
               });
             }
           },
@@ -120,14 +122,12 @@ class _JobsState extends State<JobsScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Purple Area (Header)
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
+                Container(
                   width: double.infinity,
                   height: isSearchFocused
                       ? 0
                       : size.height *
-                          0.19, // Height reduces to 0 when search is focused
+                          0.16, 
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
@@ -138,8 +138,8 @@ class _JobsState extends State<JobsScreen> {
                       end: Alignment.bottomRight,
                     ),
                     borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(60),
-                      bottomRight: Radius.circular(60),
+                      bottomLeft: Radius.circular(80),
+                      bottomRight: Radius.circular(80),
                     ),
                   ),
                   child: Stack(
@@ -197,6 +197,7 @@ class _JobsState extends State<JobsScreen> {
                                   Color(0xFF40189D), // Blue color for the icon
                               size: 20, // Adjust size as needed
                             ),
+                            
                           ),
                           onSelected: (String value) async {
                             // Handle selection here
@@ -309,11 +310,8 @@ class _JobsState extends State<JobsScreen> {
 
                 // Search Bar (moves up on focus)
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: Transform.translate(
-                    offset: isSearchFocused
-                        ? const Offset(0, 50)
-                        : const Offset(0, -30),
+                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical:10),
+                  
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -349,6 +347,7 @@ class _JobsState extends State<JobsScreen> {
                                       isSearchFocused = false;
                                       searchQuery = '';
                                       jobs = List.from(allJobs);
+                                      FocusScope.of(context).unfocus();
                                     });
                                   },
                                 )
@@ -362,23 +361,8 @@ class _JobsState extends State<JobsScreen> {
                       ),
                     ),
                   ),
-                ),
-
-                SizedBox(height: isSearchFocused ? 70 : 2),
-                if (isSearchFocused) ...[
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-
+                
+                SizedBox(height: 10,),
                 // Job Cards
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -401,7 +385,7 @@ class _JobsState extends State<JobsScreen> {
                       ),
                     ),
                   ),
-                if (jobs.isEmpty && lastDocument == null)
+                if (jobs.isEmpty && lastDocument == null && isLoadingMore == false)
                   const Center(
                     child: Text(
                       "No more jobs available",
@@ -410,7 +394,19 @@ class _JobsState extends State<JobsScreen> {
                   ),
                 if (isLoadingMore)
                   const Center(
-                    child: CircularProgressIndicator(),
+                    child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: const [
+                      SizedBox(height:180),
+                      CircularProgressIndicator(),
+                      SizedBox(height: 20),
+                      Text(
+                        "Loading data...",
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+                      ),
+                    ],
+                  ),
                   ),
               ],
             ),

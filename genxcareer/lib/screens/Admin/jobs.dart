@@ -176,6 +176,7 @@ class _JobsState extends State<Jobs> {
             if (isSearchFocused) {
               setState(() {
                 isSearchFocused = false; // Reset when tapping outside
+                FocusScope.of(context).unfocus();
               });
             }
           },
@@ -184,13 +185,12 @@ class _JobsState extends State<Jobs> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Purple Area (Header)
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
+                Container(
                   width: double.infinity,
                   height: isSearchFocused
                       ? 0
                       : size.height *
-                          0.19, // Height reduces to 0 when search is focused
+                          0.16, // Height reduces to 0 when search is focused
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
@@ -252,11 +252,8 @@ class _JobsState extends State<Jobs> {
 
                 // Search Bar (moves up on focus)
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: Transform.translate(
-                    offset: isSearchFocused
-                        ? const Offset(0, 50)
-                        : const Offset(0, -30),
+                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                  
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -292,6 +289,7 @@ class _JobsState extends State<Jobs> {
                                       isSearchFocused = false;
                                       searchQuery = '';
                                       jobs = List.from(allJobs);
+                                      FocusScope.of(context).unfocus();
                                     });
                                   },
                                 )
@@ -305,22 +303,10 @@ class _JobsState extends State<Jobs> {
                       ),
                     ),
                   ),
-                ),
+                
 
-                SizedBox(height: isSearchFocused ? 70 : 2),
-                if (isSearchFocused) ...[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                SizedBox(height: 10 ),
+                
 
                 // Job Cards
                 Padding(
@@ -344,7 +330,7 @@ class _JobsState extends State<Jobs> {
                       ),
                     ),
                   ),
-                if (jobs.isEmpty && lastDocument == null)
+                if (jobs.isEmpty && lastDocument == null && isLoadingMore == false)
                   Center(
                     child: const Text(
                       "No more jobs available",
@@ -352,8 +338,20 @@ class _JobsState extends State<Jobs> {
                     ),
                   ),
                 if (isLoadingMore)
-                  const Center(
-                    child: CircularProgressIndicator(),
+                  Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: const [
+                        SizedBox(height:150),
+                        CircularProgressIndicator(),
+                        SizedBox(height: 20),
+                        Text(
+                          "Loading data...",
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+                        ),
+                      ],
+                    ),
                   ),
               ],
             ),

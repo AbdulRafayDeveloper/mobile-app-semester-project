@@ -100,7 +100,7 @@ class _AdminPasswordScreenState extends State<AdminPasswordScreen> {
                 ),
                 const SizedBox(height: 10),
                 const Text(
-                  'Your password should be at least 6 characters long',
+                  'Admin password should be at least 6 characters long',
                   style: TextStyle(fontSize: 14, color: Colors.grey),
                 ),
                 const SizedBox(height: 30),

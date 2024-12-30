@@ -37,12 +37,20 @@ class _DashboardState extends State<Dashboard> {
             future: dashboardStats,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Center(child: CircularProgressIndicator()),
-                  ],
+                return const Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: const [
+                      SizedBox(height:350),
+                      CircularProgressIndicator(),
+                      SizedBox(height: 20),
+                      Text(
+                        "Loading data...",
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+                      ),
+                    ],
+                  ),
                 );
               }
 
