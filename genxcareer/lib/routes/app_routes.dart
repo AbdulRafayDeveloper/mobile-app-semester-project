@@ -1,35 +1,33 @@
 import 'package:genxcareer/middleware/auth_middleware.dart';
-import 'package:genxcareer/screens/Admin/edit_admin_profile.dart';
-import 'package:genxcareer/screens/Admin/admin_change_password.dart';
-import 'package:genxcareer/screens/Admin/dashboard.dart';
-import 'package:genxcareer/screens/Admin/jobs.dart';
-import 'package:genxcareer/screens/Admin/jobs_detail.dart';
-import 'package:genxcareer/screens/Admin/users.dart';
-import 'package:genxcareer/screens/user_change_password.dart';
-import 'package:genxcareer/screens/forget_password.dart';
-import 'package:genxcareer/screens/jobDetails.dart';
-import 'package:genxcareer/screens/jobs_screen.dart';
-import 'package:genxcareer/screens/sign_in_screen.dart';
-import 'package:genxcareer/screens/sign_up_screen.dart';
-import 'package:genxcareer/screens/splash_screen.dart';
-import 'package:genxcareer/screens/edit_user_profile.dart';
+import 'package:genxcareer/view/Admin/edit_admin_profile.dart';
+import 'package:genxcareer/view/Admin/admin_change_password.dart';
+import 'package:genxcareer/view/Admin/dashboard.dart';
+import 'package:genxcareer/view/Admin/jobs.dart';
+import 'package:genxcareer/view/Admin/jobs_detail.dart';
+import 'package:genxcareer/view/Admin/users.dart';
+import 'package:genxcareer/view/user_change_password.dart';
+import 'package:genxcareer/view/forget_password.dart';
+import 'package:genxcareer/view/jobDetails.dart';
+import 'package:genxcareer/view/jobs_screen.dart';
+import 'package:genxcareer/view/sign_in_screen.dart';
+import 'package:genxcareer/view/sign_up_screen.dart';
+import 'package:genxcareer/view/splash_screen.dart';
+import 'package:genxcareer/view/edit_user_profile.dart';
 import 'package:get/get.dart';
 
 class AppRoutes {
- 
   static const splashScreen = '/splashScreen';
   static const forgetPassword = '/forgetPassword';
   static const signIn = '/signIn';
   static const signUp = '/signUp';
 
-  
   static const adminDashboard = '/adminDashboard';
   static const adminJobs = '/adminJobs';
   static const adminJobsDetail = '/adminJobsDetail';
   static const adminEditDetails = '/adminEditDetails';
   static const adminCustomersList = '/adminCustomersList';
   static const adminChangePassword = '/adminChangePassword';
-  
+
   static const userChangePassword = '/userChangePassword';
   static const userForgetPassword = '/userForgetPassword';
   static const userJobs = '/userJobs';
@@ -47,7 +45,6 @@ class AppRoutes {
         page: () => SignUpScreen(),
         middlewares: [AuthMiddleware()]),
     GetPage(name: forgetPassword, page: () => ForgetPasswordPage()),
-
     GetPage(
         name: adminDashboard,
         page: () => Dashboard(),
@@ -70,7 +67,6 @@ class AppRoutes {
         name: adminChangePassword,
         page: () => AdminPasswordPage(),
         middlewares: [AuthMiddleware()]),
-
     GetPage(
         name: userChangePassword,
         page: () => UserPasswordPage(),
@@ -83,7 +79,6 @@ class AppRoutes {
     GetPage(
         name: AppRoutes.userJobDetailsPage,
         page: () => JobDetailsPage(jobId: Get.arguments['jobId'])),
-
     GetPage(
         name: userProfileDetails,
         page: () => UserDetailPage(),

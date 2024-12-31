@@ -1,11 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:genxcareer/controller/user_controller.dart';
 import 'package:genxcareer/routes/app_routes.dart';
 import 'package:flutter/gestures.dart';
 import 'package:genxcareer/services/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -100,12 +98,9 @@ class _SignInScreenState extends State<SignInScreen> {
       body: SafeArea(
         child: GestureDetector(
           onTap: () {
-          
-              setState(() {
-                
-                FocusScope.of(context).unfocus();
-              });
-            
+            setState(() {
+              FocusScope.of(context).unfocus();
+            });
           },
           child: SingleChildScrollView(
             child: Padding(
@@ -116,11 +111,11 @@ class _SignInScreenState extends State<SignInScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    
                     Row(
                       children: [
                         IconButton(
-                          icon: const Icon(Icons.arrow_back, color: Colors.black),
+                          icon:
+                              const Icon(Icons.arrow_back, color: Colors.black),
                           onPressed: () {
                             Get.offAllNamed(AppRoutes.userJobs);
                           },
@@ -133,10 +128,10 @@ class _SignInScreenState extends State<SignInScreen> {
                       ],
                     ),
                     const SizedBox(height: 40),
-          
                     const Text(
                       'Sign In',
-                      style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 10),
                     const Text(
@@ -144,7 +139,6 @@ class _SignInScreenState extends State<SignInScreen> {
                       style: TextStyle(fontSize: 14, color: Colors.grey),
                     ),
                     const SizedBox(height: 30),
-          
                     TextFormField(
                       controller: _emailController,
                       decoration: InputDecoration(
@@ -164,7 +158,6 @@ class _SignInScreenState extends State<SignInScreen> {
                       },
                     ),
                     const SizedBox(height: 20),
-          
                     TextFormField(
                       controller: _passwordController,
                       obscureText: !_showPassword,
@@ -197,8 +190,6 @@ class _SignInScreenState extends State<SignInScreen> {
                       },
                     ),
                     const SizedBox(height: 10),
-          
-                    
                     Align(
                       alignment: Alignment.centerRight,
                       child: TextButton(
@@ -213,8 +204,6 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                     ),
                     const SizedBox(height: 5),
-          
-                    
                     SizedBox(
                       width: double.infinity,
                       height: 50,
@@ -232,16 +221,14 @@ class _SignInScreenState extends State<SignInScreen> {
                         ),
                       ),
                     ),
-          
                     const SizedBox(height: 10),
-          
                     Align(
                       alignment: Alignment.center,
                       child: RichText(
                         text: TextSpan(
                           text: "Don't have an account? ",
-                          style:
-                              const TextStyle(fontSize: 14, color: Colors.black),
+                          style: const TextStyle(
+                              fontSize: 14, color: Colors.black),
                           children: [
                             TextSpan(
                               text: 'Sign up',
@@ -259,10 +246,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         ),
                       ),
                     ),
-          
                     const SizedBox(height: 20),
-          
-                    
                     const Center(
                       child: Text(
                         'Or sign in with',
@@ -270,7 +254,6 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
-          
                     SizedBox(
                       width: double.infinity,
                       height: 50,
@@ -287,7 +270,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         onPressed: () async {
                           try {
                             final result = await signInWithGoogle();
-          
+
                             if (result?['status'] == false) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
@@ -298,7 +281,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               );
                               return;
                             }
-          
+
                             if (result?['status'] == true) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
@@ -308,7 +291,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                   backgroundColor: Colors.green,
                                 ),
                               );
-          
+
                               if (userController.tokenExpired.value) {
                                 print(
                                     "tokenExpired: ${userController.tokenExpired.value}");
@@ -322,7 +305,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                 print("email: ${userController.email.value}");
                                 print("role: ${userController.role.value}");
                               }
-          
+
                               if (result?['role'] == 'admin') {
                                 print("Admin Account");
                                 Get.offAllNamed(AppRoutes.adminDashboard);
@@ -350,14 +333,14 @@ class _SignInScreenState extends State<SignInScreen> {
                             const SizedBox(width: 20),
                             const Text(
                               'Sign In with Google',
-                              style: TextStyle(fontSize: 16, color: Colors.black),
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.black),
                             ),
                           ],
                         ),
                       ),
                     ),
                     const SizedBox(height: 10),
-          
                     SizedBox(
                       width: double.infinity,
                       height: 50,
@@ -382,7 +365,8 @@ class _SignInScreenState extends State<SignInScreen> {
                             const SizedBox(width: 10),
                             const Text(
                               'Sign In with Facebook',
-                              style: TextStyle(fontSize: 16, color: Colors.black),
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.black),
                             ),
                           ],
                         ),

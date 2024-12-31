@@ -13,7 +13,8 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
   final userController = Get.find<UserController>();
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
@@ -24,13 +25,12 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     super.initState();
 
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Color(0xFF40189D), 
+      statusBarColor: Color(0xFF40189D),
       statusBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: Color(0xFF40189D), 
-      systemNavigationBarIconBrightness: Brightness.light, 
+      systemNavigationBarColor: Color(0xFF40189D),
+      systemNavigationBarIconBrightness: Brightness.light,
     ));
 
-    
     _controller = AnimationController(
       duration: const Duration(seconds: 1),
       vsync: this,
@@ -49,7 +49,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-       
         Future.delayed(const Duration(seconds: 1), () {
           _checkUserAuthentication();
         });
@@ -60,12 +59,10 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   }
 
   Future<void> _checkUserAuthentication() async {
-   
     User? checkUser = await FirebaseAuth.instance.currentUser;
 
     print("Splash Screen checkUser: $checkUser");
 
-    
     if (checkUser != null) {
       if (!checkUser.emailVerified) {
         return;
@@ -86,7 +83,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             decodedToken.expirationTime!.millisecondsSinceEpoch);
         final bool isTokenExpired = DateTime.now().isAfter(expDate);
 
-      
         userController.setUserData(idToken ?? '', checkUser.email ?? '',
             role ?? '', provider ?? "email", isTokenExpired);
 
@@ -102,7 +98,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       print("Please Login to apply for Jobs or as an administrator");
     }
 
-    Future.delayed(const Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 3), () {
       if (userController.role.value == "admin") {
         Get.offAllNamed(AppRoutes.adminDashboard);
       } else {

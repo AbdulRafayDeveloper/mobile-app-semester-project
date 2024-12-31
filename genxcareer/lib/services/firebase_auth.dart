@@ -141,6 +141,9 @@ Future<Map<String, dynamic>> firebaseSignIn(
       errorMessage = "No user found for that email.";
     } else if (e.code == "wrong-password") {
       errorMessage = "Incorrect password.";
+    } else if (e.code == "invalid-credentials" ||
+        e.message?.contains("The supplied auth credential") == true) {
+      errorMessage = "Your credentials are incorrect.";
     } else {
       errorMessage = "Error: ${e.message}";
     }
@@ -174,7 +177,7 @@ Future<Map<String, dynamic>?> signInWithGoogle() async {
 
   try {
     final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-    if (googleUser == null) return null; 
+    if (googleUser == null) return null;
 
     print("googleUser: $googleUser");
     print("googleUser Display Name: ${googleUser.displayName}");
@@ -183,7 +186,6 @@ Future<Map<String, dynamic>?> signInWithGoogle() async {
     final GoogleSignInAuthentication googleAuth =
         await googleUser.authentication;
 
-   
     final AuthCredential credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
@@ -216,8 +218,7 @@ Future<Map<String, dynamic>?> signInWithGoogle() async {
       try {
         UserModel userModel = UserModel(
           uid: user.uid,
-          name: googleUser.displayName ??
-              "Anonymous", 
+          name: googleUser.displayName ?? "Anonymous",
           email: googleUser.email,
           role: "user",
           provider: "google",
@@ -228,7 +229,6 @@ Future<Map<String, dynamic>?> signInWithGoogle() async {
         final savedUser = await userApis.addUser(userModel);
 
         if (savedUser['status'] == false) {
-         
           return {
             "status": false,
             "message": "Failed to create user in the database.",
@@ -247,9 +247,8 @@ Future<Map<String, dynamic>?> signInWithGoogle() async {
       }
     } else {
       try {
-        
         await _firestore.collection('users').doc(user.uid).update({
-          'provider': 'google', 
+          'provider': 'google',
         });
       } catch (e) {
         print("Error updating user provider: $e");
