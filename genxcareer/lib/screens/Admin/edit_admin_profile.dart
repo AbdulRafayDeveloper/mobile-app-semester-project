@@ -55,7 +55,7 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
       final XFile? pickedFile =
           await _picker.pickImage(source: ImageSource.gallery);
       if (pickedFile != null) {
-        // Validate the file type
+        
         final String fileExtension =
             pickedFile.path.split('.').last.toLowerCase();
         const List<String> allowedExtensions = ['jpg', 'jpeg', 'png'];
@@ -65,7 +65,7 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
             _selectedImage = pickedFile;
           });
         } else {
-          // Show error if file type is not allowed
+          
           Get.snackbar(
             'Invalid File',
             'Please select a valid image file (JPG, JPEG, or PNG).',
@@ -124,32 +124,32 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
     return Scaffold(
       body: Stack(
         children: [
-          // Background Image (outside area)
+          
           Positioned.fill(
             child: Container(
-              color: Color(0xFF40189D), // Use any color you prefer
+              color: Color(0xFF40189D), 
             ),
           ),
-          // White Container with Rounded Top
+          
           Positioned(
-            top: 230, // Move the white container down (adjusted)
+            top: 230, 
             left: 0,
             right: 0,
             bottom: 0,
             child: ClipRRect(
               borderRadius: const BorderRadius.only(
                 topLeft:
-                    Radius.circular(30), // Adjust the top-left corner radius
+                    Radius.circular(30), 
                 topRight:
-                    Radius.circular(30), // Adjust the top-right corner radius
+                    Radius.circular(30), 
               ),
               child: Container(
                 color: Colors.white,
                 child: Padding(
                   padding: const EdgeInsets.only(
-                      top: 100), // Adjust to make room for avatar
+                      top: 100), 
                   child: SingleChildScrollView(
-                    // Make the content scrollable
+                    
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -157,7 +157,7 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
                           padding: EdgeInsets.symmetric(horizontal: 32.0),
                         ),
                         const SizedBox(height: 24),
-                        // Form for name, email, and password
+                       
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 32.0),
                           child: Column(
@@ -183,7 +183,7 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
                           ),
                         ),
                         const SizedBox(height: 24),
-                        // Save Changes Button
+                        
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 32.0),
                           child: ElevatedButton(
@@ -192,7 +192,7 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color.fromARGB(255, 66, 2,
-                                  122), // Set the background color to purple
+                                  122), 
                             ),
                             child: const Text(
                               'Save Changes',
@@ -207,17 +207,17 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
               ),
             ),
           ),
-          // Circular Avatar breaking outside the white area
+          
           Positioned(
-            top: 160, // Move the avatar down to be half inside and half outside
+            top: 160, 
             left: MediaQuery.of(context).size.width / 2 -
-                60, // Center horizontally
+                60, 
             child: GestureDetector(
-              onTap: _pickImage, // Pick image on avatar tap
+              onTap: _pickImage,
               child: Stack(
-                clipBehavior: Clip.none, // Ensure the icon doesn't clip
+                clipBehavior: Clip.none, 
                 children: [
-                  // Circular Avatar
+                  
                   CircleAvatar(
                     radius: 60,
                     backgroundImage: _selectedImage != null
@@ -229,13 +229,13 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
                                 as ImageProvider,
                   ),
 
-                  // Edit Pencil Icon
+                  
                   Positioned(
                     bottom:
-                        -10, // Position the pencil slightly outside the avatar
-                    right: 2, // Position it on the right side
+                        -10, 
+                    right: 2, 
                     child: GestureDetector(
-                      onTap: _pickImage, // Pick image on pencil icon tap
+                      onTap: _pickImage, 
                       child: Container(
                         padding: const EdgeInsets.all(5),
                         decoration: const BoxDecoration(
@@ -255,24 +255,23 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
             ),
           ),
 
-          // Arrowhead and Title in the outer white area
           Positioned(
-            top: 50, // Position the arrow and title near the top
-            left: 20, // Add some padding from the left side of the screen
+            top: 50, 
+            left: 20, 
             child: Row(
               children: [
                 IconButton(
                   icon: const Icon(
                     Icons.arrow_back,
                     color: Colors.white,
-                    size: 34, // Adjust size of the arrow
+                    size: 34, 
                   ),
                   onPressed: () {
                     Get.offAllNamed(AppRoutes.adminDashboard);
                   },
                 ),
                 const SizedBox(
-                    width: 20), // Add spacing between the icon and the text
+                    width: 20), 
                 const Text(
                   'Edit Admin Profile',
                   style: TextStyle(

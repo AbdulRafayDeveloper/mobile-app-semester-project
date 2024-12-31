@@ -37,7 +37,6 @@ class MyApp extends StatelessWidget {
 
 void startJobFetchingTask() {
   const duration = Duration(minutes: 60);
-  // const duration = Duration(seconds: 10);
   Timer.periodic(duration, (Timer timer) async {
     print("🔄 Timer triggered: Starting the job fetching task...");
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:genxcareer/components/admin_drawer_menu.dart';
 import 'package:genxcareer/services/dashboard_stats_service.dart';
-import 'package:pie_chart/pie_chart.dart'; // Import pie_chart package
+import 'package:pie_chart/pie_chart.dart'; 
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -16,20 +16,20 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
-    // Fetch the dashboard statistics when the screen loads
+   
     dashboardStats = DashboardStatsApi().getJobAndUserCounts();
   }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size; // Get screen size
-    final double width = size.width; // For easy reference
+    final size = MediaQuery.of(context).size; 
+    final double width = size.width; 
     final double height = size.height;
 
     return Scaffold(
-      backgroundColor: Colors.grey[100], // Light background color
+      backgroundColor: Colors.grey[100], 
       drawer: Drawer(
-        child: AdminDrawerMenu(), // Use the reusable drawer menu
+        child: AdminDrawerMenu(), 
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -64,24 +64,21 @@ class _DashboardState extends State<Dashboard> {
 
               var data = snapshot.data!;
 
-              // Pie chart data from API response
               Map<String, double> dataMap = {
                 "Remote": data['remoteJobs'].toDouble(),
                 "Onsite": data['onsiteJobs'].toDouble(),
                 "Hybrid": data['hybridJobs'].toDouble(),
               };
-
-              // Color configuration for the pie chart
               List<Color> colorList = [
-                Color(0xFF40189D), // Purple for Remote
-                Colors.green, // Green for Onsite
-                Colors.blue, // Blue for Hybrid
+                Color(0xFF40189D), 
+                Colors.green, 
+                Colors.blue,
               ];
 
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Purple Header
+                  
                   AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
                     width: double.infinity,
@@ -113,7 +110,7 @@ class _DashboardState extends State<Dashboard> {
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize:
-                                      width * 0.08, // Responsive font size
+                                      width * 0.08, 
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -122,7 +119,7 @@ class _DashboardState extends State<Dashboard> {
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize:
-                                      width * 0.05, // Responsive font size
+                                      width * 0.05,
                                   fontWeight: FontWeight.normal,
                                 ),
                               ),
@@ -146,23 +143,23 @@ class _DashboardState extends State<Dashboard> {
                   ),
                   const SizedBox(height: 20),
                   Padding(
-                    padding: EdgeInsets.all(width * 0.05), // Dynamic padding
+                    padding: EdgeInsets.all(width * 0.05),
                     child: Column(
                       children: [
-                        // Your Cards
+                        
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            // Total Jobs Card
+                            
                             Card(
                               elevation: 5,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15),
                               ),
                               child: Container(
-                                width: width * 0.4, // Responsive width
+                                width: width * 0.4,
                                 padding: EdgeInsets.all(
-                                    width * 0.05), // Dynamic padding
+                                    width * 0.05), 
                                 child: Column(
                                   children: [
                                     Icon(Icons.work,
@@ -188,16 +185,16 @@ class _DashboardState extends State<Dashboard> {
                                 ),
                               ),
                             ),
-                            // Total Users Card
+                            
                             Card(
                               elevation: 5,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15),
                               ),
                               child: Container(
-                                width: width * 0.4, // Responsive width
+                                width: width * 0.4,
                                 padding: EdgeInsets.all(
-                                    width * 0.05), // Dynamic padding
+                                    width * 0.05),
                                 child: Column(
                                   children: [
                                     Icon(Icons.people,
@@ -226,13 +223,13 @@ class _DashboardState extends State<Dashboard> {
                           ],
                         ),
                         const SizedBox(height: 80),
-                        // Pie Chart
+                        
                         PieChart(
                           dataMap: dataMap,
                           chartType: ChartType.ring,
                           colorList: colorList,
                           chartRadius:
-                              width / 2.5, // Adjust size based on screen width
+                              width / 2.5, 
                           centerText: "Job Types",
                           legendOptions: const LegendOptions(
                             showLegends: true,

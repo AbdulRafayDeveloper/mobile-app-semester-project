@@ -16,8 +16,8 @@ class Jobs extends StatefulWidget {
 
 class _JobsState extends State<Jobs> {
   bool isSearchFocused = false;
-  List<Map<String, String>> allJobs = []; // Stores all fetched jobs
-  List<Map<String, String>> jobs = []; // Stores filtered jobs for display
+  List<Map<String, String>> allJobs = [];
+  List<Map<String, String>> jobs = []; 
   bool isLoadingMore = false;
   String searchQuery = '';
   DocumentSnapshot? lastDocument;
@@ -59,13 +59,13 @@ class _JobsState extends State<Jobs> {
           };
         }));
 
-        allJobs.addAll(fetchedJobs); // Append new jobs
-        jobs = List.from(allJobs); // Update displayed jobs
-        lastDocument = result['lastDocument']; // Update pagination reference
+        allJobs.addAll(fetchedJobs); 
+        jobs = List.from(allJobs); 
+        lastDocument = result['lastDocument']; 
       });
     } else if (result['data'].isEmpty) {
       setState(() {
-        lastDocument = null; // No more data to load
+        lastDocument = null;
       });
     } else {
       print('Error loading jobs: ${result['message']}');
@@ -80,9 +80,8 @@ class _JobsState extends State<Jobs> {
     setState(() {
       searchQuery = query;
 
-      // Filter jobs based on the query
       if (query.isEmpty) {
-        jobs = List.from(allJobs); // Reset to all jobs if query is empty
+        jobs = List.from(allJobs); 
       } else {
         jobs = allJobs
             .where((job) =>
@@ -130,7 +129,6 @@ class _JobsState extends State<Jobs> {
 
       if (response['status'] == 'success') {
         setState(() {
-          // Remove the deleted job from the lists
           allJobs.removeWhere((job) => job['id'] == jobId);
           jobs.removeWhere((job) => job['id'] == jobId);
         });
@@ -164,18 +162,18 @@ class _JobsState extends State<Jobs> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size; // Get screen size
+    final size = MediaQuery.of(context).size; 
     return Scaffold(
-      backgroundColor: Colors.grey[100], // Light background color
+      backgroundColor: Colors.grey[100], 
       drawer: Drawer(
-        child: AdminDrawerMenu(), // Use the reusable drawer menu
+        child: AdminDrawerMenu(),
       ),
       body: SafeArea(
         child: GestureDetector(
           onTap: () {
             if (isSearchFocused) {
               setState(() {
-                isSearchFocused = false; // Reset when tapping outside
+                isSearchFocused = false; 
                 FocusScope.of(context).unfocus();
               });
             }
@@ -184,13 +182,13 @@ class _JobsState extends State<Jobs> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Purple Area (Header)
+           
                 Container(
                   width: double.infinity,
                   height: isSearchFocused
                       ? 0
                       : size.height *
-                          0.16, // Height reduces to 0 when search is focused
+                          0.16, 
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
@@ -207,7 +205,7 @@ class _JobsState extends State<Jobs> {
                   ),
                   child: Stack(
                     children: [
-                      // Centered Text
+                      
                       Positioned(
                         top: size.height * 0.04,
                         left: 30,
@@ -233,7 +231,7 @@ class _JobsState extends State<Jobs> {
                           ],
                         ),
                       ),
-                      // Top-right icon (Popup Menu)
+                     
                       Positioned(
                         top: 10,
                         right: 10,
@@ -250,7 +248,6 @@ class _JobsState extends State<Jobs> {
                   ),
                 ),
 
-                // Search Bar (moves up on focus)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
                   
@@ -308,7 +305,6 @@ class _JobsState extends State<Jobs> {
                 SizedBox(height: 10 ),
                 
 
-                // Job Cards
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
@@ -321,7 +317,7 @@ class _JobsState extends State<Jobs> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor:
-                            Colors.white, // Button's background color
+                            Colors.white,
                       ),
                       onPressed: loadMoreJobs,
                       child: const Text(
@@ -374,30 +370,30 @@ class _JobsState extends State<Jobs> {
           padding: const EdgeInsets.all(8),
           child: Row(
             children: [
-              // Image with proper fit and constraints
+              
               Container(
-                width: 50, // Set a fixed width for the image
-                height: 50, // Set a fixed height for the image
+                width: 50,
+                height: 50, 
                 decoration: BoxDecoration(
                   borderRadius:
-                      BorderRadius.circular(8), // Optional: for rounded corners
+                      BorderRadius.circular(8), 
                   image: DecorationImage(
                     image: job['logo'] != null && job['logo']!.isNotEmpty
                         ? NetworkImage(job['logo']!)
                         : const AssetImage(
                             'assets/missing_companies_logo.jpeg'),
                     fit: BoxFit
-                        .cover, // Adjust the image to fit the container without distortion
+                        .cover, 
                   ),
                 ),
               ),
               const SizedBox(
-                  width: 15), // Add some space between image and text
+                  width: 15), 
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Company Title
+                  
                     Text(
                       job['companyName'] ?? 'Unknown Company',
                       style: const TextStyle(
@@ -405,23 +401,23 @@ class _JobsState extends State<Jobs> {
                         color: Colors.black54,
                       ),
                       overflow: TextOverflow
-                          .ellipsis, // Adds ellipsis if text is too long
-                      maxLines: 1, // Limits to a single line
+                          .ellipsis, 
+                      maxLines: 1, 
                     ),
                     const SizedBox(height: 5),
-                    // Job Title with character limit
+                   
                     Text(
                       job['title']!.length > 25
-                          ? '${job['title']!.substring(0, 25)}...' // Show first 25 characters with ellipsis
-                          : job['title']!, // Show full title if it's short
+                          ? '${job['title']!.substring(0, 25)}...' 
+                          : job['title']!, 
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Colors.black87,
                       ),
                       overflow: TextOverflow
-                          .ellipsis, // Adds ellipsis if text is too long
-                      maxLines: 1, // Limits to a single line
+                          .ellipsis, 
+                      maxLines: 1, 
                     ),
                     const SizedBox(height: 5),
                     Row(
@@ -429,17 +425,17 @@ class _JobsState extends State<Jobs> {
                         const Icon(Icons.work_outline,
                             color: Color(0xFF40189D)),
                         const SizedBox(width: 5),
-                        // Location with character limit
+                   
                         Expanded(
                           child: Text(
                             job['location']!.length > 30
-                                ? '${job['location']!.substring(0, 22)}...' // Show first 30 characters with ellipsis
+                                ? '${job['location']!.substring(0, 22)}...' 
                                 : job[
-                                    'location']!, // Show full location if it's short
+                                    'location']!, 
                             style: const TextStyle(fontSize: 14),
                             overflow: TextOverflow
-                                .ellipsis, // Adds ellipsis if text is too long
-                            maxLines: 1, // Limits to a single line
+                                .ellipsis, 
+                            maxLines: 1, 
                           ),
                         ),
                         const Spacer(),

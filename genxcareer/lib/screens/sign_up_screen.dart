@@ -69,7 +69,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           }
 
           try {
-            // create User Model Object
+           
             UserModel user = UserModel(
               uid: result['uid'],
               name: _nameController.text,
@@ -102,7 +102,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             );
           }
 
-          // Navigate to Sign in Screen after creating an account
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text(
@@ -145,11 +144,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
               padding:
                   const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
               child: Form(
-                key: _formKey, // Form key for validation
+                key: _formKey, 
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Back Button and Title
+                    
                     Row(
                       children: [
                         IconButton(
@@ -167,7 +166,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     const SizedBox(height: 40),
           
-                    // Sign Up Title
+                    
                     const Text(
                       'Sign Up',
                       style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
@@ -179,7 +178,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     const SizedBox(height: 30),
           
-                    // Name TextField
                     TextFormField(
                       controller: _nameController,
                       decoration: InputDecoration(
@@ -197,7 +195,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     const SizedBox(height: 20),
           
-                    // Email TextField
                     TextFormField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
@@ -220,7 +217,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     const SizedBox(height: 20),
           
-                    // Password TextField
+                    
                     TextFormField(
                       controller: _passwordController,
                       obscureText: !_showPassword,
@@ -265,7 +262,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                     const SizedBox(height: 20),
           
-                    // Confirm Password TextField
                     TextFormField(
                       controller: _confirmPasswordController,
                       obscureText: !_showPassword,
@@ -299,7 +295,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     const SizedBox(height: 30),
           
-                    // Register Button
                     SizedBox(
                       width: double.infinity,
                       height: 50,
@@ -319,7 +314,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
           
                     const SizedBox(height: 30),
-                    // Already have an account? Sign In
+                  
                     Align(
                       alignment: Alignment.center,
                       child: RichText(

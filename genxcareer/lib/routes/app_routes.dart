@@ -16,20 +16,20 @@ import 'package:genxcareer/screens/edit_user_profile.dart';
 import 'package:get/get.dart';
 
 class AppRoutes {
-  // common routes
+ 
   static const splashScreen = '/splashScreen';
   static const forgetPassword = '/forgetPassword';
   static const signIn = '/signIn';
   static const signUp = '/signUp';
 
-  // admin routes
+  
   static const adminDashboard = '/adminDashboard';
   static const adminJobs = '/adminJobs';
   static const adminJobsDetail = '/adminJobsDetail';
   static const adminEditDetails = '/adminEditDetails';
   static const adminCustomersList = '/adminCustomersList';
   static const adminChangePassword = '/adminChangePassword';
-  // user routes
+  
   static const userChangePassword = '/userChangePassword';
   static const userForgetPassword = '/userForgetPassword';
   static const userJobs = '/userJobs';
@@ -48,7 +48,6 @@ class AppRoutes {
         middlewares: [AuthMiddleware()]),
     GetPage(name: forgetPassword, page: () => ForgetPasswordPage()),
 
-    // admin
     GetPage(
         name: adminDashboard,
         page: () => Dashboard(),
@@ -72,7 +71,6 @@ class AppRoutes {
         page: () => AdminPasswordPage(),
         middlewares: [AuthMiddleware()]),
 
-    // users
     GetPage(
         name: userChangePassword,
         page: () => UserPasswordPage(),

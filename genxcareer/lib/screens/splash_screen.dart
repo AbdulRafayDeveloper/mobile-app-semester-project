@@ -23,27 +23,23 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   void initState() {
     super.initState();
 
-    // Set the navigation bar and status bar color
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Color(0xFF40189D), // Status bar color
-      statusBarIconBrightness: Brightness.light, // Status bar icon color
-      systemNavigationBarColor: Color(0xFF40189D), // Navigation bar color
-      systemNavigationBarIconBrightness: Brightness.light, // Nav bar icon color
+      statusBarColor: Color(0xFF40189D), 
+      statusBarIconBrightness: Brightness.light,
+      systemNavigationBarColor: Color(0xFF40189D), 
+      systemNavigationBarIconBrightness: Brightness.light, 
     ));
 
-    // Initialize the animation controller
+    
     _controller = AnimationController(
       duration: const Duration(seconds: 1),
       vsync: this,
     );
 
-    // Fade animation
     _fadeAnimation = CurvedAnimation(
       parent: _controller,
       curve: Curves.easeInOut,
     );
-
-    // Scale animation
     _scaleAnimation = Tween<double>(begin: 0.8, end: 1.2).animate(
       CurvedAnimation(
         parent: _controller,
@@ -51,28 +47,25 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       ),
     );
 
-    // Add status listener to trigger authentication check after animation completes
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        // Delay the navigation for a few seconds to allow the logo to be visible
+       
         Future.delayed(const Duration(seconds: 1), () {
           _checkUserAuthentication();
         });
       }
     });
 
-    // Start the animation
     _controller.forward();
   }
 
-  // Separate async method to handle user authentication
   Future<void> _checkUserAuthentication() async {
-    // Get the user from FirebaseAuth
+   
     User? checkUser = await FirebaseAuth.instance.currentUser;
 
     print("Splash Screen checkUser: $checkUser");
 
-    // Check if the user is authenticated
+    
     if (checkUser != null) {
       if (!checkUser.emailVerified) {
         return;
@@ -93,7 +86,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             decodedToken.expirationTime!.millisecondsSinceEpoch);
         final bool isTokenExpired = DateTime.now().isAfter(expDate);
 
-        // Store the user data using GetX
+      
         userController.setUserData(idToken ?? '', checkUser.email ?? '',
             role ?? '', provider ?? "email", isTokenExpired);
 
@@ -109,7 +102,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       print("Please Login to apply for Jobs or as an administrator");
     }
 
-    // Delay for 3 seconds before checking the user role and navigating
     Future.delayed(const Duration(seconds: 1), () {
       if (userController.role.value == "admin") {
         Get.offAllNamed(AppRoutes.adminDashboard);
@@ -130,7 +122,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          color: Color(0xFF40189D), // Background color
+          color: Color(0xFF40189D),
         ),
         child: Center(
           child: Column(

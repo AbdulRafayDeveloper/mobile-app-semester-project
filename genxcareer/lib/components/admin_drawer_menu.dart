@@ -65,26 +65,26 @@ class AdminDrawerMenu extends StatelessWidget {
           },
         ),
         ListTile(
-        leading: const Icon(Icons.logout),
-        title: const Text('Logout'),
-        onTap: () async {
-          await FirebaseAuth.instance.signOut();
-          if (userStates.provider.value == 'google') {
-            await _googleSignIn.signOut();
-          }
-          Get.find<UserController>().clearUserData();
-          // Show a Snackbar indicating successful logout
-          Get.snackbar(
-            'Logged Out',
-            'You have been successfully logged out.',
-            snackPosition: SnackPosition.BOTTOM, // Position at the bottom of the screen
-            backgroundColor: Colors.green, // Background color
-            colorText: Colors.white, // Text color
-            duration: Duration(seconds: 2), // Duration for snackbar
-          );
-          Get.offAllNamed(AppRoutes.signIn);
-        },
-      ),
+          leading: const Icon(Icons.logout),
+          title: const Text('Logout'),
+          onTap: () async {
+            await FirebaseAuth.instance.signOut();
+            if (userStates.provider.value == 'google') {
+              await _googleSignIn.signOut();
+            }
+            Get.find<UserController>().clearUserData();
+            
+            Get.snackbar(  
+              'Logged Out',
+              'You have been successfully logged out.',
+              snackPosition: SnackPosition.BOTTOM, 
+              backgroundColor: Colors.green, 
+              colorText: Colors.white, 
+              duration: Duration(seconds: 2), 
+            );
+            Get.offAllNamed(AppRoutes.signIn);
+          },
+        ),
 
       ],
     );

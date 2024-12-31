@@ -62,13 +62,13 @@ class _JobsState extends State<JobsScreen> {
           };
         }));
 
-        allJobs.addAll(fetchedJobs); // Append new jobs
-        jobs = List.from(allJobs); // Update displayed jobs
-        lastDocument = result['lastDocument']; // Update pagination reference
+        allJobs.addAll(fetchedJobs); 
+        jobs = List.from(allJobs); 
+        lastDocument = result['lastDocument']; 
       });
     } else if (result['data'].isEmpty) {
       setState(() {
-        lastDocument = null; // No more data to load
+        lastDocument = null; 
       });
     } else {
       print('Error loading jobs: ${result['message']}');
@@ -83,9 +83,8 @@ class _JobsState extends State<JobsScreen> {
     setState(() {
       searchQuery = query;
 
-      // Filter jobs based on the query
       if (query.isEmpty) {
-        jobs = List.from(allJobs); // Reset to all jobs if query is empty
+        jobs = List.from(allJobs); 
       } else {
         jobs = allJobs
             .where((job) =>
@@ -101,11 +100,11 @@ class _JobsState extends State<JobsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size; // Get screen size
+    final size = MediaQuery.of(context).size; 
     return Scaffold(
-      backgroundColor: Colors.grey[100], // Light background color
+      backgroundColor: Colors.grey[100], 
       drawer: Drawer(
-        child: AdminDrawerMenu(), // Use the reusable drawer menu
+        child: AdminDrawerMenu(), 
       ),
       body: SafeArea(
         child: GestureDetector(
@@ -113,7 +112,7 @@ class _JobsState extends State<JobsScreen> {
             
             if (isSearchFocused) {
               setState(() {
-                isSearchFocused = false; // Reset when tapping outside
+                isSearchFocused = false; 
                 FocusScope.of(context).unfocus();
               });
             }
@@ -144,7 +143,7 @@ class _JobsState extends State<JobsScreen> {
                   ),
                   child: Stack(
                     children: [
-                      // Centered Text
+                      
                       Positioned(
                         top: size.height * 0.04,
                         left: 30,
@@ -176,15 +175,15 @@ class _JobsState extends State<JobsScreen> {
                         child: PopupMenuButton<String>(
                           icon: Container(
                             padding: const EdgeInsets.all(
-                                8.0), // Padding around the icon
+                                8.0), 
                             decoration: BoxDecoration(
                               color:
-                                  Colors.white, // White background for the icon
-                              shape: BoxShape.circle, // Circular background
+                                  Colors.white, 
+                              shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.grey.withOpacity(
-                                      0.5), // Optional shadow for the circle
+                                      0.5), 
                                   spreadRadius: 1,
                                   blurRadius: 4,
                                   offset: Offset(0, 3),
@@ -194,13 +193,13 @@ class _JobsState extends State<JobsScreen> {
                             child: const Icon(
                               Icons.person,
                               color:
-                                  Color(0xFF40189D), // Blue color for the icon
-                              size: 20, // Adjust size as needed
+                                  Color(0xFF40189D), 
+                              size: 20, 
                             ),
                             
                           ),
                           onSelected: (String value) async {
-                            // Handle selection here
+                            
                             if (value == 'Edit Profile') {
                               Get.offAllNamed(AppRoutes.userProfileDetails);
                             } else if (value == 'Change Password') {
@@ -308,7 +307,7 @@ class _JobsState extends State<JobsScreen> {
                   ),
                 ),
 
-                // Search Bar (moves up on focus)
+                
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 50, vertical:10),
                   
@@ -363,7 +362,7 @@ class _JobsState extends State<JobsScreen> {
                   ),
                 
                 SizedBox(height: 10,),
-                // Job Cards
+              
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
@@ -376,7 +375,7 @@ class _JobsState extends State<JobsScreen> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor:
-                            Colors.white, // Button's background color
+                            Colors.white, 
                       ),
                       onPressed: loadMoreJobs,
                       child: const Text(
@@ -429,30 +428,30 @@ class _JobsState extends State<JobsScreen> {
           padding: const EdgeInsets.all(8),
           child: Row(
             children: [
-              // Image with proper fit and constraints
+              
               Container(
-                width: 50, // Set a fixed width for the image
-                height: 50, // Set a fixed height for the image
+                width: 50,
+                height: 50, 
                 decoration: BoxDecoration(
                   borderRadius:
-                      BorderRadius.circular(8), // Optional: for rounded corners
+                      BorderRadius.circular(8), 
                   image: DecorationImage(
                     image: job['logo'] != null && job['logo']!.isNotEmpty
                         ? NetworkImage(job['logo']!)
                         : const AssetImage(
                             'assets/missing_companies_logo.jpeg'),
                     fit: BoxFit
-                        .cover, // Adjust the image to fit the container without distortion
+                        .cover,
                   ),
                 ),
               ),
               const SizedBox(
-                  width: 15), // Add some space between image and text
+                  width: 15), 
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Company Title
+                    
                     Text(
                       job['companyName'] ?? 'Unknown Company',
                       style: const TextStyle(
@@ -460,23 +459,23 @@ class _JobsState extends State<JobsScreen> {
                         color: Colors.black54,
                       ),
                       overflow: TextOverflow
-                          .ellipsis, // Adds ellipsis if text is too long
-                      maxLines: 1, // Limits to a single line
+                          .ellipsis, 
+                      maxLines: 1, 
                     ),
                     const SizedBox(height: 5),
-                    // Job Title with character limit
+                    
                     Text(
                       job['title']!.length > 25
-                          ? '${job['title']!.substring(0, 25)}...' // Show first 25 characters with ellipsis
-                          : job['title']!, // Show full title if it's short
+                          ? '${job['title']!.substring(0, 25)}...' 
+                          : job['title']!, 
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Colors.black87,
                       ),
                       overflow: TextOverflow
-                          .ellipsis, // Adds ellipsis if text is too long
-                      maxLines: 1, // Limits to a single line
+                          .ellipsis, 
+                      maxLines: 1, 
                     ),
                     const SizedBox(height: 5),
                     Row(
@@ -484,17 +483,17 @@ class _JobsState extends State<JobsScreen> {
                         const Icon(Icons.work_outline,
                             color: Color(0xFF40189D)),
                         const SizedBox(width: 5),
-                        // Location with character limit
+                        
                         Expanded(
                           child: Text(
                             job['location']!.length > 30
-                                ? '${job['location']!.substring(0, 22)}...' // Show first 30 characters with ellipsis
+                                ? '${job['location']!.substring(0, 22)}...' 
                                 : job[
-                                    'location']!, // Show full location if it's short
+                                    'location']!,
                             style: const TextStyle(fontSize: 14),
                             overflow: TextOverflow
-                                .ellipsis, // Adds ellipsis if text is too long
-                            maxLines: 1, // Limits to a single line
+                                .ellipsis, 
+                            maxLines: 1,
                           ),
                         ),
                       ],

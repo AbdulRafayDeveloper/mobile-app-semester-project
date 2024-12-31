@@ -93,7 +93,6 @@ class _PasswordScreenState extends State<PasswordScreen> {
                 ),
                 const SizedBox(height: 40),
 
-                // Title
                 const Text(
                   'Change Password',
                   style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
@@ -105,7 +104,6 @@ class _PasswordScreenState extends State<PasswordScreen> {
                 ),
                 const SizedBox(height: 30),
 
-                // Current Password
                 _buildPasswordField(
                   controller: _currentPasswordController,
                   label: 'Current Password',
@@ -124,7 +122,6 @@ class _PasswordScreenState extends State<PasswordScreen> {
                 ),
                 const SizedBox(height: 20),
 
-                // New Password
                 _buildPasswordField(
                   controller: _newPasswordController,
                   label: 'New Password',
@@ -137,7 +134,6 @@ class _PasswordScreenState extends State<PasswordScreen> {
                 ),
                 const SizedBox(height: 20),
 
-                // Confirm Password
                 _buildPasswordField(
                   controller: _confirmPasswordController,
                   label: 'Re-Type New Password',
@@ -159,7 +155,6 @@ class _PasswordScreenState extends State<PasswordScreen> {
                 ),
                 const SizedBox(height: 30),
 
-                // Submit Button
                 SizedBox(
                   width: double.infinity,
                   height: 50,
@@ -185,7 +180,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
     );
   }
 
-  // Reusable Password Field Widget
+  
   Widget _buildPasswordField({
     required TextEditingController controller,
     required String label,

@@ -72,7 +72,7 @@ class _AdminJobDetailPageState extends State<JobDetailsPage> {
           title: const Row(
             children: [
               Icon(
-                Icons.login, // Login icon
+                Icons.login, 
                 color: Colors.blue,
                 size: 28,
               ),
@@ -93,7 +93,7 @@ class _AdminJobDetailPageState extends State<JobDetailsPage> {
           actions: <Widget>[
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.grey, // Button color
+                backgroundColor: Colors.grey, 
                 padding:
                     const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                 shape: RoundedRectangleBorder(
@@ -114,7 +114,7 @@ class _AdminJobDetailPageState extends State<JobDetailsPage> {
                 Get.toNamed(AppRoutes.signIn);
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue, // Button color
+                backgroundColor: Colors.blue, 
                 padding:
                     const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                 shape: RoundedRectangleBorder(
@@ -135,9 +135,9 @@ class _AdminJobDetailPageState extends State<JobDetailsPage> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double fontSizeTitle = screenWidth * 0.05; // 6% of screen width
-    double fontSizeSubtitle = screenWidth * 0.035; // 4.5% of screen width
-    double fontSizeBody = screenWidth * 0.04; // 4% of screen width
+    double fontSizeTitle = screenWidth * 0.05; 
+    double fontSizeSubtitle = screenWidth * 0.035; 
+    double fontSizeBody = screenWidth * 0.04; 
 
     return Scaffold(
       appBar: AppBar(
@@ -257,13 +257,13 @@ class _AdminJobDetailPageState extends State<JobDetailsPage> {
                       Center(
                         child: ElevatedButton(
                           onPressed: () {
-                            // Check if user is authenticated and has the correct role
+                            
                             if (userStates.role.value == "user" &&
                                 userStates.isAuthenticated.value) {
-                              // If conditions are met, open the apply URL
+                             
                               _openApplyUrl(jobData['applyUrl']);
                             } else {
-                              // If conditions are not met, show a login prompt
+                              
                               _showLoginPrompt(context);
                             }
                           },
@@ -295,7 +295,7 @@ class _AdminJobDetailPageState extends State<JobDetailsPage> {
 
   Widget buildDetailRow(IconData icon, String label, String? value,
       {int maxLength = 25}) {
-    // Ensure the value doesn't exceed maxLength
+
     String displayValue = (value?.isEmpty ?? true) ? "N/A" : value!;
     if (displayValue.length > maxLength) {
       displayValue = '${displayValue.substring(0, maxLength)}...';
@@ -304,7 +304,7 @@ class _AdminJobDetailPageState extends State<JobDetailsPage> {
     return Padding(
       padding: const EdgeInsets.only(left: 30),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start, // Aligns to top
+        crossAxisAlignment: CrossAxisAlignment.start, 
         children: [
           Container(
             padding: const EdgeInsets.all(8),
@@ -324,7 +324,7 @@ class _AdminJobDetailPageState extends State<JobDetailsPage> {
           ),
           const SizedBox(width: 10),
           Expanded(
-            // This ensures the text can expand and wrap
+            
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -335,8 +335,8 @@ class _AdminJobDetailPageState extends State<JobDetailsPage> {
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
-                  overflow: TextOverflow.ellipsis, // Adds ellipsis for overflow
-                  maxLines: 1, // Ensures the text stays in a single line
+                  overflow: TextOverflow.ellipsis, 
+                  maxLines: 1, 
                 ),
               ],
             ),

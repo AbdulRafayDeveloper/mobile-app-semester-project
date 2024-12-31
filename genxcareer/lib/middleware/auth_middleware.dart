@@ -26,7 +26,6 @@ class AuthMiddleware extends GetMiddleware {
       return null;
     }
 
-    // Default redirection to the sign-in page for unauthenticated users
     if (!userController.isAuthenticated.value ||
         userController.token.value.isEmpty ||
         userController.tokenExpired.value == true) {
@@ -35,7 +34,7 @@ class AuthMiddleware extends GetMiddleware {
           route != 'userJobs' &&
           route != 'userJobDetailsPage') {
         print("Redirecting to signIn due to unauthenticated user");
-        // empty the value of isAuthenticated and token
+        
         userController.clearUserData();
         return const RouteSettings(name: '/signIn');
       }
@@ -62,7 +61,6 @@ class AuthMiddleware extends GetMiddleware {
       }
     }
 
-    // Handle admin-specific logic
 
     if (userController.isAuthenticated.value &&
         userController.role.value == 'admin' &&
@@ -82,7 +80,7 @@ class AuthMiddleware extends GetMiddleware {
         print("Admin cannot access this page. Redirecting to adminDashboard.");
         return const RouteSettings(name: '/adminDashboard');
       }
-      return null; // Allow navigation to admin routes
+      return null; 
     }
 
     if (userController.isAuthenticated.value &&
@@ -103,10 +101,10 @@ class AuthMiddleware extends GetMiddleware {
         print("User cannot access this page. Redirecting to Users Job Page.");
         return const RouteSettings(name: '/userJobs');
       }
-      return null; // Allow navigation to user routes
+      return null; 
     }
 
     print("No redirection needed.");
-    return null; // Allow navigation if all checks pass
+    return null; 
   }
 }

@@ -101,7 +101,6 @@ Future<Map<String, dynamic>> firebaseSignIn(
         userController.setUserData(idToken ?? '', checkUser.email ?? '',
             role ?? '', "email", isTokenExpired);
 
-        // Update the provider to "email"
         await FirebaseFirestore.instance
             .collection('users')
             .doc(checkUser.uid)
@@ -175,7 +174,7 @@ Future<Map<String, dynamic>?> signInWithGoogle() async {
 
   try {
     final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-    if (googleUser == null) return null; // User cancelled sign-in
+    if (googleUser == null) return null; 
 
     print("googleUser: $googleUser");
     print("googleUser Display Name: ${googleUser.displayName}");
@@ -184,13 +183,12 @@ Future<Map<String, dynamic>?> signInWithGoogle() async {
     final GoogleSignInAuthentication googleAuth =
         await googleUser.authentication;
 
-    // Create a credential
+   
     final AuthCredential credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
 
-    // Sign in with Firebase
     final UserCredential userCredential =
         await _auth.signInWithCredential(credential);
     final User? user = userCredential.user;
@@ -213,26 +211,24 @@ Future<Map<String, dynamic>?> signInWithGoogle() async {
       };
     }
 
-    // Fetch user data from Firestore
     final doc = await _firestore.collection('users').doc(user.uid).get();
     if (!doc.exists) {
       try {
-        // create User Model Object
         UserModel userModel = UserModel(
           uid: user.uid,
           name: googleUser.displayName ??
-              "Anonymous", // Add a default name if null
+              "Anonymous", 
           email: googleUser.email,
           role: "user",
           provider: "google",
-          profileUrl: "", // Handle null case for profile URL
+          profileUrl: "",
           createdAt: DateTime.now(),
         );
 
         final savedUser = await userApis.addUser(userModel);
 
         if (savedUser['status'] == false) {
-          // Handle failure to save user, maybe show an error message
+         
           return {
             "status": false,
             "message": "Failed to create user in the database.",
@@ -251,16 +247,15 @@ Future<Map<String, dynamic>?> signInWithGoogle() async {
       }
     } else {
       try {
-        // User exists, update the provider field to "google"
+        
         await _firestore.collection('users').doc(user.uid).update({
-          'provider': 'google', // Update provider to google
+          'provider': 'google', 
         });
       } catch (e) {
         print("Error updating user provider: $e");
       }
     }
 
-    // Extract user data
     final userDoc = doc.data()!;
     String? role = userDoc['role'];
     String? name = userDoc['name'];

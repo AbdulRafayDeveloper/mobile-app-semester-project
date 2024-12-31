@@ -34,11 +34,11 @@ class _AdminJobDetailPageState extends State<AdminJobDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Get screen width for responsive text sizing
+    
     double screenWidth = MediaQuery.of(context).size.width;
-    double fontSizeTitle = screenWidth * 0.05; // 6% of screen width
-    double fontSizeSubtitle = screenWidth * 0.035; // 4.5% of screen width
-    double fontSizeBody = screenWidth * 0.04; // 4% of screen width
+    double fontSizeTitle = screenWidth * 0.05;
+    double fontSizeSubtitle = screenWidth * 0.035; 
+    double fontSizeBody = screenWidth * 0.04; 
 
     return Scaffold(
       appBar: AppBar(
@@ -171,7 +171,7 @@ class _AdminJobDetailPageState extends State<AdminJobDetailPage> {
 
   Widget buildDetailRow(IconData icon, String label, String? value,
       {int maxLength = 25}) {
-    // Ensure the value doesn't exceed maxLength
+    
     String displayValue = (value?.isEmpty ?? true) ? "N/A" : value!;
     if (displayValue.length > maxLength) {
       displayValue = displayValue.substring(0, maxLength) + '...';
@@ -180,7 +180,7 @@ class _AdminJobDetailPageState extends State<AdminJobDetailPage> {
     return Padding(
       padding: const EdgeInsets.only(left: 30),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start, // Aligns to top
+        crossAxisAlignment: CrossAxisAlignment.start, 
         children: [
           Container(
             padding: const EdgeInsets.all(8),
@@ -200,7 +200,7 @@ class _AdminJobDetailPageState extends State<AdminJobDetailPage> {
           ),
           const SizedBox(width: 10),
           Expanded(
-            // This ensures the text can expand and wrap
+            
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -211,8 +211,8 @@ class _AdminJobDetailPageState extends State<AdminJobDetailPage> {
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
-                  overflow: TextOverflow.ellipsis, // Adds ellipsis for overflow
-                  maxLines: 1, // Ensures the text stays in a single line
+                  overflow: TextOverflow.ellipsis, 
+                  maxLines: 1, 
                 ),
               ],
             ),

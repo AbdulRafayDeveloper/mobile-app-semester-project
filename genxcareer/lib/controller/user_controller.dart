@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 class UserController extends GetxController {
-  // Variables to store user information globally
+  
   var token = ''.obs;
   var email = ''.obs;
   var role = ''.obs;
@@ -9,7 +9,7 @@ class UserController extends GetxController {
   var isAuthenticated = false.obs;
   var tokenExpired = false.obs;
 
-  // Method to set user data
+  
   void setUserData(String userToken, String userEmail, String userRole,
       String userProvider, bool isTokenExpired) {
     token.value = userToken;
@@ -20,7 +20,6 @@ class UserController extends GetxController {
     isAuthenticated.value = true;
   }
 
-  // Method to clear user data (Logout)
   void clearUserData() {
     token.value = '';
     email.value = '';

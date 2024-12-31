@@ -2,7 +2,7 @@ class UserModel {
   final String uid;
   final String name;
   final String email;
-  final String role; // Either 'user' or 'admin'
+  final String role; 
   final String provider;
   final String? profileUrl;
   final DateTime createdAt;
@@ -17,7 +17,6 @@ class UserModel {
     required this.createdAt,
   });
 
-  // Convert a UserModel instance to a map for Firestore
   Map<String, dynamic> toMap() {
     return {
       'uid': uid,
@@ -30,7 +29,6 @@ class UserModel {
     };
   }
 
-  // Create a UserModel instance from Firestore data
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
       uid: map['uid'] ?? '',

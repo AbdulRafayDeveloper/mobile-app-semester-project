@@ -9,10 +9,9 @@ class UserApis {
   final CollectionReference users =
       FirebaseFirestore.instance.collection("users");
 
-  // Method to add a user
   Future<Map<String, dynamic>> addUser(UserModel user) async {
     try {
-      // Validate user data before attempting to save
+      
       if (user.uid.isEmpty || user.name.isEmpty || user.email.isEmpty) {
         return {
           'status': 'error',
@@ -37,7 +36,6 @@ class UserApis {
     }
   }
 
-  /// Fetch paginated users with optional search query
   Future<Map<String, dynamic>> getPaginatedUsers(
     int limit,
     DocumentSnapshot? lastDocument, {
@@ -81,10 +79,9 @@ class UserApis {
     }
   }
 
-  // Method to get a user by email
   Future<Map<String, dynamic>> getOneUser(String email) async {
     try {
-      // Validate email before attempting to fetch data
+      
       if (email.isEmpty) {
         return {
           'status': 'error',
@@ -93,7 +90,7 @@ class UserApis {
         };
       }
 
-      // Query user by email
+    
       QuerySnapshot query = await users.where('email', isEqualTo: email).get();
 
       if (query.docs.isEmpty) {
@@ -140,11 +137,9 @@ class UserApis {
     }
   }
 
-  // Method to update user profile
   Future<Map<String, dynamic>> updateUserByEmail(
       String email, String profileUrl, String newName) async {
     try {
-      // Validate data before attempting to update
       if (email.isEmpty) {
         return {
           'status': 'error',
@@ -153,17 +148,14 @@ class UserApis {
         };
       }
 
-      // Query user by email
       QuerySnapshot query = await users.where('email', isEqualTo: email).get();
 
       if (query.docs.isEmpty) {
         return {'status': 'error', 'message': 'User not found.', 'data': null};
       }
 
-      // Get the user's document ID
       String userId = query.docs.first.id;
 
-      // Update the user's profile URL
       await users.doc(userId).update({
         'name': newName,
         'profileUrl': profileUrl,
@@ -186,10 +178,8 @@ class UserApis {
     }
   }
 
-// Method to delete a user
   Future<Map<String, dynamic>> deleteUser(String userId) async {
     try {
-      // Validate userId
       if (userId.isEmpty) {
         return {
           'status': 'error',
@@ -198,7 +188,6 @@ class UserApis {
         };
       }
 
-      // Check if the user exists in Firestore
       DocumentSnapshot userDoc = await users.doc(userId).get();
       if (!userDoc.exists) {
         return {
@@ -208,7 +197,6 @@ class UserApis {
         };
       }
 
-      // Deleting the user from Firestore
       await users.doc(userId).delete();
 
       return {
@@ -225,11 +213,9 @@ class UserApis {
     }
   }
 
-  // Method to change the user's password
   Future<Map<String, dynamic>> changePassword(String currentPassword,
       String newPassword, String confirmPassword) async {
     try {
-      // Check if newPassword and confirmPassword match
       if (newPassword != confirmPassword) {
         return {
           'status': 'error',
@@ -238,7 +224,6 @@ class UserApis {
         };
       }
 
-      // Get the current authenticated user
       User? user = FirebaseAuth.instance.currentUser;
       if (user == null) {
         return {
@@ -248,7 +233,6 @@ class UserApis {
         };
       }
 
-      // Reauthenticate the user with the current password
       AuthCredential credential = EmailAuthProvider.credential(
         email: user.email!,
         password: currentPassword,
@@ -264,7 +248,6 @@ class UserApis {
         };
       }
 
-      // If reauthentication is successful, update the password
       await user.updatePassword(newPassword);
 
       return {

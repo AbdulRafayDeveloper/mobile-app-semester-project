@@ -116,7 +116,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Back Button and Title
+                    
                     Row(
                       children: [
                         IconButton(
@@ -134,7 +134,6 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                     const SizedBox(height: 40),
           
-                    // Sign In Title
                     const Text(
                       'Sign In',
                       style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
@@ -146,7 +145,6 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                     const SizedBox(height: 30),
           
-                    // Email TextField
                     TextFormField(
                       controller: _emailController,
                       decoration: InputDecoration(
@@ -167,7 +165,6 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                     const SizedBox(height: 20),
           
-                    // Password TextField
                     TextFormField(
                       controller: _passwordController,
                       obscureText: !_showPassword,
@@ -201,7 +198,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                     const SizedBox(height: 10),
           
-                    // Forgot Password
+                    
                     Align(
                       alignment: Alignment.centerRight,
                       child: TextButton(
@@ -217,7 +214,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                     const SizedBox(height: 5),
           
-                    // Login Button
+                    
                     SizedBox(
                       width: double.infinity,
                       height: 50,
@@ -265,7 +262,7 @@ class _SignInScreenState extends State<SignInScreen> {
           
                     const SizedBox(height: 20),
           
-                    // Or Sign In With
+                    
                     const Center(
                       child: Text(
                         'Or sign in with',
@@ -274,7 +271,6 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                     const SizedBox(height: 20),
           
-                    // Google Sign-In Button
                     SizedBox(
                       width: double.infinity,
                       height: 50,
@@ -362,7 +358,6 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                     const SizedBox(height: 10),
           
-                    // Facebook Sign-In Button
                     SizedBox(
                       width: double.infinity,
                       height: 50,

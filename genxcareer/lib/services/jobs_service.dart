@@ -15,7 +15,6 @@ class JobsApis {
   final String apiToken =
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhbWlycmFmYXkxMzVAZ21haWwuY29tIiwicGVybWlzc2lvbnMiOiJ1c2VyIn0.xDgZvK_iWtSdhlLHki-_Uj-VNA88WRvi4mZxHBhmvbI";
 
-  // Fetch paginated jobs with optional search query
   Future<Map<String, dynamic>> getPaginatedJobs(
     int limit,
     DocumentSnapshot? lastDocument, {
@@ -78,8 +77,6 @@ class JobsApis {
           'data': null,
         };
       }
-
-      // Convert DocumentSnapshot to Map<String, dynamic>
       final jobData = jobDoc.data() as Map<String, dynamic>;
 
       return {
@@ -96,10 +93,9 @@ class JobsApis {
     }
   }
 
-  // Method to delete a job
   Future<Map<String, dynamic>> deleteOneJob(String jobId) async {
     try {
-      // Validate jobId
+     
       if (jobId.isEmpty) {
         return {
           'status': 'error',
@@ -108,7 +104,6 @@ class JobsApis {
         };
       }
 
-      // Check if the job exists in Firestore
       DocumentSnapshot jobDoc = await jobs.doc(jobId).get();
       if (!jobDoc.exists) {
         return {
@@ -118,7 +113,6 @@ class JobsApis {
         };
       }
 
-      // Deleting the job from Firestore
       await jobs.doc(jobId).delete();
 
       return {
@@ -181,7 +175,7 @@ class JobsApis {
 
       final oldJobsSnapshot = await jobs
           .where('createdAt',
-              isGreaterThan: oneMinuteAgo) // Use DateTime directly
+              isGreaterThan: oneMinuteAgo) 
           .get();
 
       print("Comparison time (oneMinuteAgo): $oneMinuteAgo");
@@ -195,7 +189,7 @@ class JobsApis {
 
           if (createdAt.isBefore(oneMinuteAgo)) {
             print("Deleting job with ID ${doc.id} (older than 25 minutes)");
-            await doc.reference.delete(); // Delete old job
+            await doc.reference.delete(); 
             print("Deleted job with ID ${doc.id}");
           }
         }
@@ -203,16 +197,14 @@ class JobsApis {
         print("No old jobs found to delete.");
       }
 
-      // Add new jobs to Firestore
       for (var job in jobData) {
-        // Clean the description
+       
         final cleanDescription = job['description']
             ?.replaceAll('*', ' ')
             .replaceAll('\\n', ' ')
             .replaceAll(RegExp(r'  +'), ' ')
             .replaceAll('\\', '');
 
-        // Check if job already exists
         final existingJob = await jobs
             .where('thierStackJobId', isEqualTo: job['id'])
             .limit(1)
@@ -223,7 +215,6 @@ class JobsApis {
           continue;
         }
 
-        // Create job model
         JobListingModel jobModel = JobListingModel(
           thierStackJobId: job['id'] ?? 0,
           title: job['job_title'] ?? "No title provided",
@@ -256,7 +247,7 @@ class JobsApis {
           jobPostDate: job['date_posted'] != null
               ? DateTime.parse(job['date_posted'])
               : DateTime.now(),
-          createdAt: DateTime.now(), // Store DateTime directly
+          createdAt: DateTime.now(), 
         );
 
         jobsToSave.add(jobModel);
@@ -265,7 +256,7 @@ class JobsApis {
       final batch = FirebaseFirestore.instance.batch();
 
       for (var job in jobsToSave) {
-        final jobRef = jobs.doc(); // This will create new document references
+        final jobRef = jobs.doc(); 
         batch.set(jobRef, job.toMap());
       }
 

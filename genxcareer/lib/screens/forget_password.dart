@@ -32,7 +32,6 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
 
   bool _showPassword = false;
 
-  // Handle password change
   void _changePassword() {
     if (_formKey.currentState?.validate() ?? false) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -72,7 +71,6 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                 ),
                 const SizedBox(height: 40),
 
-                // Title
                 const Text(
                   'Change Password',
                   style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
@@ -84,7 +82,6 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                 ),
                 const SizedBox(height: 30),
 
-                // Current Password
                 _buildPasswordField(
                   controller: _currentPasswordController,
                   label: 'Current Password',
@@ -92,19 +89,17 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     if (value == null || value.isEmpty) {
                       return 'Current Password cannot be empty';
                     }
-                    return null; // Add additional validation if needed
+                    return null; 
                   },
                 ),
                 const SizedBox(height: 20),
 
-                // New Password
                 _buildPasswordField(
                   controller: _newPasswordController,
                   label: 'New Password',
                 ),
                 const SizedBox(height: 20),
 
-                // Confirm Password
                 _buildPasswordField(
                   controller: _confirmPasswordController,
                   label: 'Re-Type New Password',
@@ -120,7 +115,6 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                 ),
                 const SizedBox(height: 30),
 
-                // Submit Button
                 SizedBox(
                   width: double.infinity,
                   height: 50,
@@ -146,7 +140,6 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
     );
   }
 
-  // Reusable Password Field Widget
   Widget _buildPasswordField({
     required TextEditingController controller,
     required String label,
