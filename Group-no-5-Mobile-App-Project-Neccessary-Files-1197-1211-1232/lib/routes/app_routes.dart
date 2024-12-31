@@ -6,6 +6,7 @@ import 'package:genxcareer/view/Admin/jobs.dart';
 import 'package:genxcareer/view/Admin/jobs_detail.dart';
 import 'package:genxcareer/view/Admin/users.dart';
 import 'package:genxcareer/view/user_change_password.dart';
+import 'package:genxcareer/view/forget_password.dart';
 import 'package:genxcareer/view/jobDetails.dart';
 import 'package:genxcareer/view/jobs_screen.dart';
 import 'package:genxcareer/view/sign_in_screen.dart';
@@ -43,6 +44,7 @@ class AppRoutes {
         name: signUp,
         page: () => SignUpScreen(),
         middlewares: [AuthMiddleware()]),
+    GetPage(name: forgetPassword, page: () => ForgetPasswordPage()),
     GetPage(
         name: adminDashboard,
         page: () => Dashboard(),
@@ -68,6 +70,10 @@ class AppRoutes {
     GetPage(
         name: userChangePassword,
         page: () => UserPasswordPage(),
+        middlewares: [AuthMiddleware()]),
+    GetPage(
+        name: userForgetPassword,
+        page: () => ForgetPasswordPage(),
         middlewares: [AuthMiddleware()]),
     GetPage(name: userJobs, page: () => JobsScreen()),
     GetPage(

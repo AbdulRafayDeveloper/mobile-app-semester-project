@@ -11,6 +11,7 @@ class UserApis {
 
   Future<Map<String, dynamic>> addUser(UserModel user) async {
     try {
+      
       if (user.uid.isEmpty || user.name.isEmpty || user.email.isEmpty) {
         return {
           'status': 'error',
@@ -80,6 +81,7 @@ class UserApis {
 
   Future<Map<String, dynamic>> getOneUser(String email) async {
     try {
+      
       if (email.isEmpty) {
         return {
           'status': 'error',
@@ -88,6 +90,7 @@ class UserApis {
         };
       }
 
+    
       QuerySnapshot query = await users.where('email', isEqualTo: email).get();
 
       if (query.docs.isEmpty) {

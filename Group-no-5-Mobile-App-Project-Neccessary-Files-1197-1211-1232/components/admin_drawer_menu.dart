@@ -16,6 +16,7 @@ class AdminDrawerMenu extends StatelessWidget {
       padding: EdgeInsets.zero,
       children: [
         const DrawerHeader(
+          
           decoration: BoxDecoration(),
           child: Center(
             child: SizedBox(
@@ -72,18 +73,19 @@ class AdminDrawerMenu extends StatelessWidget {
               await _googleSignIn.signOut();
             }
             Get.find<UserController>().clearUserData();
-
-            Get.snackbar(
+            
+            Get.snackbar(  
               'Logged Out',
               'You have been successfully logged out.',
-              snackPosition: SnackPosition.BOTTOM,
-              backgroundColor: Colors.green,
-              colorText: Colors.white,
-              duration: Duration(seconds: 2),
+              snackPosition: SnackPosition.BOTTOM, 
+              backgroundColor: Colors.green, 
+              colorText: Colors.white, 
+              duration: Duration(seconds: 2), 
             );
             Get.offAllNamed(AppRoutes.signIn);
           },
         ),
+
       ],
     );
   }

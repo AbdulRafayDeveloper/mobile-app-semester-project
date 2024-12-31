@@ -7,6 +7,13 @@ class AuthMiddleware extends GetMiddleware {
   RouteSettings? redirect(String? route) {
     final userController = Get.find<UserController>();
 
+    print("Check Middlware");
+    print("Middleware triggered for route: $route");
+    print("User isAuthenticated: ${userController.isAuthenticated.value}");
+    print("User role: ${userController.role.value}");
+    print("User token: ${userController.token.value}");
+    print("User tokenExpired: ${userController.tokenExpired.value}");
+
     if (route == '/signIn' && !userController.isAuthenticated.value) {
       print("User is already on the signIn page.");
       userController.clearUserData();
@@ -27,7 +34,7 @@ class AuthMiddleware extends GetMiddleware {
           route != 'userJobs' &&
           route != 'userJobDetailsPage') {
         print("Redirecting to signIn due to unauthenticated user");
-
+        
         userController.clearUserData();
         return const RouteSettings(name: '/signIn');
       }
@@ -54,6 +61,7 @@ class AuthMiddleware extends GetMiddleware {
       }
     }
 
+
     if (userController.isAuthenticated.value &&
         userController.role.value == 'admin' &&
         userController.tokenExpired.value == false) {
@@ -72,7 +80,7 @@ class AuthMiddleware extends GetMiddleware {
         print("Admin cannot access this page. Redirecting to adminDashboard.");
         return const RouteSettings(name: '/adminDashboard');
       }
-      return null;
+      return null; 
     }
 
     if (userController.isAuthenticated.value &&
@@ -93,10 +101,10 @@ class AuthMiddleware extends GetMiddleware {
         print("User cannot access this page. Redirecting to Users Job Page.");
         return const RouteSettings(name: '/userJobs');
       }
-      return null;
+      return null; 
     }
 
     print("No redirection needed.");
-    return null;
+    return null; 
   }
 }

@@ -95,6 +95,7 @@ class JobsApis {
 
   Future<Map<String, dynamic>> deleteOneJob(String jobId) async {
     try {
+     
       if (jobId.isEmpty) {
         return {
           'status': 'error',
@@ -135,6 +136,8 @@ class JobsApis {
       int postedAtMaxAgeDays = 15;
       bool includeTotalResults = false;
 
+      print("Fetching jobs from the API...");
+
       final body = jsonEncode({
         'page': page,
         'limit': limit,
@@ -153,6 +156,7 @@ class JobsApis {
       );
 
       if (response.statusCode != 200) {
+        print("API call failed with status: ${response.statusCode}");
         return {
           'status': 'error',
           'message': 'Failed to fetch jobs',
@@ -163,12 +167,20 @@ class JobsApis {
       final data = jsonDecode(response.body);
       final List<dynamic> jobData = data['data'] ?? [];
 
+      print("Jobs fetched from API: $jobData");
+
       List<JobListingModel> jobsToSave = [];
 
       final oneMinuteAgo = DateTime.now().subtract(Duration(minutes: 60));
 
-      final oldJobsSnapshot =
-          await jobs.where('createdAt', isGreaterThan: oneMinuteAgo).get();
+      final oldJobsSnapshot = await jobs
+          .where('createdAt',
+              isGreaterThan: oneMinuteAgo) 
+          .get();
+
+      print("Comparison time (oneMinuteAgo): $oneMinuteAgo");
+      print("oldJobsSnapshot: $oldJobsSnapshot");
+      print("oldJobsSnapshot is empty: ${oldJobsSnapshot.docs.isEmpty}");
 
       if (oldJobsSnapshot.docs.isNotEmpty) {
         for (var doc in oldJobsSnapshot.docs) {
@@ -176,8 +188,8 @@ class JobsApis {
           print("Job ID ${doc.id} - Created At: $createdAt");
 
           if (createdAt.isBefore(oneMinuteAgo)) {
-            print("Deleting job with ID ${doc.id}");
-            await doc.reference.delete();
+            print("Deleting job with ID ${doc.id} (older than 25 minutes)");
+            await doc.reference.delete(); 
             print("Deleted job with ID ${doc.id}");
           }
         }
@@ -186,6 +198,7 @@ class JobsApis {
       }
 
       for (var job in jobData) {
+       
         final cleanDescription = job['description']
             ?.replaceAll('*', ' ')
             .replaceAll('\\n', ' ')
@@ -234,7 +247,7 @@ class JobsApis {
           jobPostDate: job['date_posted'] != null
               ? DateTime.parse(job['date_posted'])
               : DateTime.now(),
-          createdAt: DateTime.now(),
+          createdAt: DateTime.now(), 
         );
 
         jobsToSave.add(jobModel);
@@ -243,11 +256,13 @@ class JobsApis {
       final batch = FirebaseFirestore.instance.batch();
 
       for (var job in jobsToSave) {
-        final jobRef = jobs.doc();
+        final jobRef = jobs.doc(); 
         batch.set(jobRef, job.toMap());
       }
 
       await batch.commit();
+
+      print("Jobs saved successfully!");
 
       return {
         'status': 'success',
@@ -255,6 +270,7 @@ class JobsApis {
         'data': jobsToSave,
       };
     } catch (e) {
+      print("Error occurred: ${e.toString()}");
       return {
         'status': 'error',
         'message': 'Error fetching and saving jobs: ${e.toString()}',

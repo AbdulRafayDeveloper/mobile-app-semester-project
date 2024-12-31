@@ -175,7 +175,21 @@ class _SignInScreenState extends State<SignInScreen> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: () {
+                          Get.offAllNamed(AppRoutes.forgetPassword);
+                        },
+                        child: const Text(
+                          'Forgot your password?',
+                          style:
+                              TextStyle(fontSize: 14, color: Color(0xFF40189D)),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 5),
                     SizedBox(
                       width: double.infinity,
                       height: 50,

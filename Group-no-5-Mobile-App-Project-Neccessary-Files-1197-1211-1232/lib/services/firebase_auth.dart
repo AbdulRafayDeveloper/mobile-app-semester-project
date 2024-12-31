@@ -167,6 +167,8 @@ Future<Map<String, dynamic>> firebaseSignIn(
 }
 
 Future<Map<String, dynamic>?> signInWithGoogle() async {
+  print("Enter into sign in with Google");
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -176,6 +178,10 @@ Future<Map<String, dynamic>?> signInWithGoogle() async {
   try {
     final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
     if (googleUser == null) return null;
+
+    print("googleUser: $googleUser");
+    print("googleUser Display Name: ${googleUser.displayName}");
+    print("googleUser Email: ${googleUser.email}");
 
     final GoogleSignInAuthentication googleAuth =
         await googleUser.authentication;
@@ -231,6 +237,7 @@ Future<Map<String, dynamic>?> signInWithGoogle() async {
           };
         }
       } catch (e) {
+        print("Error creating user: $e");
         return {
           "status": false,
           "message": "An error occurred while creating user.",
@@ -288,6 +295,7 @@ Future<Map<String, dynamic>?> signInWithGoogle() async {
       "uid": null,
     };
   } catch (e) {
+    print("Google Sign-In Error: $e");
     return {
       "status": false,
       "message": "An unexpected error occurred.",
