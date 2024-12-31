@@ -58,23 +58,9 @@ class _SignInScreenState extends State<SignInScreen> {
             ),
           );
 
-          if (userController.tokenExpired.value) {
-            print("tokenExpired: ${userController.tokenExpired.value}");
-            print("Token: ${userController.token.value}");
-            print("email: ${userController.email.value}");
-            print("role: ${userController.role.value}");
-          } else {
-            print("tokenExpired: ${userController.tokenExpired.value}");
-            print("Token: ${userController.token.value}");
-            print("email: ${userController.email.value}");
-            print("role: ${userController.role.value}");
-          }
-
           if (result['role'] == 'admin') {
-            print("Admin Account");
             Get.offAllNamed(AppRoutes.adminDashboard);
           } else {
-            print("User Account");
             Get.offAllNamed(AppRoutes.userJobs);
           }
         }
@@ -292,25 +278,9 @@ class _SignInScreenState extends State<SignInScreen> {
                                 ),
                               );
 
-                              if (userController.tokenExpired.value) {
-                                print(
-                                    "tokenExpired: ${userController.tokenExpired.value}");
-                                print("Token: ${userController.token.value}");
-                                print("email: ${userController.email.value}");
-                                print("role: ${userController.role.value}");
-                              } else {
-                                print(
-                                    "tokenExpired: ${userController.tokenExpired.value}");
-                                print("Token: ${userController.token.value}");
-                                print("email: ${userController.email.value}");
-                                print("role: ${userController.role.value}");
-                              }
-
                               if (result?['role'] == 'admin') {
-                                print("Admin Account");
                                 Get.offAllNamed(AppRoutes.adminDashboard);
                               } else {
-                                print("User Account");
                                 Get.offAllNamed(AppRoutes.userJobs);
                               }
                             }
@@ -354,9 +324,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             width: 0.5,
                           ),
                         ),
-                        onPressed: () {
-                          print("Current This option is not valid");
-                        },
+                        onPressed: () {},
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

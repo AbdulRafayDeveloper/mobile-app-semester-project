@@ -89,29 +89,29 @@ class _UsersState extends State<Users> {
             }
           },
           child: isInitialLoading
-              ? const Center(child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: const [
-                        SizedBox(height:80),
-                        CircularProgressIndicator(),
-                        SizedBox(height: 20),
-                        Text(
-                          "Loading data...",
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-                        ),
-                      ],
-                    ),)
+              ? const Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: const [
+                      SizedBox(height: 80),
+                      CircularProgressIndicator(),
+                      SizedBox(height: 20),
+                      Text(
+                        "Loading data...",
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.normal),
+                      ),
+                    ],
+                  ),
+                )
               : SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
                         width: double.infinity,
-                        height: isSearchFocused
-                      ? 0
-                      : size.height *
-                          0.16,
+                        height: isSearchFocused ? 0 : size.height * 0.16,
                         decoration: const BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
@@ -129,7 +129,7 @@ class _UsersState extends State<Users> {
                         child: Stack(
                           children: [
                             Positioned(
-                              top: size.height * 0.04,
+                              top: size.height * 0.025,
                               left: 30,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,60 +170,59 @@ class _UsersState extends State<Users> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
-                        
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(30),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.3),
-                                  spreadRadius: 1,
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 5),
-                                ),
-                              ],
-                            ),
-                            child: TextField(
-                              onChanged: onSearch,
-                              controller: searchController,
-                              autofocus: false,
-                              onTap: () {
-                                setState(() {
-                                  isSearchFocused = true;
-                                });
-                              },
-                              decoration: InputDecoration(
-                                hintText: 'Search By Name...',
-                                fillColor: Colors.transparent,
-                                filled: true,
-                                prefixIcon: const Icon(Icons.search,
-                                    color: Colors.grey),
-                                suffixIcon: isSearchFocused
-                                    ? IconButton(
-                                        icon: const Icon(Icons.close),
-                                        onPressed: () {
-                                          setState(() {
-                                            isSearchFocused = false;
-                                            searchController.clear();
-                                            onSearch('');
-                                            FocusScope.of(context).unfocus();
-                                          });
-                                        },
-                                      )
-                                    : null,
-                                contentPadding: const EdgeInsets.all(10),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(30),
-                                  borderSide: BorderSide.none,
-                                ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 50, vertical: 10),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(30),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.3),
+                                spreadRadius: 1,
+                                blurRadius: 10,
+                                offset: const Offset(0, 5),
+                              ),
+                            ],
+                          ),
+                          child: TextField(
+                            onChanged: onSearch,
+                            controller: searchController,
+                            autofocus: false,
+                            onTap: () {
+                              setState(() {
+                                isSearchFocused = true;
+                              });
+                            },
+                            decoration: InputDecoration(
+                              hintText: 'Search By Name...',
+                              fillColor: Colors.transparent,
+                              filled: true,
+                              prefixIcon:
+                                  const Icon(Icons.search, color: Colors.grey),
+                              suffixIcon: isSearchFocused
+                                  ? IconButton(
+                                      icon: const Icon(Icons.close),
+                                      onPressed: () {
+                                        setState(() {
+                                          isSearchFocused = false;
+                                          searchController.clear();
+                                          onSearch('');
+                                          FocusScope.of(context).unfocus();
+                                        });
+                                      },
+                                    )
+                                  : null,
+                              contentPadding: const EdgeInsets.all(10),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: BorderSide.none,
                               ),
                             ),
                           ),
-                      
+                        ),
                       ),
-                      SizedBox(height:10 ),
+                      SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         child: SizedBox(

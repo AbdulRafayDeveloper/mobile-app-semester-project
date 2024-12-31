@@ -62,16 +62,14 @@ class _JobsState extends State<JobsScreen> {
           };
         }));
 
-        allJobs.addAll(fetchedJobs); 
-        jobs = List.from(allJobs); 
-        lastDocument = result['lastDocument']; 
+        allJobs.addAll(fetchedJobs);
+        jobs = List.from(allJobs);
+        lastDocument = result['lastDocument'];
       });
     } else if (result['data'].isEmpty) {
       setState(() {
-        lastDocument = null; 
+        lastDocument = null;
       });
-    } else {
-      print('Error loading jobs: ${result['message']}');
     }
 
     setState(() {
@@ -84,7 +82,7 @@ class _JobsState extends State<JobsScreen> {
       searchQuery = query;
 
       if (query.isEmpty) {
-        jobs = List.from(allJobs); 
+        jobs = List.from(allJobs);
       } else {
         jobs = allJobs
             .where((job) =>
@@ -100,19 +98,18 @@ class _JobsState extends State<JobsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size; 
+    final size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.grey[100], 
+      backgroundColor: Colors.grey[100],
       drawer: Drawer(
-        child: AdminDrawerMenu(), 
+        child: AdminDrawerMenu(),
       ),
       body: SafeArea(
         child: GestureDetector(
           onTap: () {
-            
             if (isSearchFocused) {
               setState(() {
-                isSearchFocused = false; 
+                isSearchFocused = false;
                 FocusScope.of(context).unfocus();
               });
             }
@@ -123,10 +120,7 @@ class _JobsState extends State<JobsScreen> {
               children: [
                 Container(
                   width: double.infinity,
-                  height: isSearchFocused
-                      ? 0
-                      : size.height *
-                          0.16, 
+                  height: isSearchFocused ? 0 : size.height * 0.16,
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
@@ -143,9 +137,8 @@ class _JobsState extends State<JobsScreen> {
                   ),
                   child: Stack(
                     children: [
-                      
                       Positioned(
-                        top: size.height * 0.04,
+                        top: size.height * 0.025,
                         left: 30,
                         child: const Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,16 +167,13 @@ class _JobsState extends State<JobsScreen> {
                         right: 10,
                         child: PopupMenuButton<String>(
                           icon: Container(
-                            padding: const EdgeInsets.all(
-                                8.0), 
+                            padding: const EdgeInsets.all(8.0),
                             decoration: BoxDecoration(
-                              color:
-                                  Colors.white, 
+                              color: Colors.white,
                               shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.grey.withOpacity(
-                                      0.5), 
+                                  color: Colors.grey.withOpacity(0.5),
                                   spreadRadius: 1,
                                   blurRadius: 4,
                                   offset: Offset(0, 3),
@@ -192,14 +182,11 @@ class _JobsState extends State<JobsScreen> {
                             ),
                             child: const Icon(
                               Icons.person,
-                              color:
-                                  Color(0xFF40189D), 
-                              size: 20, 
+                              color: Color(0xFF40189D),
+                              size: 20,
                             ),
-                            
                           ),
                           onSelected: (String value) async {
-                            
                             if (value == 'Edit Profile') {
                               Get.offAllNamed(AppRoutes.userProfileDetails);
                             } else if (value == 'Change Password') {
@@ -306,63 +293,61 @@ class _JobsState extends State<JobsScreen> {
                     ],
                   ),
                 ),
-
-                
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical:10),
-                  
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(30),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.3),
-                            spreadRadius: 1,
-                            blurRadius: 10,
-                            offset: const Offset(0, 5),
-                          ),
-                        ],
-                      ),
-                      child: TextField(
-                        onChanged: onSearch,
-                        autofocus: false,
-                        onTap: () {
-                          setState(() {
-                            isSearchFocused = true;
-                          });
-                        },
-                        decoration: InputDecoration(
-                          hintText: 'Search job here...',
-                          fillColor: Colors.transparent,
-                          filled: true,
-                          prefixIcon:
-                              const Icon(Icons.search, color: Colors.grey),
-                          suffixIcon: isSearchFocused
-                              ? IconButton(
-                                  icon: const Icon(Icons.close),
-                                  onPressed: () {
-                                    setState(() {
-                                      isSearchFocused = false;
-                                      searchQuery = '';
-                                      jobs = List.from(allJobs);
-                                      FocusScope.of(context).unfocus();
-                                    });
-                                  },
-                                )
-                              : null,
-                          contentPadding: const EdgeInsets.all(10),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
-                            borderSide: BorderSide.none,
-                          ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          spreadRadius: 1,
+                          blurRadius: 10,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: TextField(
+                      onChanged: onSearch,
+                      autofocus: false,
+                      onTap: () {
+                        setState(() {
+                          isSearchFocused = true;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        hintText: 'Search job here...',
+                        fillColor: Colors.transparent,
+                        filled: true,
+                        prefixIcon:
+                            const Icon(Icons.search, color: Colors.grey),
+                        suffixIcon: isSearchFocused
+                            ? IconButton(
+                                icon: const Icon(Icons.close),
+                                onPressed: () {
+                                  setState(() {
+                                    isSearchFocused = false;
+                                    searchQuery = '';
+                                    jobs = List.from(allJobs);
+                                    FocusScope.of(context).unfocus();
+                                  });
+                                },
+                              )
+                            : null,
+                        contentPadding: const EdgeInsets.all(10),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide.none,
                         ),
                       ),
                     ),
                   ),
-                
-                SizedBox(height: 10,),
-              
+                ),
+                SizedBox(
+                  height: 10,
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
@@ -374,8 +359,7 @@ class _JobsState extends State<JobsScreen> {
                   Center(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            Colors.white, 
+                        backgroundColor: Colors.white,
                       ),
                       onPressed: loadMoreJobs,
                       child: const Text(
@@ -384,7 +368,9 @@ class _JobsState extends State<JobsScreen> {
                       ),
                     ),
                   ),
-                if (jobs.isEmpty && lastDocument == null && isLoadingMore == false)
+                if (jobs.isEmpty &&
+                    lastDocument == null &&
+                    isLoadingMore == false)
                   const Center(
                     child: Text(
                       "No more jobs available",
@@ -394,18 +380,19 @@ class _JobsState extends State<JobsScreen> {
                 if (isLoadingMore)
                   const Center(
                     child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
-                      SizedBox(height:180),
-                      CircularProgressIndicator(),
-                      SizedBox(height: 20),
-                      Text(
-                        "Loading data...",
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-                      ),
-                    ],
-                  ),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: const [
+                        SizedBox(height: 180),
+                        CircularProgressIndicator(),
+                        SizedBox(height: 20),
+                        Text(
+                          "Loading data...",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.normal),
+                        ),
+                      ],
+                    ),
                   ),
               ],
             ),
@@ -428,54 +415,46 @@ class _JobsState extends State<JobsScreen> {
           padding: const EdgeInsets.all(8),
           child: Row(
             children: [
-              
               Container(
                 width: 50,
-                height: 50, 
+                height: 50,
                 decoration: BoxDecoration(
-                  borderRadius:
-                      BorderRadius.circular(8), 
+                  borderRadius: BorderRadius.circular(8),
                   image: DecorationImage(
                     image: job['logo'] != null && job['logo']!.isNotEmpty
                         ? NetworkImage(job['logo']!)
                         : const AssetImage(
                             'assets/missing_companies_logo.jpeg'),
-                    fit: BoxFit
-                        .cover,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
-              const SizedBox(
-                  width: 15), 
+              const SizedBox(width: 15),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    
                     Text(
                       job['companyName'] ?? 'Unknown Company',
                       style: const TextStyle(
                         fontSize: 12,
                         color: Colors.black54,
                       ),
-                      overflow: TextOverflow
-                          .ellipsis, 
-                      maxLines: 1, 
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                     ),
                     const SizedBox(height: 5),
-                    
                     Text(
                       job['title']!.length > 25
-                          ? '${job['title']!.substring(0, 25)}...' 
-                          : job['title']!, 
+                          ? '${job['title']!.substring(0, 25)}...'
+                          : job['title']!,
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Colors.black87,
                       ),
-                      overflow: TextOverflow
-                          .ellipsis, 
-                      maxLines: 1, 
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                     ),
                     const SizedBox(height: 5),
                     Row(
@@ -483,16 +462,13 @@ class _JobsState extends State<JobsScreen> {
                         const Icon(Icons.work_outline,
                             color: Color(0xFF40189D)),
                         const SizedBox(width: 5),
-                        
                         Expanded(
                           child: Text(
                             job['location']!.length > 30
-                                ? '${job['location']!.substring(0, 22)}...' 
-                                : job[
-                                    'location']!,
+                                ? '${job['location']!.substring(0, 22)}...'
+                                : job['location']!,
                             style: const TextStyle(fontSize: 14),
-                            overflow: TextOverflow
-                                .ellipsis, 
+                            overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                           ),
                         ),

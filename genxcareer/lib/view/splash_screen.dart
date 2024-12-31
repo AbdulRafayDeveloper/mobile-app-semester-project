@@ -61,8 +61,6 @@ class _SplashScreenState extends State<SplashScreen>
   Future<void> _checkUserAuthentication() async {
     User? checkUser = await FirebaseAuth.instance.currentUser;
 
-    print("Splash Screen checkUser: $checkUser");
-
     if (checkUser != null) {
       if (!checkUser.emailVerified) {
         return;
@@ -85,20 +83,10 @@ class _SplashScreenState extends State<SplashScreen>
 
         userController.setUserData(idToken ?? '', checkUser.email ?? '',
             role ?? '', provider ?? "email", isTokenExpired);
-
-        print("Token Expiry Date: $expDate");
-        print("Is Token Expired? $isTokenExpired");
-        print("Check User: $checkUser");
-        print("idToken: $idToken");
-        print("provider: $provider");
-      } else {
-        print("Please Login to apply for Jobs or as an administrator");
-      }
-    } else {
-      print("Please Login to apply for Jobs or as an administrator");
+      } else {}
     }
 
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 2), () {
       if (userController.role.value == "admin") {
         Get.offAllNamed(AppRoutes.adminDashboard);
       } else {
