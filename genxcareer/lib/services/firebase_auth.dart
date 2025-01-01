@@ -208,6 +208,7 @@ Future<Map<String, dynamic>?> signInWithGoogle() async {
     }
 
     final doc = await _firestore.collection('users').doc(user.uid).get();
+
     if (!doc.exists) {
       try {
         UserModel userModel = UserModel(
